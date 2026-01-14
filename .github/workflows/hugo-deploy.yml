@@ -65,6 +65,10 @@ jobs:
 
       ## Deploy when PR is closed with label 'netlify-release' and any hugo changes
       - name: Deploy to deploy branch
+        if: |
+          github.event.action == 'closed' &&
+          github.event.pull_request.merged == true &&
+          contains(github.event.pull_request.labels.*.name, 'netlify-release')
         run: |
           ## Build fresh public/ dir
           hugo --gc --minify
