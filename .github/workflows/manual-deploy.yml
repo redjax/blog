@@ -48,6 +48,9 @@ jobs:
 
           git checkout -B deploy
 
+          ## Rebuild site on deploy branch
+          hugo --gc --minify
+
           git add -f public/
           git add .
 
