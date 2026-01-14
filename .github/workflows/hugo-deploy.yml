@@ -71,6 +71,9 @@ jobs:
           github.event.pull_request.merged == true &&
           contains(github.event.pull_request.labels.*.name, 'netlify-release')
         run: |
+          ## Rebuild site if public/ dir does not exist
+          [ -d "public" ] || hugo --gc --minify
+
           git config user.name "GitHub Action"
           git config user.email "action@github.com"
 
