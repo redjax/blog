@@ -2,7 +2,7 @@
 title: "Git Rewrite History"
 type: "notes"
 date: 2026-01-13T23:38:06-05:00
-draft: true
+draft: false
 showToc: true
 
 categories: []
