@@ -1,0 +1,56 @@
+---
+name: "Manual Hugo Deploy"
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  HUGO_VERSION: "0.154.3"
+
+jobs:
+  build-test-deploy:
+    name: "Manual build, test, and deploy"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: ${{ env.HUGO_VERSION }}
+          extended: true
+
+      - name: Vale prose linting
+        uses: errata-ai/vale-action@v2.1.1
+        with:
+          files: '["content/**.{md}"]'
+
+      - name: Build site
+        run: hugo --gc --minify
+
+      - name: Check built links (Lychee)
+        uses: lycheeverse/lychee-action@v2.0.2
+        with:
+          args: >-
+            --exclude file://*
+            public/**/*.html
+
+      - name: Deploy to deploy branch
+        run: |
+          git config user.name "GitHub Action"
+          git config user.email "action@github.com"
+
+          git checkout -B deploy
+
+          git add -f public/
+          git add .
+
+          git commit -m "Manual deploy from ${{ github.sha }}" || exit 0
+
+          git push origin deploy --force
