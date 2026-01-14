@@ -39,7 +39,7 @@ jobs:
         run: hugo --gc --minify
 
       - name: Check links with Lychee
-        uses: lycheeverse/lychee-action@v1
+        uses: lycheeverse/lychee-action@v2.0.2
         with:
           args: "public/**/*.html --base ."
           fail: false
