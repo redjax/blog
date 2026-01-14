@@ -58,7 +58,7 @@ jobs:
 
       - name: Check built links (Lychee)
         if: steps.hugo-changed.outputs.hugo-changed == 'true'
-        uses: lycheeverse/lychee-action@v1
+        uses: lycheeverse/lychee-action@v2.0.2
         with:
           args: >-
             --exclude file://*
