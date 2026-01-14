@@ -29,6 +29,12 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: ${{ env.HUGO_VERSION }}
+          extended: true
+
       ## Skip Hugo steps if no Hugo changes, or no netlify-release label
       - name: Check if Hugo files changed
         id: hugo-changed
@@ -44,13 +50,6 @@ jobs:
         uses: errata-ai/vale-action@v2.1.1
         with:
           files: '["content/**.{md}"]'
-
-      - name: Setup Hugo
-        if: steps.hugo-changed.outputs.hugo-changed == 'true'
-        uses: peaceiris/actions-hugo@v3
-        with:
-          hugo-version: ${{ env.HUGO_VERSION }}
-          extended: true
 
       - name: Build site
         if: steps.hugo-changed.outputs.hugo-changed == 'true'
