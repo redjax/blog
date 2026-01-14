@@ -72,7 +72,6 @@ params:
   title: Techobyte
   description: "Personal blog, mostly about technology."
   keywords: [Blob, Technology, Linux, Open-Source, DevOps, Hugo]
-  favicon: favicon.ico
   author: me
   DateFormat: "2006-01-02"
   defaultTheme: auto
@@ -102,6 +101,10 @@ params:
   assets:
     disableFingerprinting: true
     disableHLJS: true
+    favicon: "favicon.ico"
+    favicon16x16: "favicon-16x16.png"
+    favicon32x32: "favicon-32x32.png"
+    apple_touch_icon: "apple-touch-icon.png"
 
   label:
     text: "Techobyte"
