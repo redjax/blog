@@ -70,17 +70,19 @@ jobs:
           github.event.pull_request.merged == true &&
           contains(github.event.pull_request.labels.*.name, 'netlify-release')
         run: |
-          ## Build fresh public/ dir
-          hugo --gc --minify
-
           git config user.name "GitHub Action"
           git config user.email "action@github.com"
 
           ## Create fresh deploy branch
           git checkout -B deploy
 
+          ## Build fresh public/ dir
+          hugo --gc --minify
+
           ## Force commit the ignored public/ dir
           git add -f public/
           git add .
+
           git commit -m "Deploy PR #${{ github.event.pull_request.number }}" || exit 0
+
           git push origin deploy --force
