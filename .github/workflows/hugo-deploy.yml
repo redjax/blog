@@ -65,24 +65,18 @@ jobs:
 
       ## Deploy when PR is closed with label 'netlify-release' and any hugo changes
       - name: Deploy to deploy branch
-        if: |
-          github.event.action == 'closed' &&
-          github.event.pull_request.merged == true &&
-          contains(github.event.pull_request.labels.*.name, 'netlify-release')
         run: |
-          ## Rebuild site if public/ dir does not exist
-          [ -d "public" ] || hugo --gc --minify
+          ## Build fresh public/ dir
+          hugo --gc --minify
 
           git config user.name "GitHub Action"
           git config user.email "action@github.com"
 
-          ## Checkout orphaned deploy branch, force latest from main
+          ## Create fresh deploy branch
           git checkout -B deploy
 
-          rm -rf *
-
-          cp -r public/* . || echo "No public dir, skipping deploy"
-
+          ## Force commit the ignored public/ dir
+          git add -f public/
           git add .
-          git commit -m "Deploy PR #${{ github.event.pull_request.number }}" || echo "Nothing to commit"
+          git commit -m "Deploy PR #${{ github.event.pull_request.number }}" || exit 0
           git push origin deploy --force
