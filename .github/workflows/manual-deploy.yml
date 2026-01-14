@@ -43,26 +43,17 @@ jobs:
 
       - name: Deploy to deploy branch
         run: |
-          hugo --gc --minify
           git config user.name "GitHub Action"
           git config user.email "action@github.com"
 
-          ## Build & copy public/ before switching branches
-          mkdir deploy-temp
-
-          cp -r public/ deploy-temp/
-          cp -r archetypes/ content/ layouts/ static/ hugo.yml deploy-temp/ 2>/dev/null || true
-
-          ## Switch to fresh deploy branch
           git checkout -B deploy
 
-          ## Move files from temp to working directory
-          mv deploy-temp/* . 2>/dev/null || true
-          mv deploy-temp/.* . 2>/dev/null 2>&1 || true  # Hidden files
-
-          rm -rf deploy-temp
+          ## Rebuild site on deploy branch
+          hugo --gc --minify
 
           git add -f public/
           git add .
-          git commit -m "Deploy PR #${{ github.event.pull_request.number }}" || exit 0
+
+          git commit -m "Manual deploy from ${{ github.sha }}" || exit 0
+
           git push origin deploy --force
