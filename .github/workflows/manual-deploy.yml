@@ -9,6 +9,7 @@ permissions:
 
 env:
   HUGO_VERSION: "0.154.3"
+  HUGO_BASEURL: ${{ vars.HUGO_BASEURL }}
 
 jobs:
   build-test-deploy:
@@ -38,7 +39,8 @@ jobs:
         uses: lycheeverse/lychee-action@v2.0.2
         with:
           args: >-
-            --exclude file://*
+            --offline
+            --exclude 'https://techobyte\.cc'
             public/**/*.html
 
       - name: Deploy to deploy branch
