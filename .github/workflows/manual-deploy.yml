@@ -40,8 +40,7 @@ jobs:
         with:
           args: >-
             --offline
-            --exclude-all
-            --include-verbatim
+            --exclude 'https://techobyte\.cc'
             public/**/*.html
 
       - name: Deploy to deploy branch
