@@ -61,9 +61,9 @@ jobs:
         uses: lycheeverse/lychee-action@v2.0.2
         with:
           args: >-
-            --exclude file://*
             --offline
-            --root-dir public
+            --exclude-all
+            --include-verbatim
             public/**/*.html
 
       ## Deploy when PR is closed with label 'netlify-release' and any hugo changes
