@@ -62,6 +62,8 @@ jobs:
         with:
           args: >-
             --exclude file://*
+            --offline
+            --root-dir public
             public/**/*.html
 
       ## Deploy when PR is closed with label 'netlify-release' and any hugo changes

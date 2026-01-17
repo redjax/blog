@@ -40,6 +40,8 @@ jobs:
         with:
           args: >-
             --exclude file://*
+            --offline
+            --root-dir public
             public/**/*.html
 
       - name: Deploy to deploy branch
