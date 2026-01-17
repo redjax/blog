@@ -9,6 +9,7 @@ permissions:
 
 env:
   HUGO_VERSION: "0.154.3"
+  HUGO_BASEURL: ${{ vars.HUGO_BASEURL }}
 
 jobs:
   build-test-deploy:
