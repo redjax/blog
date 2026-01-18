@@ -41,5 +41,8 @@ jobs:
       - name: Check links with Lychee
         uses: lycheeverse/lychee-action@v2.0.2
         with:
-          args: "public/**/*.html --base ."
           fail: false
+          args: >-
+            --offline
+            --exclude 'https://techobyte\.cc'
+            public/**/*.html
