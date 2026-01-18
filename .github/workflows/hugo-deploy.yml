@@ -50,7 +50,11 @@ jobs:
         if: steps.hugo-changed.outputs.hugo-changed == 'true'
         uses: errata-ai/vale-action@v2.1.1
         with:
-          files: '["content/**.{md}"]'
+          files: content/**.{md}
+          vale_flags: --config=.vale.ini
+          filter_mode: file
+          fail_on_error: true
+          level: suggestion
 
       - name: Build site
         if: steps.hugo-changed.outputs.hugo-changed == 'true'
