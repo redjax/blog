@@ -18,13 +18,19 @@ tasks:
     desc: "Run lychee on the live site"
     cmds:
       - >
-        lychee
-        "{{.HUGO_BASEURL}}"
-        --exclude-all-private
-        --max-concurrency 5
-        --user-agent "TechobyteLinkChecker/1.0 (+{{.HUGO_BASEURL}})"
-        "{{.HUGO_BASEURL}}"
-        "{{.HUGO_BASEURL}}/posts/"
-        "{{.HUGO_BASEURL}}/notes/"
-        "{{.HUGO_BASEURL}}/tags/"
-        "{{.HUGO_BASEURL}}/categories/"
+        lychee public/
+        --root-dir public/
+        --remap "^https://example.org file://$(pwd)/public"
+        --offline
+    # cmds:
+    #   - >
+    #     lychee
+    #     "{{.HUGO_BASEURL}}"
+    #     --exclude-all-private
+    #     --max-concurrency 5
+    #     --user-agent "TechobyteLinkChecker/1.0 (+{{.HUGO_BASEURL}})"
+    #     "{{.HUGO_BASEURL}}"
+    #     "{{.HUGO_BASEURL}}/posts/"
+    #     "{{.HUGO_BASEURL}}/notes/"
+    #     "{{.HUGO_BASEURL}}/tags/"
+    #     "{{.HUGO_BASEURL}}/categories/"
