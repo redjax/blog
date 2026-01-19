@@ -3,9 +3,9 @@ resources:
   - name: repo
     type: git
     source:
+      ## Before cloning a repo from Github, you have do a onetime setup of adding your Github PAT as a pipeline variable:
+      #    fly -t <concourse-target> set-pipeline -p pipeline-name -v github-pat=ghp_... -c path/to/build-and-test.yml
       uri: https://github.com/redjax/blog.git
-      username: redjax
-      # password: <set your password by running this: fly set-pipeline -p pipeline-name -v github-pat=ghp_...
 
 jobs:
   - name: build-and-test
