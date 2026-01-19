@@ -39,9 +39,10 @@ jobs:
         uses: lycheeverse/lychee-action@v2.0.2
         with:
           args: >-
+            public/
+            --root-dir public/
+            --remap "^https://example.org file://$(pwd)/public"
             --offline
-            --exclude 'https://techobyte\.cc'
-            public/**/*.html
 
       - name: Deploy to deploy branch
         run: |
