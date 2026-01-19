@@ -24,7 +24,7 @@ jobs:
           inputs:
             - name: repo
           outputs:
-            - name: public-site
+            - name: public
           caches:
             - path: /tmp/hugo_cache
           params:
@@ -35,7 +35,7 @@ jobs:
               - -c
               - |
                 cd repo
-                hugo --gc --minify --destination ../public-site
+                hugo --gc --minify --destination ../public
 
       - task: lychee-check-links
         config:
@@ -47,17 +47,13 @@ jobs:
               repository: lycheeverse/lychee
               tag: latest
           inputs:
-            - name: public-site
+            - name: public
           run:
             path: sh
             args:
               - -c
               - |
-                lychee $(find public-site -name "*.html") \
-                  --root-dir public-site
-                  --exclude 'https?://techobyte\.(cc|digital).*' \
-                  --exclude 'https?://github\.com' \
-                  --exclude 'mailto:' \
-                  --exclude-all-private \
-                  --max-retries 3 \
-                  --verbose
+                lychee public/ \
+                  --root-dir public/ \
+                  --remap "^https://example.org file://$(pwd)/public" \
+                  --offline
