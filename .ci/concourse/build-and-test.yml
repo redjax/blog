@@ -1,3 +1,11 @@
+---
+##
+# Pipeline to lint, build, & check the site.
+#
+# Deploy to Concourse with:
+#   fly -t <target> set-pipeline --pipeline <desired-pipeline-name> --config .ci/concourse/build-and-test.yml
+##
+
 resources:
   ## Blog repo
   - name: repo
@@ -12,6 +20,25 @@ jobs:
     plan:
       ## Clone repo
       - get: repo
+
+      ## Vale lint
+      - task: vale-lint
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source:
+              repository: jdkato/vale
+              tag: latest
+          inputs:
+            - name: repo
+          run:
+            path: sh
+            args:
+              - -c
+              - |
+                cd repo
+                vale --config .vale.ini content/**/*.md
 
       - task: build-hugo-site
         config:
