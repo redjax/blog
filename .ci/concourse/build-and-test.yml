@@ -36,3 +36,28 @@ jobs:
               - |
                 cd repo
                 hugo --gc --minify --destination ../public-site
+
+      - task: lychee-check-links
+        config:
+          platform: linux
+          type: registry-image
+          image_resource:
+            type: registry-image
+            source:
+              repository: lycheeverse/lychee
+              tag: latest
+          inputs:
+            - name: public-site
+          run:
+            path: sh
+            args:
+              - -c
+              - |
+                lychee $(find public-site -name "*.html") \
+                  --root-dir public-site
+                  --exclude 'https?://techobyte\.(cc|digital).*' \
+                  --exclude 'https?://github\.com' \
+                  --exclude 'mailto:' \
+                  --exclude-all-private \
+                  --max-retries 3 \
+                  --verbose
