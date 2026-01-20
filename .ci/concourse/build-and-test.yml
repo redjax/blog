@@ -3,6 +3,7 @@ resources:
     type: git
     source:
       uri: https://github.com/redjax/blog.git
+      branch: feat/concourse-ci
 
 jobs:
   - name: build-and-test
