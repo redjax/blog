@@ -1,86 +1,26 @@
----
-##
-# Pipeline to lint, build, & check the site.
-#
-# Deploy to Concourse with:
-#   fly -t <target> set-pipeline --pipeline <desired-pipeline-name> --config .ci/concourse/build-and-test.yml
-##
-
 resources:
-  ## Blog repo
   - name: repo
     type: git
     source:
-      ## Before cloning a repo from Github, you have do a onetime setup of adding your Github PAT as a pipeline variable:
-      #    fly -t <concourse-target> set-pipeline -p pipeline-name -v github-pat=ghp_... -c path/to/build-and-test.yml
       uri: https://github.com/redjax/blog.git
 
 jobs:
   - name: build-and-test
     plan:
-      ## Clone repo
       - get: repo
 
-      ## Vale lint
-      - task: vale-lint
-        config:
-          platform: linux
-          image_resource:
-            type: registry-image
-            source:
-              repository: jdkato/vale
-              tag: latest
-          inputs:
-            - name: repo
-          run:
-            path: sh
-            args:
-              - -c
-              - |
-                cd repo
-                vale --config .vale.ini content/**/*.md
+      - try:
+          task: vale-lint
+          file: repo/.ci/concourse/tasks/vale-lint.yml
+          ## Params to pass into task file. This is commented with the default values
+          #  in the task file, just to show where they go.
+          # params:
+          #   VALE_CONFIG: .vale.ini
+          #   VALE_PATH: content
+          #   VALE_GLOB: "**/*.md"
 
       - task: build-hugo-site
-        config:
-          platform: linux
-          image_resource:
-            type: registry-image
-            source:
-              repository: hugomods/hugo
-              tag: debian-exts
-          inputs:
-            - name: repo
-          outputs:
-            - name: public
-          caches:
-            - path: /tmp/hugo_cache
-          params:
-            HUGO_CACHEDIR: /tmp/hugo_cache
-          run:
-            path: sh
-            args:
-              - -c
-              - |
-                cd repo
-                hugo --gc --minify --destination ../public
+        file: repo/.ci/concourse/tasks/build-hugo-site.yml
 
       - task: lychee-check-links
-        config:
-          platform: linux
-          type: registry-image
-          image_resource:
-            type: registry-image
-            source:
-              repository: lycheeverse/lychee
-              tag: latest
-          inputs:
-            - name: public
-          run:
-            path: sh
-            args:
-              - -c
-              - |
-                lychee public/ \
-                  --root-dir public/ \
-                  --remap "^https://example.org file://$(pwd)/public" \
-                  --offline
+        file: repo/.ci/concourse/tasks/lychee-check-links.yml
