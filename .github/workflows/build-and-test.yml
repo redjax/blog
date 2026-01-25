@@ -42,7 +42,7 @@ jobs:
         uses: lycheeverse/lychee-action@v2.0.2
         with:
           fail: false
-          args: >-
+          args: |
             public/
             --root-dir public/
             --remap "^https://example.org file://$(pwd)/public"
