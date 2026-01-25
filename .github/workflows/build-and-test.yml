@@ -44,6 +44,5 @@ jobs:
           fail: false
           args: |
             public/
-            --root-dir public/
-            --remap "^https://example.org file://$(pwd)/public"
+            --remap "^https://example.org file://public"
             --offline
