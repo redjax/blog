@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Tags on Techobyte Blog</title>
+    <link>https://techobyte.cc/tags/</link>
+    <description>Recent content in Tags on Techobyte Blog</description>
+    <generator>Hugo -- 0.154.3</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 13 Jan 2026 23:38:06 -0500</lastBuildDate>
+    <atom:link href="https://techobyte.cc/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Git</title>
+      <link>https://techobyte.cc/tags/git/</link>
+      <pubDate>Tue, 13 Jan 2026 23:38:06 -0500</pubDate>
+      <guid>https://techobyte.cc/tags/git/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Note</title>
+      <link>https://techobyte.cc/tags/note/</link>
+      <pubDate>Tue, 13 Jan 2026 23:38:06 -0500</pubDate>
+      <guid>https://techobyte.cc/tags/note/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Ci-Cd</title>
+      <link>https://techobyte.cc/tags/ci-cd/</link>
+      <pubDate>Fri, 09 Jan 2026 01:56:08 -0500</pubDate>
+      <guid>https://techobyte.cc/tags/ci-cd/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Cloudflare</title>
+      <link>https://techobyte.cc/tags/cloudflare/</link>
+      <pubDate>Fri, 09 Jan 2026 01:56:08 -0500</pubDate>
+      <guid>https://techobyte.cc/tags/cloudflare/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Devops</title>
+      <link>https://techobyte.cc/tags/devops/</link>
+      <pubDate>Fri, 09 Jan 2026 01:56:08 -0500</pubDate>
+      <guid>https://techobyte.cc/tags/devops/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Hosting</title>
+      <link>https://techobyte.cc/tags/hosting/</link>
+      <pubDate>Fri, 09 Jan 2026 01:56:08 -0500</pubDate>
+      <guid>https://techobyte.cc/tags/hosting/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Netlify</title>
+      <link>https://techobyte.cc/tags/netlify/</link>
+      <pubDate>Fri, 09 Jan 2026 01:56:08 -0500</pubDate>
+      <guid>https://techobyte.cc/tags/netlify/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Static-Site</title>
+      <link>https://techobyte.cc/tags/static-site/</link>
+      <pubDate>Fri, 09 Jan 2026 01:56:08 -0500</pubDate>
+      <guid>https://techobyte.cc/tags/static-site/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>First</title>
+      <link>https://techobyte.cc/tags/first/</link>
+      <pubDate>Sun, 04 Jan 2026 23:21:26 -0500</pubDate>
+      <guid>https://techobyte.cc/tags/first/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Linux</title>
+      <link>https://techobyte.cc/tags/linux/</link>
+      <pubDate>Thu, 24 Mar 2016 00:00:00 -0500</pubDate>
+      <guid>https://techobyte.cc/tags/linux/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Story</title>
+      <link>https://techobyte.cc/tags/story/</link>
+      <pubDate>Thu, 24 Mar 2016 00:00:00 -0500</pubDate>
+      <guid>https://techobyte.cc/tags/story/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

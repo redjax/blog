@@ -1,0 +1,1396 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Techobyte Blog</title>
+    <link>https://techobyte.cc/</link>
+    <description>Recent content on Techobyte Blog</description>
+    <generator>Hugo -- 0.154.3</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 13 Jan 2026 23:38:06 -0500</lastBuildDate>
+    <atom:link href="https://techobyte.cc/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Git Rewrite History</title>
+      <link>https://techobyte.cc/notes/git-rewrite-history/</link>
+      <pubDate>Tue, 13 Jan 2026 23:38:06 -0500</pubDate>
+      <guid>https://techobyte.cc/notes/git-rewrite-history/</guid>
+      <description>Code snippet or command reference</description>
+      <content:encoded><![CDATA[<p>If you have ever accidentally committed code under the wrong <code>git.user</code>/<code>git.email</code>, you should know you can rewrite the <code>git log</code> to change commit authors using <code>git filter-branch</code>.</p>
+<h2 id="git-filter-repo-plugin">Git filter-repo plugin</h2>
+<p>Install the <a href="https://github.com/newren/git-filter-repo/blob/main/INSTALL.md"><code>git-filter-repo</code></a> plugin for Git with Python:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">pip install git-filter-repo
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>This plugin is required to run the <code>git filter-repo</code> command. It is ok to install this using &ldquo;system Python.&rdquo;</p>
+<p>If you are running Linux, you can install it with <code>apt install -y git-filter-repo</code> (or whatever package manager your distribution uses, i.e. <code>dnf</code> for RedHat/Fedora).</p>
+<h2 id="steps">Steps</h2>
+<p>Clone the repository that has the history you want to rewrite using the <code>--bare</code> flag:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">git clone --bare git@github.com:user/repo.git
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Run the following command to replace all instances of the old/wrong name &amp; email with a different Git user:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">git filter-branch --env-filter <span class="s1">&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s1">if [ &#34;$GIT_COMMITTER_NAME&#34; = &#34;Old Name&#34; ] &amp;&amp; [ &#34;$GIT_COMMITTER_EMAIL&#34; = &#34;old.email@example.com&#34; ]; then
+</span></span></span><span class="line"><span class="cl"><span class="s1">    GIT_COMMITTER_NAME=&#34;New Name&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s1">    GIT_COMMITTER_EMAIL=&#34;new.email@example.com&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s1">    GIT_AUTHOR_NAME=&#34;New Name&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s1">    GIT_AUTHOR_EMAIL=&#34;new.email@example.com&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s1">fi
+</span></span></span><span class="line"><span class="cl"><span class="s1">&#39;</span> --tag-name-filter cat -- --branches --tags
+</span></span></code></pre></td></tr></table>
+</div>
+</div><style type="text/css">
+     
+    .notice {
+        --title-color: #fff;
+        --title-background-color: #6be;
+        --content-color: #444;
+        --content-background-color: #e7f2fa;
+    }
+
+    .notice.info {
+        --title-background-color: #fb7;
+        --content-background-color: #fec;
+    }
+
+    .notice.tip {
+        --title-background-color: #5a5;
+        --content-background-color: #efe;
+    }
+
+    .notice.warning {
+        --title-background-color: #c33;
+        --content-background-color: #fee;
+    }
+
+     
+    @media (prefers-color-scheme:dark) {
+        .notice {
+            --title-color: #fff;
+            --title-background-color: #069;
+            --content-color: #ddd;
+            --content-background-color: #023;
+        }
+
+        .notice.info {
+            --title-background-color: #a50;
+            --content-background-color: #420;
+        }
+
+        .notice.tip {
+            --title-background-color: #363;
+            --content-background-color: #121;
+        }
+
+        .notice.warning {
+            --title-background-color: #800;
+            --content-background-color: #400;
+        }
+    }
+
+    body.dark .notice {
+        --title-color: #fff;
+        --title-background-color: #069;
+        --content-color: #ddd;
+        --content-background-color: #023;
+    }
+
+    body.dark .notice.info {
+        --title-background-color: #a50;
+        --content-background-color: #420;
+    }
+
+    body.dark .notice.tip {
+        --title-background-color: #363;
+        --content-background-color: #121;
+    }
+
+    body.dark .notice.warning {
+        --title-background-color: #800;
+        --content-background-color: #400;
+    }
+
+     
+    .notice {
+        padding: 18px;
+        line-height: 24px;
+        margin-bottom: 24px;
+        border-radius: 4px;
+        color: var(--content-color);
+        background: var(--content-background-color);
+    }
+
+    .notice p:last-child {
+        margin-bottom: 0
+    }
+
+     
+    .notice-title {
+        margin: -18px -18px 12px;
+        padding: 4px 18px;
+        border-radius: 4px 4px 0 0;
+        font-weight: 700;
+        color: var(--title-color);
+        background: var(--title-background-color);
+    }
+
+     
+    .icon-notice {
+        display: inline-flex;
+        align-self: center;
+        margin-right: 8px;
+    }
+
+    .icon-notice img,
+    .icon-notice svg {
+        height: 1em;
+        width: 1em;
+        fill: currentColor;
+    }
+
+    .icon-notice img,
+    .icon-notice.baseline svg {
+        top: .125em;
+        position: relative;
+    }
+</style><div class="notice info" >
+    <p class="notice-title">
+        <span class="icon-notice baseline">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="92 59.5 300 300">
+  <path d="M292 303.25V272c0-3.516-2.734-6.25-6.25-6.25H267v-100c0-3.516-2.734-6.25-6.25-6.25h-62.5c-3.516 0-6.25 2.734-6.25 6.25V197c0 3.516 2.734 6.25 6.25 6.25H217v62.5h-18.75c-3.516 0-6.25 2.734-6.25 6.25v31.25c0 3.516 2.734 6.25 6.25 6.25h87.5c3.516 0 6.25-2.734 6.25-6.25Zm-25-175V97c0-3.516-2.734-6.25-6.25-6.25h-37.5c-3.516 0-6.25 2.734-6.25 6.25v31.25c0 3.516 2.734 6.25 6.25 6.25h37.5c3.516 0 6.25-2.734 6.25-6.25Zm125 81.25c0 82.813-67.188 150-150 150-82.813 0-150-67.188-150-150 0-82.813 67.188-150 150-150 82.813 0 150 67.188 150 150Z"/>
+</svg>
+
+        </span>Info</p><p>Replace <code>Old Name</code> with the old <code>git config user.name</code>, <code>old.email@example.com</code> with the old <code>git config user.email</code>, and do the same for <code>New Name</code> and <code>new.email@example.com</code>.</p></div>
+
+<p>Clean the <code>reflog</code> and run Git garbage collection to remove any cached history with the old Git user:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">git reflog expire --expire<span class="o">=</span>now --all
+</span></span><span class="line"><span class="cl">git gc --prune<span class="o">=</span>now
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Finally, force push the changes back to the remote:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">git push --force --all
+</span></span><span class="line"><span class="cl">git push --force --tags
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="notice tip" >
+    <p class="notice-title">
+        <span class="icon-notice baseline">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="300.5 134 300 300">
+  <path d="M551.281 252.36c0-3.32-1.172-6.641-3.515-8.985l-17.774-17.578c-2.344-2.344-5.469-3.711-8.789-3.711-3.32 0-6.445 1.367-8.789 3.71l-79.687 79.493-44.141-44.14c-2.344-2.344-5.469-3.712-8.79-3.712-3.32 0-6.444 1.368-8.788 3.711l-17.774 17.579c-2.343 2.343-3.515 5.664-3.515 8.984 0 3.32 1.172 6.445 3.515 8.789l70.704 70.703c2.343 2.344 5.664 3.711 8.789 3.711 3.32 0 6.64-1.367 8.984-3.71l106.055-106.056c2.343-2.343 3.515-5.468 3.515-8.789ZM600.5 284c0 82.813-67.188 150-150 150-82.813 0-150-67.188-150-150 0-82.813 67.188-150 150-150 82.813 0 150 67.188 150 150Z"/>
+</svg>
+
+        </span>Tip</p><p>If you have branch protection rules that prevent force pushing, you will need to turn them off temporarily to run the force push.</p></div>
+
+<p>Verify the rewrite succeeded by cloning the repository to a new path and search the log for the old user:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">mkdir ~/tmp
+</span></span><span class="line"><span class="cl">git clone git@github.com:user/repo.git ~/tmp/repo
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> ~/tmp/repo
+</span></span><span class="line"><span class="cl">git log --author<span class="o">=</span><span class="s2">&#34;Old Name&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>You should not see any results; if you do, look back through the history of your commands to see if there were any errors during the process.</p>
+<h2 id="bash-script">Bash script</h2>
+<p>On a Linux or Mac system, you can use this Bash script to automate the steps above. Run the script with <code>--help</code> to see the usage menu.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span><span class="lnt">146
+</span><span class="lnt">147
+</span><span class="lnt">148
+</span><span class="lnt">149
+</span><span class="lnt">150
+</span><span class="lnt">151
+</span><span class="lnt">152
+</span><span class="lnt">153
+</span><span class="lnt">154
+</span><span class="lnt">155
+</span><span class="lnt">156
+</span><span class="lnt">157
+</span><span class="lnt">158
+</span><span class="lnt">159
+</span><span class="lnt">160
+</span><span class="lnt">161
+</span><span class="lnt">162
+</span><span class="lnt">163
+</span><span class="lnt">164
+</span><span class="lnt">165
+</span><span class="lnt">166
+</span><span class="lnt">167
+</span><span class="lnt">168
+</span><span class="lnt">169
+</span><span class="lnt">170
+</span><span class="lnt">171
+</span><span class="lnt">172
+</span><span class="lnt">173
+</span><span class="lnt">174
+</span><span class="lnt">175
+</span><span class="lnt">176
+</span><span class="lnt">177
+</span><span class="lnt">178
+</span><span class="lnt">179
+</span><span class="lnt">180
+</span><span class="lnt">181
+</span><span class="lnt">182
+</span><span class="lnt">183
+</span><span class="lnt">184
+</span><span class="lnt">185
+</span><span class="lnt">186
+</span><span class="lnt">187
+</span><span class="lnt">188
+</span><span class="lnt">189
+</span><span class="lnt">190
+</span><span class="lnt">191
+</span><span class="lnt">192
+</span><span class="lnt">193
+</span><span class="lnt">194
+</span><span class="lnt">195
+</span><span class="lnt">196
+</span><span class="lnt">197
+</span><span class="lnt">198
+</span><span class="lnt">199
+</span><span class="lnt">200
+</span><span class="lnt">201
+</span><span class="lnt">202
+</span><span class="lnt">203
+</span><span class="lnt">204
+</span><span class="lnt">205
+</span><span class="lnt">206
+</span><span class="lnt">207
+</span><span class="lnt">208
+</span><span class="lnt">209
+</span><span class="lnt">210
+</span><span class="lnt">211
+</span><span class="lnt">212
+</span><span class="lnt">213
+</span><span class="lnt">214
+</span><span class="lnt">215
+</span><span class="lnt">216
+</span><span class="lnt">217
+</span><span class="lnt">218
+</span><span class="lnt">219
+</span><span class="lnt">220
+</span><span class="lnt">221
+</span><span class="lnt">222
+</span><span class="lnt">223
+</span><span class="lnt">224
+</span><span class="lnt">225
+</span><span class="lnt">226
+</span><span class="lnt">227
+</span><span class="lnt">228
+</span><span class="lnt">229
+</span><span class="lnt">230
+</span><span class="lnt">231
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="cp">#!/usr/bin/env bash
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span> -euo pipefail
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">## Find a Python interpreter for pip installs</span>
+</span></span><span class="line"><span class="cl"><span class="nv">PYTHON_BIN</span><span class="o">=</span><span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> bin in python3 python py py3 python<span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="nb">command</span> -v <span class="s2">&#34;</span><span class="nv">$bin</span><span class="s2">&#34;</span> &gt;/dev/null 2&gt;<span class="p">&amp;</span>1<span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">PYTHON_BIN</span><span class="o">=</span><span class="nv">$bin</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">break</span>
+</span></span><span class="line"><span class="cl">  <span class="k">fi</span>
+</span></span><span class="line"><span class="cl"><span class="k">done</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">## Ensure git-filter-repo is installed (try uv first, then pip)</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> ! <span class="nb">command</span> -v git-filter-repo &gt;/dev/null 2&gt;<span class="p">&amp;</span>1<span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;git-filter-repo not found.&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">## Install with uv, if available</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="nb">command</span> -v uv &gt;/dev/null 2&gt;<span class="p">&amp;</span>1<span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;uv found. Installing git-filter-repo as a tool...&#34;</span>
+</span></span><span class="line"><span class="cl">    uv tool install git-filter-repo
+</span></span><span class="line"><span class="cl">    <span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$HOME</span><span class="s2">/.local/bin:</span><span class="nv">$PATH</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="o">[[</span> -z <span class="s2">&#34;</span><span class="nv">$PYTHON_BIN</span><span class="s2">&#34;</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;No Python interpreter found. Please install Python or uv.&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">  <span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">## Fallback to Python</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;Using </span><span class="nv">$PYTHON_BIN</span><span class="s2"> to install git-filter-repo via pip...&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;</span><span class="nv">$PYTHON_BIN</span><span class="s2">&#34;</span> -m pip install --user git-filter-repo
+</span></span><span class="line"><span class="cl">  <span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$HOME</span><span class="s2">/.local/bin:</span><span class="nv">$PATH</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">## Test git-filter-repo was installed correctly</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> ! <span class="nb">command</span> -v git-filter-repo &gt;/dev/null 2&gt;<span class="p">&amp;</span>1<span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;git-filter-repo still not found after installation attempts.&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">## Function to print help menu/usage</span>
+</span></span><span class="line"><span class="cl">usage<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;Usage: </span><span class="nv">$0</span><span class="s2"> [--force] \\&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;          --repo-url git@github.com:user/repo.git \\&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;          --source-email &#39;old.email@example.com&#39; \\&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;          --target-email &#39;new.email@example.com&#39; \\&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;          [--source-name &#39;Old Name&#39;] \\&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;          [--target-name &#39;New Name&#39;]&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">## Default vars</span>
+</span></span><span class="line"><span class="cl"><span class="nv">REPO_URL</span><span class="o">=</span><span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">SRC_EMAIL</span><span class="o">=</span><span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">TGT_EMAIL</span><span class="o">=</span><span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">SRC_NAME</span><span class="o">=</span><span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">TGT_NAME</span><span class="o">=</span><span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">FORCE_PUSH</span><span class="o">=</span><span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">## Parse arguments</span>
+</span></span><span class="line"><span class="cl"><span class="k">while</span> <span class="o">[[</span> <span class="nv">$#</span> -gt <span class="m">0</span> <span class="o">]]</span><span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="k">case</span> <span class="nv">$1</span> in
+</span></span><span class="line"><span class="cl">  --repo-url<span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">REPO_URL</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$2</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">shift</span> <span class="m">2</span>
+</span></span><span class="line"><span class="cl">    <span class="p">;;</span>
+</span></span><span class="line"><span class="cl">  --source-email<span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">SRC_EMAIL</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$2</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">shift</span> <span class="m">2</span>
+</span></span><span class="line"><span class="cl">    <span class="p">;;</span>
+</span></span><span class="line"><span class="cl">  --target-email<span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">TGT_EMAIL</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$2</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">shift</span> <span class="m">2</span>
+</span></span><span class="line"><span class="cl">    <span class="p">;;</span>
+</span></span><span class="line"><span class="cl">  --source-name<span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">SRC_NAME</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$2</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">shift</span> <span class="m">2</span>
+</span></span><span class="line"><span class="cl">    <span class="p">;;</span>
+</span></span><span class="line"><span class="cl">  --target-name<span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">TGT_NAME</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$2</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">shift</span> <span class="m">2</span>
+</span></span><span class="line"><span class="cl">    <span class="p">;;</span>
+</span></span><span class="line"><span class="cl">  --force<span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">FORCE_PUSH</span><span class="o">=</span><span class="m">1</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">shift</span>
+</span></span><span class="line"><span class="cl">    <span class="p">;;</span>
+</span></span><span class="line"><span class="cl">  -h <span class="p">|</span> --help<span class="o">)</span>
+</span></span><span class="line"><span class="cl">    usage
+</span></span><span class="line"><span class="cl">    <span class="p">;;</span>
+</span></span><span class="line"><span class="cl">  *<span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;Invalid argument: </span><span class="nv">$1</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    usage
+</span></span><span class="line"><span class="cl">    <span class="p">;;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">esac</span>
+</span></span><span class="line"><span class="cl"><span class="k">done</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[[</span> -z <span class="s2">&#34;</span><span class="nv">$REPO_URL</span><span class="s2">&#34;</span> <span class="o">||</span> -z <span class="s2">&#34;</span><span class="nv">$SRC_EMAIL</span><span class="s2">&#34;</span> <span class="o">||</span> -z <span class="s2">&#34;</span><span class="nv">$TGT_EMAIL</span><span class="s2">&#34;</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;Missing required arguments.&#34;</span>
+</span></span><span class="line"><span class="cl">  usage
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Repo URL: </span><span class="nv">$REPO_URL</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Replacing source email &lt;</span><span class="nv">$SRC_EMAIL</span><span class="s2">&gt; with target email &lt;</span><span class="nv">$TGT_EMAIL</span><span class="s2">&gt;&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[[</span> -n <span class="s2">&#34;</span><span class="nv">$SRC_NAME</span><span class="s2">&#34;</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;Source name: </span><span class="nv">$SRC_NAME</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[[</span> -n <span class="s2">&#34;</span><span class="nv">$TGT_NAME</span><span class="s2">&#34;</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;Target name: </span><span class="nv">$TGT_NAME</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">## Create temporary directory to clone repo into</span>
+</span></span><span class="line"><span class="cl"><span class="nv">TMP_DIR</span><span class="o">=</span><span class="k">$(</span>mktemp -d<span class="k">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Mirror cloning repository into temporary directory: </span><span class="nv">$TMP_DIR</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">git clone --mirror <span class="s2">&#34;</span><span class="nv">$REPO_URL</span><span class="s2">&#34;</span> <span class="s2">&#34;</span><span class="nv">$TMP_DIR</span><span class="s2">/repo&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> <span class="s2">&#34;</span><span class="nv">$TMP_DIR</span><span class="s2">/repo&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Rewriting commit history emails with git-filter-repo...&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">## Read history with source username/email, replace with target</span>
+</span></span><span class="line"><span class="cl"><span class="nv">COMMIT_CALLBACK</span><span class="o">=</span><span class="s2">&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">if commit.author_email.decode(&#39;utf-8&#39;) == &#39;</span><span class="nv">$SRC_EMAIL</span><span class="s2">&#39;:
+</span></span></span><span class="line"><span class="cl"><span class="s2">    commit.author_email = b&#39;</span><span class="nv">$TGT_EMAIL</span><span class="s2">&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[[</span> -n <span class="s2">&#34;</span><span class="nv">$TGT_NAME</span><span class="s2">&#34;</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">COMMIT_CALLBACK</span><span class="o">+=</span><span class="s2">&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    commit.author_name = b&#39;</span><span class="nv">$TGT_NAME</span><span class="s2">&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">COMMIT_CALLBACK</span><span class="o">+=</span><span class="s2">&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">if commit.committer_email.decode(&#39;utf-8&#39;) == &#39;</span><span class="nv">$SRC_EMAIL</span><span class="s2">&#39;:
+</span></span></span><span class="line"><span class="cl"><span class="s2">    commit.committer_email = b&#39;</span><span class="nv">$TGT_EMAIL</span><span class="s2">&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[[</span> -n <span class="s2">&#34;</span><span class="nv">$TGT_NAME</span><span class="s2">&#34;</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">COMMIT_CALLBACK</span><span class="o">+=</span><span class="s2">&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    commit.committer_name = b&#39;</span><span class="nv">$TGT_NAME</span><span class="s2">&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Generated callback:&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;</span><span class="nv">$COMMIT_CALLBACK</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">## Rewrite history</span>
+</span></span><span class="line"><span class="cl">git filter-repo --force --commit-callback <span class="s2">&#34;</span><span class="nv">$COMMIT_CALLBACK</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;git filter-repo completed successfully&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Verifying first few commits after rewrite...&#34;</span>
+</span></span><span class="line"><span class="cl">git log --all --pretty<span class="o">=</span>format:<span class="s2">&#34;%h %ad %an &lt;%ae&gt;&#34;</span> --date<span class="o">=</span>iso -5
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Removing backup refs...&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">##  Remove all refs with old data</span>
+</span></span><span class="line"><span class="cl">git <span class="k">for</span>-each-ref --format<span class="o">=</span><span class="s1">&#39;%(refname)&#39;</span> refs/original <span class="p">|</span> xargs -r git update-ref -d
+</span></span><span class="line"><span class="cl">git <span class="k">for</span>-each-ref --format<span class="o">=</span><span class="s1">&#39;%(refname)&#39;</span> refs/backup <span class="p">|</span> xargs -r git update-ref -d
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Expiring reflogs and pruning unreachable objects...&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">## Expire old data locally before pushing</span>
+</span></span><span class="line"><span class="cl">git reflog expire --expire<span class="o">=</span>now --all
+</span></span><span class="line"><span class="cl">git gc --prune<span class="o">=</span>now --aggressive
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Verifying no lingering commits with source email anywhere...&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">## Get list of commits with source email</span>
+</span></span><span class="line"><span class="cl"><span class="nv">SOURCE_COMMITS</span><span class="o">=</span><span class="k">$(</span>git <span class="k">for</span>-each-ref --format<span class="o">=</span><span class="s1">&#39;%(refname)&#39;</span> <span class="p">|</span> <span class="k">while</span> <span class="nb">read</span> -r ref<span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  git log <span class="s2">&#34;</span><span class="nv">$ref</span><span class="s2">&#34;</span> --pretty<span class="o">=</span>format:<span class="s2">&#34;%H%x09%ad%x09%an%x09%ae%x09%cN%x09%cE&#34;</span> --date<span class="o">=</span>iso <span class="p">|</span>
+</span></span><span class="line"><span class="cl">    awk -v <span class="nv">src_email</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$SRC_EMAIL</span><span class="s2">&#34;</span> <span class="s1">&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s1">        $4 == src_email || $6 == src_email {
+</span></span></span><span class="line"><span class="cl"><span class="s1">            print FILENAME &#34;\t&#34; $0
+</span></span></span><span class="line"><span class="cl"><span class="s1">        }&#39;</span> <span class="nv">FILENAME</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$ref</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">done)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">## If any commits remain with source email, exit</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[[</span> -n <span class="s2">&#34;</span><span class="nv">$SOURCE_COMMITS</span><span class="s2">&#34;</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;[ERROR] Some commits still contain the source email &lt;</span><span class="nv">$SRC_EMAIL</span><span class="s2">&gt;:&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> -e <span class="s2">&#34;Ref\tCommit\tDate\tAuthorName\tAuthorEmail\tCommitterName\tCommitterEmail&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;</span><span class="nv">$SOURCE_COMMITS</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;Aborting push.&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nb">exit</span> <span class="m">2</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Removing local refs under refs/merge-requests/ to avoid push errors...&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">## Remove all refs under refs/merge-requests/</span>
+</span></span><span class="line"><span class="cl">git <span class="k">for</span>-each-ref --format<span class="o">=</span><span class="s1">&#39;%(refname)&#39;</span> refs/merge-requests <span class="p">|</span> xargs -r -n <span class="m">1</span> git update-ref -d <span class="o">||</span> <span class="nb">true</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Adding remote origin after filter-repo cleanup...&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">## Re-add origin (git-filter-repo removes it)</span>
+</span></span><span class="line"><span class="cl">git remote add origin <span class="s2">&#34;</span><span class="nv">$REPO_URL</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Pushing all branches and tags to origin forcibly...&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">## Push rewritten histories back up</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[[</span> -n <span class="s2">&#34;</span><span class="si">${</span><span class="nv">FORCE_PUSH</span><span class="k">:-</span><span class="si">}</span><span class="s2">&#34;</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> ! git push origin --force --all<span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;[ERROR] Failed to push rewritten commits to origin.&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">  <span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> ! git push origin --force --tags<span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;[ERROR] Failed to push rewritten commits to origin.&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">  <span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">else</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> ! git push origin --force --all<span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;[ERROR] Failed to push rewritten commits to origin.&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">  <span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> ! git push origin --force --tags<span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;[ERROR] Failed to push rewritten commits to origin.&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">  <span class="k">fi</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Successfully rewrote all commits and pushed to remote.&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Temporary repo location: </span><span class="nv">$TMP_DIR</span><span class="s2">/repo&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">exit</span> <span class="m">0</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div>]]></content:encoded>
+    </item>
+    <item>
+      <title>Host Hugo with Netlify</title>
+      <link>https://techobyte.cc/posts/host-hugo-with-netlify/</link>
+      <pubDate>Fri, 09 Jan 2026 01:56:08 -0500</pubDate>
+      <guid>https://techobyte.cc/posts/host-hugo-with-netlify/</guid>
+      <description>Build &amp;amp; deploy a Hugo site from a Github/Gitlab repository and host it on Netlify behind a custom domain (with optional Cloudflare).</description>
+      <content:encoded><![CDATA[<p><a href="https://gohugo.com">Hugo</a> is a <a href="https://www.cloudflare.com/learning/performance/static-site-generator/">static site generator</a> that enables you to write your website&rsquo;s content as Markdown files, and render them to nice-looking websites using <a href="https://themes.gohugo.io">Hugo themes</a>. The word &ldquo;static&rdquo; in this context means that the files Hugo renders are meant to be served as-is, there is no &ldquo;backend&rdquo; for the site (unless you add custom Javascript code).</p>
+<p>Static sites are perfect for many different kinds of websites, from personal blogs like this site to product sites (i.e. <a href="https://brave.com">Brave browser&rsquo;s website</a>) to an organization&rsquo;s home page (i.e. <a href="https://letsencrypt.org">the LetsEncrypt project&rsquo;s site</a>) to documentation sites (i.e. <a href="https://docs.digitalocean.com">DigitalOcean&rsquo;s documentation</a>). With a static site generator, you do not have to deal with web code like HTML or Javascript, but you still have the option of <a href="https://gohugo.io/commands/hugo_new_theme/">creating your own custom themes</a> if that appeals to you.</p>
+<p>When Hugo renders your source code into a website, it outputs everything you need to start serving the site to a <code>public/</code> directory, allowing you to host the page in <a href="https://hugomods.com">Docker</a>, or on a VPS you control, or with a service like <a href="https://www.netlify.com">Netlify</a>. You could even host your site on a <a href="https://snapcraft.io/install/hugo/raspbian">Raspberry Pi you own</a> (although I would recommend looking into running the site in a Docker container, instead of a Canonical Snap). Anywhere that can serve HTML should be able to serve your compiled Hugo website.</p>
+<p>This blog will run through the basic steps to initialize a Hugo project, host it on Github, and setup hosting with Netlify.</p>
+<h2 id="requirements">Requirements</h2>
+<ul>
+<li><a href="https://gohugo.io/installation/">Hugo</a>
+<ul>
+<li>You should also pick a <a href="https://themes.gohugo.io">Hugo theme</a>, i.e. <a href="https://themes.gohugo.io/themes/hugo-papermod/">PaperMod</a></li>
+</ul>
+</li>
+<li><a href="https://go.dev/doc/install">Go</a> (optional)
+<ul>
+<li>You can <a href="https://gohugo.io/hugo-modules/use-modules/">add themes as a Hugo module</a> instead of using Git submodules.</li>
+</ul>
+</li>
+<li><a href="https://git-scm.org">Git</a></li>
+<li><a href="https://github.com">Github account</a></li>
+<li><a href="https://netlify.com">Netlify account</a></li>
+</ul>
+<h2 id="initialize-hugo-repository">Initialize Hugo repository</h2>
+<p>There are different ways of structuring the repository, like putting the site&rsquo;s content in a <code>src/</code> directory or storing multiple Hugo sites in a single monorepo. This guide assumes you follow the <a href="https://gohugo.io/getting-started/quick-start/#create-a-site">default steps for initializing a Hugo project</a>, where all source code is in the &ldquo;root&rdquo; of the repository.</p>
+<p>First, <code>cd</code> to a path where you want to initialize your Hugo site, i.e. <code>~/git</code> or just <code>~/</code> and initialize the site with:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">hugo new site &lt;your-blog-name&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Replace <code>&lt;your-blog-name&gt;</code> above with the name of your blog. The documentation uses <code>quickstart</code> as an example. You can name the site whatever you want, and can change it later by editing the <code>hugo.toml</code>/<code>hugo.yml</code> file the <code>hugo new site</code> command creates. When you run the Hugo command, you will see output with some first steps and instructions for editing the <code>hugo.toml</code> to change the site&rsquo;s configuration:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$&gt; hugo new site your-site-name
+</span></span><span class="line"><span class="cl">Congratulations! Your new Hugo site was created in /home/username/git/your-site-name.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Just a few more steps...
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">1. Change the current directory to /home/username/git/your-site-name.
+</span></span><span class="line"><span class="cl">2. Create or install a theme:
+</span></span><span class="line"><span class="cl">   - Create a new theme with the <span class="nb">command</span> <span class="s2">&#34;hugo new theme &lt;THEMENAME&gt;&#34;</span>
+</span></span><span class="line"><span class="cl">   - Or, install a theme from https://themes.gohugo.io/
+</span></span><span class="line"><span class="cl">3. Edit hugo.toml, setting the <span class="s2">&#34;theme&#34;</span> property to the theme name.
+</span></span><span class="line"><span class="cl">4. Create new content with the <span class="nb">command</span> <span class="s2">&#34;hugo new content &lt;SECTIONNAME&gt;/&lt;FILENAME&gt;.&lt;FORMAT&gt;&#34;</span>.
+</span></span><span class="line"><span class="cl">5. Start the embedded web server with the <span class="nb">command</span> <span class="s2">&#34;hugo server --buildDrafts&#34;</span>.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">See documentation at https://gohugo.io/.
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>This is an example of the files <code>hugo new site</code> creates:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">your-site-name/
+</span></span><span class="line"><span class="cl">├── themes
+</span></span><span class="line"><span class="cl">├── static
+</span></span><span class="line"><span class="cl">├── layouts
+</span></span><span class="line"><span class="cl">├── i18n
+</span></span><span class="line"><span class="cl">├── hugo.toml
+</span></span><span class="line"><span class="cl">├── data
+</span></span><span class="line"><span class="cl">├── content
+</span></span><span class="line"><span class="cl">├── assets
+</span></span><span class="line"><span class="cl">└── archetypes
+</span></span><span class="line"><span class="cl">    └── default.md
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Since this blog post is not meant to be an in-depth tutorial of how to build a website with Hugo, we will not go into detail on every single file and folder this command creates, but some important things to know are:</p>
+<ul>
+<li>The <code>themes/</code> directory is where you store themes added as Git submodules.
+<ul>
+<li>This guide assumes you are using Hugo modules to install themes, instead of the old Git submodule way, so you will not need to interact with the <code>themes/</code> directory.</li>
+<li>This is also where you would store a custom theme, if you wanted to create your own Hugo theme for your site.</li>
+</ul>
+</li>
+<li>The <code>static/</code> directory is where you would store static assets for your site, including images and a <code>favicon.ico</code> for the site.
+<ul>
+<li>Although counter-intuitive, it is generally considered best practice to include the binaries for your static resources in the Git repository.</li>
+<li>Save your <code>favicon.ico</code> to <code>static/favicon.ico</code> (if you have one), and any images you use in your posts in <code>static/img</code> (this directory doesn&rsquo;t exist by default, you have to create it).</li>
+</ul>
+</li>
+<li>The <code>layouts/</code> directory is where you can create <a href="https://gohugo.io/content-management/data-sources/">Hugo templates</a> for finer-grained control of how content is displayed on your site.</li>
+</ul>
+<p>The <code>hugo.toml</code> file is the main configuration file for your site. If you prefer YAML, you can copy the contents of <code>hugo.toml</code> into <a href="https://www.convertsimple.com/convert-toml-to-yaml/">convertsimple.com</a>, delete or rename <code>hugo.toml</code> to <code>hugo.yaml</code>/<code>hugo.yml</code>, and paste the converted configuration into the YAML file. Hugo will detect a file named <code>hugo.yml</code> or <code>hugo.toml</code> wherever you run <code>hugo</code> commands from. This guide assumes you are using YAML for your configuration.</p>
+<style type="text/css">
+     
+    .notice {
+        --title-color: #fff;
+        --title-background-color: #6be;
+        --content-color: #444;
+        --content-background-color: #e7f2fa;
+    }
+
+    .notice.info {
+        --title-background-color: #fb7;
+        --content-background-color: #fec;
+    }
+
+    .notice.tip {
+        --title-background-color: #5a5;
+        --content-background-color: #efe;
+    }
+
+    .notice.warning {
+        --title-background-color: #c33;
+        --content-background-color: #fee;
+    }
+
+     
+    @media (prefers-color-scheme:dark) {
+        .notice {
+            --title-color: #fff;
+            --title-background-color: #069;
+            --content-color: #ddd;
+            --content-background-color: #023;
+        }
+
+        .notice.info {
+            --title-background-color: #a50;
+            --content-background-color: #420;
+        }
+
+        .notice.tip {
+            --title-background-color: #363;
+            --content-background-color: #121;
+        }
+
+        .notice.warning {
+            --title-background-color: #800;
+            --content-background-color: #400;
+        }
+    }
+
+    body.dark .notice {
+        --title-color: #fff;
+        --title-background-color: #069;
+        --content-color: #ddd;
+        --content-background-color: #023;
+    }
+
+    body.dark .notice.info {
+        --title-background-color: #a50;
+        --content-background-color: #420;
+    }
+
+    body.dark .notice.tip {
+        --title-background-color: #363;
+        --content-background-color: #121;
+    }
+
+    body.dark .notice.warning {
+        --title-background-color: #800;
+        --content-background-color: #400;
+    }
+
+     
+    .notice {
+        padding: 18px;
+        line-height: 24px;
+        margin-bottom: 24px;
+        border-radius: 4px;
+        color: var(--content-color);
+        background: var(--content-background-color);
+    }
+
+    .notice p:last-child {
+        margin-bottom: 0
+    }
+
+     
+    .notice-title {
+        margin: -18px -18px 12px;
+        padding: 4px 18px;
+        border-radius: 4px 4px 0 0;
+        font-weight: 700;
+        color: var(--title-color);
+        background: var(--title-background-color);
+    }
+
+     
+    .icon-notice {
+        display: inline-flex;
+        align-self: center;
+        margin-right: 8px;
+    }
+
+    .icon-notice img,
+    .icon-notice svg {
+        height: 1em;
+        width: 1em;
+        fill: currentColor;
+    }
+
+    .icon-notice img,
+    .icon-notice.baseline svg {
+        top: .125em;
+        position: relative;
+    }
+</style><div class="notice tip" >
+    <p class="notice-title">
+        <span class="icon-notice baseline">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="300.5 134 300 300">
+  <path d="M551.281 252.36c0-3.32-1.172-6.641-3.515-8.985l-17.774-17.578c-2.344-2.344-5.469-3.711-8.789-3.711-3.32 0-6.445 1.367-8.789 3.71l-79.687 79.493-44.141-44.14c-2.344-2.344-5.469-3.712-8.79-3.712-3.32 0-6.444 1.368-8.788 3.711l-17.774 17.579c-2.343 2.343-3.515 5.664-3.515 8.984 0 3.32 1.172 6.445 3.515 8.789l70.704 70.703c2.343 2.344 5.664 3.711 8.789 3.711 3.32 0 6.64-1.367 8.984-3.71l106.055-106.056c2.343-2.343 3.515-5.468 3.515-8.789ZM600.5 284c0 82.813-67.188 150-150 150-82.813 0-150-67.188-150-150 0-82.813 67.188-150 150-150 82.813 0 150 67.188 150 150Z"/>
+</svg>
+
+        </span>Tip</p><p>You can initialize Hugo with a YAML config file instead of TOML by running the  <code>hugo new site</code> command with a <code>--format yaml</code> flag:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">hugo new site site-name --format yaml
+</span></span></code></pre></td></tr></table>
+</div>
+</div></div>
+
+<h2 id="convert-site-to-hugo-module">Convert Site to Hugo Module</h2>
+<p>Next, initialize your site as a <a href="https://gohugo.io/commands/hugo_mod_init/">Hugo module</a>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">hugo mod init github.com/username/your-site-name
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>After running this, you will see a <code>go.mod</code> file. This allows Go to mannage your site so you can install themes like they are Go packages. For example, to install the <code>PaperMod</code> theme by editing your <code>hugo.yml</code> file and adding the following block of code:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">module</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">imports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">github.com/adityatelange/hugo-PaperMod</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>The full <code>hugo.yml</code> should now look like this:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">baseURL</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;https://example.org/&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">languageCode</span><span class="p">:</span><span class="w"> </span><span class="l">en-us</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l">My New Hugo Site</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">module</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">imports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">github.com/adityatelange/hugo-PaperMod</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><div class="notice note" >
+    <p class="notice-title">
+        <span class="icon-notice baseline">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 128 300 300">
+  <path d="M150 128c82.813 0 150 67.188 150 150 0 82.813-67.188 150-150 150C67.187 428 0 360.812 0 278c0-82.813 67.188-150 150-150Zm25 243.555v-37.11c0-3.515-2.734-6.445-6.055-6.445h-37.5c-3.515 0-6.445 2.93-6.445 6.445v37.11c0 3.515 2.93 6.445 6.445 6.445h37.5c3.32 0 6.055-2.93 6.055-6.445Zm-.39-67.188 3.515-121.289c0-1.367-.586-2.734-1.953-3.516-1.172-.976-2.93-1.562-4.688-1.562h-42.968c-1.758 0-3.516.586-4.688 1.563-1.367.78-1.953 2.148-1.953 3.515l3.32 121.29c0 2.734 2.93 4.882 6.64 4.882h36.134c3.515 0 6.445-2.148 6.64-4.883Z"/>
+</svg>
+
+        </span>Note</p><p>Run <code>hugo mod tidy</code>; this will download the theme(s)/module(s) you declare, remove old versions, and update your <code>go.mod</code> file for you.</p></div>
+
+<h2 id="run-local-hugo-development-server">Run Local Hugo Development Server</h2>
+<p>Now you can test running the server with <code>hugo serve</code>, which will compile the site and start serving it at <code>http://localhost:1313/</code> by default. To change the host address, i.e. to access it from another machine on the network, use <code>--bind 0.0.0.0</code>, and to change the port use <code>-p &lt;port&gt;</code>. This is Hugo&rsquo;s development server. As you edit files, the server will &lsquo;hot reload,&rsquo; re-compiling the Markdown you write and restarting the server.</p>
+<p>Hugo does this <em>very</em> quickly. Each page takes mere milliseconds to render, even those with images or a lot of text, and it caches between rebuilds, only re-rendering the new content. This leads to a pleasant &ldquo;change something and see it instantly&rdquo; writing experience.</p>
+<p>If you start the server with <code>-D</code>, Hugo will also render your drafts in the development server.</p>
+<h2 id="git-repository-setup">Git Repository Setup</h2>
+<p>Run <code>git init -b main</code> in your Hugo site&rsquo;s directory to initialize a new Git repository. Before committing any code, add a <code>.gitignore</code> that ignores Hugo&rsquo;s <code>public/</code> and <code>resources/</code> directories that it creates when you run the development server:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-plaintext" data-lang="plaintext"><span class="line"><span class="cl">/public/
+</span></span><span class="line"><span class="cl">/resources/
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Then, do your initial commit:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">git add *
+</span></span><span class="line"><span class="cl">git commit -m <span class="s2">&#34;Initial commit&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Create a repository on Github for your Hugo site. This should match the URL you used when you create the Hugo module with <code>hugo mod init github.com/user/your-site-name</code>. Add the remote to your local repository:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">git remote <span class="nb">set</span> origin git@github.com:username/your-site-name.git
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>And push your code with <code>git push -u origin main</code>.</p>
+<h2 id="netlify-setup">Netlify Setup</h2>
+<p>Create an account on <a href="https://netlify.com">Netlify</a>. During the setup process, you will be asked to create a project. Allow Netlify to integrate with your Github and find the repository with your Hugo site. If you already have a Netlify site, add a new project and use &ldquo;Import an existing project&rdquo; and find your Hugo repository.</p>
+<p>When you are prompted to input build settings like the base directory/package directory, the build command, the publish directory, etc, leave all of these blank. You can optionally leave the functions directory as <code>netlify/functions</code>. If you set values here, the site will fail to build because the <code>hugo.yml</code> interferes with these settings. Do your site configuration in <code>hugo.yml</code>, not Netlify.</p>
+<p>When asked which branch to trigger Netlify deploys on, you have a decision to make: do you want your site to deploy every single time you open a PR to the main branch, including times where you are doing small cleanup chores like updating the <code>.gitignore</code>, or setting up a new pipeline? Or do you want to have more control over deploys, i.e. only when merging into a branch named <code>netlify</code>?</p>
+<p>I chose the latter, and created a <code>netlify</code> branch, then configured Netlify to deploy from the <code>netlify</code> branch instead of <code>main</code>. I also turned off deployment previews, so any PR into <code>netlify</code> will trigger a deploy.</p>
+<h3 id="netlifytoml-config">netlify.toml Config</h3>
+<p>After finishing the setup, create a <code>netlify.toml</code> file in the root of your Hugo repository :</p>
+<div class="notice note" >
+    <p class="notice-title">
+        <span class="icon-notice baseline">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 128 300 300">
+  <path d="M150 128c82.813 0 150 67.188 150 150 0 82.813-67.188 150-150 150C67.187 428 0 360.812 0 278c0-82.813 67.188-150 150-150Zm25 243.555v-37.11c0-3.515-2.734-6.445-6.055-6.445h-37.5c-3.515 0-6.445 2.93-6.445 6.445v37.11c0 3.515 2.93 6.445 6.445 6.445h37.5c3.32 0 6.055-2.93 6.055-6.445Zm-.39-67.188 3.515-121.289c0-1.367-.586-2.734-1.953-3.516-1.172-.976-2.93-1.562-4.688-1.562h-42.968c-1.758 0-3.516.586-4.688 1.563-1.367.78-1.953 2.148-1.953 3.515l3.32 121.29c0 2.734 2.93 4.882 6.64 4.882h36.134c3.515 0 6.445-2.148 6.64-4.883Z"/>
+</svg>
+
+        </span>Note</p><p>If you have a domain name, you can set it in <code>HUGO_BASEURL</code> instead of the Netlify app URL. Also, make sure to check the current versions of <a href="https://github.com/gohugoio/hugo/releases">Hugo</a> and <a href="https://nodejs.org/en/download/current">Node</a>. for NPM versions, just put the major version number, i.e. <code>24</code>, <code>25</code>, etc.</p></div>
+
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="line"><span class="cl"><span class="p">[</span><span class="nx">build</span><span class="p">.</span><span class="nx">environment</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">HUGO_BASEURL</span> <span class="p">=</span> <span class="s2">&#34;https://netlify-project-name.netlify.app&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">HUGO_VERSION</span> <span class="p">=</span> <span class="s2">&#34;0.152.2&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">HUGO_ENV</span> <span class="p">=</span> <span class="s2">&#34;production&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">NODE_VERSION</span> <span class="p">=</span> <span class="s2">&#34;24&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">HUGO_ENABLEGITINFO</span> <span class="p">=</span> <span class="s2">&#34;true&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">build</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nx">command</span> <span class="p">=</span> <span class="s2">&#34;hugo --gc --minify&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">publish</span> <span class="p">=</span> <span class="s2">&#34;public&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>This file tells Netlify how to build your Hugo site. Commit it to git with <code>git add * &amp;&amp; git commit -m &quot;Add netlify config&quot;</code> and push to main with <code>git push</code>. Even better, create a new branch before adding/committing your code, i.e. <code>git switch -c feat/netlify-setup</code>, then add the files and commit message. When you push, use <code>git push -u origin feat/netlify-setup</code>. Merge the branch into the <code>main</code> branch in Github.</p>
+<h2 id="example-production-hugo-dockerfile">Example Production Hugo Dockerfile</h2>
+<p>If you plan to host your Hugo site yourself, you can set up a Dockerfile to build your site and serve it behind a proxy like <a href="https://caddyserver.com">Caddy</a> or <a href="https://nginx.org/en/">NGINX</a>.</p>
+<p>You can use a multi-stage Docker build to have a smaller final image that only has your rendered HTML and the Caddy server to serve it:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="line"><span class="cl"><span class="k">FROM</span><span class="w"> </span><span class="s">hugomods/hugo:exts</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="s">builder</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">WORKDIR</span><span class="w"> </span><span class="s">/src</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c">## Copy Hugo site files &amp; config</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">COPY</span> archetypes/ archetypes/<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">COPY</span> assets/ assets/<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">COPY</span> content/ content/<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">COPY</span> layouts/ layouts/<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">COPY</span> static/ static/<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">COPY</span> hugo.yml go.mod go.sum .hugo_build.lock ./<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">ARG</span> <span class="nv">HUGO_BASEURL</span><span class="o">=</span>http://localhost/<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">RUN</span> hugo <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --minify <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --gc <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --baseURL<span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">HUGO_BASEURL</span><span class="si">}</span><span class="s2">&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --destination /output/public<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">FROM</span><span class="w"> </span><span class="s">caddy:alpine</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">COPY</span> --from<span class="o">=</span>builder /output/public /usr/share/caddy<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">COPY</span> ./Caddyfile /etc/caddy/Caddyfile<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">EXPOSE</span><span class="w"> </span><span class="s">80</span> <span class="m">443</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">CMD</span> <span class="p">[</span><span class="s2">&#34;caddy&#34;</span><span class="p">,</span> <span class="s2">&#34;run&#34;</span><span class="p">,</span> <span class="s2">&#34;--config&#34;</span><span class="p">,</span> <span class="s2">&#34;/etc/caddy/Caddyfile&#34;</span><span class="p">]</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>Create a <code>Caddyfile</code> the container will use to configure the Caddy server:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-caddyfile" data-lang="caddyfile"><span class="line"><span class="cl"><span class="p">{</span><span class="c1">
+</span></span></span><span class="line"><span class="cl"><span class="c1">  # debug
+</span></span></span><span class="line"><span class="cl">  <span class="k">email</span> <span class="se">{$CADDY_EMAIL}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="se">{$CADDY_SITE_ADDRESS}</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">root</span> <span class="nd">*</span> <span class="s">/usr/share/caddy</span>
+</span></span><span class="line"><span class="cl">  <span class="k">file_server</span>
+</span></span><span class="line"><span class="cl">  <span class="k">encode</span> <span class="s">gzip</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">header</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">X-Content-Type-Options</span> <span class="s">nosniff</span>
+</span></span><span class="line"><span class="cl">    <span class="k">X-Frame-Options</span> <span class="s">DENY</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>When you build the container, you will need to set environment variables for <code>CADDY_EMAIL</code> (for automated LetsEncrypt SSL certificates) and <code>CADDY_SITE_ADDRESS</code> (for handling connections coming to the Caddy URL). The 2 env vars are <a href="https://docs.docker.com/build/building/variables/">&ldquo;build arguments&rdquo;</a>, which you can inject in your <code>docker build</code> command using <code>--build-arg ARG_NAME=value</code>. For example, to build this Dockerfile:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker build --build-arg <span class="nv">CADDY_EMAIL</span><span class="o">=</span><span class="s2">&#34;youremail@address.com&#34;</span> --build-arg <span class="nv">CADDY_SITE_ADDRESS</span><span class="o">=</span><span class="s2">&#34;myblog.com&#34;</span> .
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="check-links-with-lychee">Check Links with Lychee</h2>
+<p><a href="https://github.com/lycheeverse/lychee">Lychee</a> is a <em>fast</em> link checker you can use to check your site for broken links. You can install it locally and point it at your live site, or you can run it against the <code>public/</code> directory after Hugo builds to check your links before deploying.</p>
+<p>Lychee&rsquo;s syntax is simple:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1">## Check links on your live site</span>
+</span></span><span class="line"><span class="cl">lychee https://your-site-name.com
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">## Check links in the public/ directory after a Hugo build</span>
+</span></span><span class="line"><span class="cl">lychee public/
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>As a Github action:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nn">---</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;Test Blog Links&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">on</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c">## Allow manual runs</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">workflow_dispatch</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c">## Every 6 hours</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">schedule</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">cron</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;0 */6 * * *&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">permissions</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">contents</span><span class="p">:</span><span class="w"> </span><span class="l">read</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">jobs</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">test</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l">ubuntu-latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">concurrency</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">group</span><span class="p">:</span><span class="w"> </span><span class="l">${{ github.workflow }}-${{ github.ref }}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Test live site links</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">lycheeverse/lychee-action@v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="p">&gt;-</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">            --base-verification false 
+</span></span></span><span class="line"><span class="cl"><span class="sd">            --no-progress 
+</span></span></span><span class="line"><span class="cl"><span class="sd">            &#34;${{ vars.HUGO_BASEURL }}&#34;/*</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>Or in a full pipeline that builds the site and then tests the <code>public/</code> directory (this is useful to do before deploying):</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nn">---</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;PR checks&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">on</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="l">netlify]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">types</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="l">opened, synchronize, reopened]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">permissions</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">contents</span><span class="p">:</span><span class="w"> </span><span class="l">read</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">pull-requests</span><span class="p">:</span><span class="w"> </span><span class="l">write</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">env</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">HUGO_VERSION</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;0.154.3&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">jobs</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">test</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Build &amp; test Hugo site</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l">ubuntu-latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Checkout</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">actions/checkout@v4</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">fetch-depth</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Vale prose linting</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">errata-ai/vale-action@v2.1.1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">files</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;[&#34;content/**.{md}&#34;]&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Setup Hugo</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">peaceiris/actions-hugo@v3</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">hugo-version</span><span class="p">:</span><span class="w"> </span><span class="l">${{ env.HUGO_VERSION }}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">extended</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Build site</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l">hugo --gc --minify</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Check links with Lychee</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">lycheeverse/lychee-action@v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;public/**/*.html --base .&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">fail</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="closing">Closing</h2>
+<p>Building a blog with Hugo is fun, and relatively quick and easy to get up and running. You can build a complex site for your product, or a simple blog you update a couple times a year, all with the same tooling. The minimal amount of configuration you need to get started lends itself to quick development, while still allowing you to build up <a href="https://gohugo.io/configuration/">a more complex configuration over time</a>. Hugo modules make it even easier to install themes and site extensions, and the ability to host the site anywhere that can serve static web files gives you a ton of flexibility to where you put the site online.</p>
+<p>This guide did not go in-depth on configuring and customizing Hugo, nor did it walk through creating content for the site. The <a href="https://gohugo.io/getting-started/">Hugo quickstart guide</a> will do a better job of walking you through building your first blog, and I highly recommend keeping this site open and using the search bar at the top as you&rsquo;re learning to find new ways of using Hugo.</p>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>First</title>
+      <link>https://techobyte.cc/posts/first/</link>
+      <pubDate>Sun, 04 Jan 2026 23:21:26 -0500</pubDate>
+      <guid>https://techobyte.cc/posts/first/</guid>
+      <description>The first post on the site</description>
+      <content:encoded><![CDATA[<p>Welcome to Techobyte, a personal blog about technology. This blog covers varied topics with no posting cadence or central theme. The blog&rsquo;s content is text-heavy, although some articles may use images to enhance or clarify things.</p>
+<p>I write about tools I use and projects I work on in my homelab, and share the knowledge on this blog. In my free time I like to try new technologies and tools, and I love to share that knowledge with others. I hope the hours I spend struggling on certain things and choose to write about can get you over a hump.</p>
+<p>You can subscribe to the <a href="/index.xml">RSS feed</a>, a feed of the entire site. Add <code>/index.xml</code> to individual pages/sections on the site to subscribe to content of that type. For example, check the <a href="/posts/index.xml"><code>posts</code> feed</a> to see a feed of only the <a href="/posts/">posts</a> made on this site (no <a href="/notes/">notes</a> or <a href="/notes/snippets/">code snippets</a>). Or if you <em>only</em> want to see snippets, subscribe to <a href="/notes/snippets/index.xml"><code>notes/snippets/index.xml</code></a>.</p>
+<p>Techobyte is a <a href="https://gohugo.io">Hugo</a> static site. Feel free to <a href="https://github.com/Techobytedigital/blog">check out the source code for this blog</a>!</p>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>
