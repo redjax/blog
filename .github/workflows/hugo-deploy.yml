@@ -62,7 +62,6 @@ jobs:
         with:
           args: >-
             public/
-            --root-dir public/
             --remap "^https://example.org file://$(pwd)/public"
             --offline
 
