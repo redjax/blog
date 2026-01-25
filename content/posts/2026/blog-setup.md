@@ -53,3 +53,40 @@ I am using [Mise](https://mise.jdx.dev) to handle installing all of the tools I 
 I also faced some difficulties getting started with the blog. I spent way too much time creating the Github Action that deploys my content to Netlify. I failed so many times before getting it right, I exceeded Netlify's free tier 🤡. Most of the difficulty actually came from the "extra" functionality with Lychee link checking and Vale linting. Although I was able to get both of these tools running well locally on my machine, I ran into challenges getting them to run in the pipeline.
 
 Linting with Vale was very difficult to nail down. I was able to get it to work reliabily in the local repository, but struggled with containerizing it and running in a pipeline. I also had invalid syntax in my Lychee link scanning for a while. I resolved both issues, but definitely got caught up in the weeds and did not write any new blog posts in the meantime.
+
+I reposted [one of my old blogs from Medium](), and realized Hugo doesn't have a great way of centering images. You can use [Hugo shortcodes](), but those are specific to/dependent on Hugo, and in the interest of keeping the content as decoupled from the site generator as possible, I did not want to invest too heavily in shortcodes. I found [a really helpful blog post on ebaddf.net](http://www.ebadf.net/2016/10/19/centering-images-in-hugo/) that had a simple, elegant fix that should work across site generators.
+
+It involves creating a custom CSS file, i.e. at `static/css/custom.css`:
+
+```css
+img[src$='#center']
+{
+    display: block;
+    margin: 0.7rem auto; /* you can replace the vertical '0.7rem' by
+                            whatever floats your boat, but keep the
+                            horizontal 'auto' for this to work */
+    /* whatever else styles you fancy here */
+}
+
+img[src$='#floatleft']
+{
+    float:left;
+    margin: 0.7rem;      /* this margin is totally up to you */
+    /* whatever else styles you fancy here */
+}
+
+img[src$='#floatright']
+{
+    float:right;
+    margin: 0.7rem;      /* this margin is totally up to you */
+    /* whatever else styles you fancy here */
+}
+```
+
+And embedding images using that class:
+
+```markdown
+![your_img](/img/your_img.png#center)
+![your_img](/img/your_img.png#floatleft)
+![your_img](/img/your_img.png#floatright)
+```
