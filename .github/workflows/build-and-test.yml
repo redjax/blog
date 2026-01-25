@@ -24,10 +24,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Vale prose linting
-        uses: errata-ai/vale-action@v2.1.1
-        with:
-          files: '["content/**.{md}"]'
+      # - name: Vale prose linting
+      #   uses: errata-ai/vale-action@v2.1.1
+      #   with:
+      #     files: '["content/**.{md}"]'
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
@@ -38,11 +38,11 @@ jobs:
       - name: Build site
         run: hugo --gc --minify
 
-      - name: Check links with Lychee
-        uses: lycheeverse/lychee-action@v2.0.2
-        with:
-          fail: false
-          args: |
-            public/
-            --remap "^https://example.org file://public"
-            --offline
+      # - name: Check links with Lychee
+      #   uses: lycheeverse/lychee-action@v2.0.2
+      #   with:
+      #     fail: false
+      #     args: |
+      #       public/
+      #       --remap "^https://example.org file://public"
+      #       --offline

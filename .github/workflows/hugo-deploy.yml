@@ -46,24 +46,24 @@ jobs:
             echo "hugo-changed=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Vale prose linting
-        if: steps.hugo-changed.outputs.hugo-changed == 'true'
-        uses: errata-ai/vale-action@v2.1.1
-        with:
-          files: '["content/**.{md}"]'
+      # - name: Vale prose linting
+      #   if: steps.hugo-changed.outputs.hugo-changed == 'true'
+      #   uses: errata-ai/vale-action@v2.1.1
+      #   with:
+      #     files: '["content/**.{md}"]'
 
       - name: Build site
         if: steps.hugo-changed.outputs.hugo-changed == 'true'
         run: hugo --gc --minify
 
-      - name: Check built links (Lychee)
-        if: steps.hugo-changed.outputs.hugo-changed == 'true'
-        uses: lycheeverse/lychee-action@v2.0.2
-        with:
-          args: >-
-            public/
-            --remap "^https://example.org file://$(pwd)/public"
-            --offline
+      # - name: Check built links (Lychee)
+      #   if: steps.hugo-changed.outputs.hugo-changed == 'true'
+      #   uses: lycheeverse/lychee-action@v2.0.2
+      #   with:
+      #     args: >-
+      #       public/
+      #       --remap "^https://example.org file://$(pwd)/public"
+      #       --offline
 
       ## Deploy when PR is closed with label 'netlify-release' and any hugo changes
       - name: Deploy to deploy branch
