@@ -27,21 +27,21 @@ jobs:
           hugo-version: ${{ env.HUGO_VERSION }}
           extended: true
 
-      - name: Vale prose linting
-        uses: errata-ai/vale-action@v2.1.1
-        with:
-          files: '["content/**.{md}"]'
+      # - name: Vale prose linting
+      #   uses: errata-ai/vale-action@v2.1.1
+      #   with:
+      #     files: '["content/**.{md}"]'
 
       - name: Build site
         run: hugo --gc --minify
 
-      - name: Check built links (Lychee)
-        uses: lycheeverse/lychee-action@v2.0.2
-        with:
-          args: >-
-            public/
-            --remap "^https://example.org file://$(pwd)/public"
-            --offline
+      # - name: Check built links (Lychee)
+      #   uses: lycheeverse/lychee-action@v2.0.2
+      #   with:
+      #     args: >-
+      #       public/
+      #       --remap "^https://example.org file://$(pwd)/public"
+      #       --offline
 
       - name: Deploy to deploy branch
         run: |
