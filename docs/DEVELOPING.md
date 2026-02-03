@@ -83,3 +83,19 @@ A good command to run in a production/live environment is:
 ```shell
 hugo --minify --gc --cleanDestinationDir
 ```
+
+## Using bundles
+
+[Hugo page bundles](https://gohugo.io/content-management/page-bundles/#article) allow you to organize posts, especially those with media content like images. Creating a bundle is as simple as putting an `index.md` or `_index.md` inside of a subdirectory in [`content/posts/`](../content/posts/).
+
+For example, say you were creating a post named `my-experience-with.md`, but you have a lot of images you want to embed. Instead of creating a "flat" Markdown file at the root of `content/posts/`, you can create a subdirectory with the same name, `content/posts/my-experience-with/` and put an `index.md` file in it. Then you can put images in the same directory and use `./img.ext` in your Markdown file to embed it.
+
+There are 2 types of bundles: "leaf" and "branch."
+
+- A leaf bundle is a directory that contains an `index.md` file and zero or more resources.
+  - Analogous to a physical leaf, a leaf bundle is at the end of a branch.
+  - It has no descendants.
+- A branch bundle is a directory that contains an `_index.md` file and zero or more resources.
+  - Analogous to a physical branch, a branch bundle may have descendants including leaf bundles and other branch bundles.
+  - Top-level directories with or without `_index.md` files are also branch bundles.
+  - This includes the home page.
