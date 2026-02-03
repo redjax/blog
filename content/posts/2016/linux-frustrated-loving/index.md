@@ -1,6 +1,7 @@
 ---
 title: "How Linux Frustrated Me Into Loving It"
 date: 2016-03-24T00:00:00-05:00
+url: /posts/linux-frustrated-loving
 draft: false
 categories: []
 tags: ["linux", "story"]

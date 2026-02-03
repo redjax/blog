@@ -2,6 +2,7 @@
 date: 2026-01-04T23:21:26-05:00
 draft: false
 title: First
+url: /posts/first
 tags: ["first"]
 categories: ["example"]
 author: me
