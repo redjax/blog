@@ -3,6 +3,7 @@ title: "{{ replace .Name "-" " " | title }}"
 type: "notes"
 date: {{ .Date }}
 draft: true
+url: "/notes/{{ .File.ContentBaseName }}/"
 {{ if hasPrefix .Dir "notes/snippets" }}
 categories: []
 description: "Code snippet or command reference"

@@ -2,6 +2,7 @@
 title: "{{ replace .Name "-" " " | title }}"
 date: {{ .Date }}
 draft: true
+url: "/posts/{{ .File.ContentBaseName }}/"
 categories: []
 tags: []
 author: "me"
