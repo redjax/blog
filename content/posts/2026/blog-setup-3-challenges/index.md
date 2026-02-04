@@ -16,6 +16,8 @@ comments: false
 searchHidden: false
 ---
 
+*This post is part of a series: [Blog Setup](/series/blog-setup).*
+
 I also faced some difficulties getting started with the blog. I spent way too much time creating the Github Action that deploys my content to Netlify. I failed so many times before getting it right, I exceeded Netlify's free tier 🤡. Most of the difficulty actually came from the "extra" functionality with Lychee link checking and Vale linting. Although I was able to get both of these tools running well locally on my machine, I ran into challenges getting them to run in the pipeline.
 
 Linting with Vale was very difficult to nail down. I was able to get it to work reliabily in the local repository, but struggled with containerizing it and running in a pipeline. I also had invalid syntax in my Lychee link scanning for a while. I resolved both issues, but definitely got caught up in the weeds and did not write any new blog posts in the meantime.
