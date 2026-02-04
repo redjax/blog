@@ -18,9 +18,23 @@ searchHidden: false
 
 *This post is part of a series: [Blog Setup](/series/blog-setup).*
 
+During the setup process, I had to make a number of choices that affect the short and long term health of the blog. Deciding where and how to host the code and the static site, what tooling to add, how to structure the repository, etc.
+
+## Git Forge
+
+Spoiler: [I went with Github](https://github.com/redjax/blog).
+
+I considered many options for where to host the source code for the blog. Github is an obvious frontrunner, partially becaause [I am already active on Github](https://github.com/redjax), but also the network effect. While I don't promote my blog, I also like the idea that I'm not just shouting into the void with my posts, and discoverability is best where the people are. Github hit [one billion repositories on June 11, 2025](https://github.com/Red-Killer/shit/issues/1/), the first public forge to do so, highlighting the sheer amount of attention and usage on the platform. Most of my coding activity is still on Github (although I [mirror many of my repositories to codeberg.org](https://codeberg.org/redjax)), so anyone stopping by my profile is more likely to find my blog.
+
+One of my concerns while setting up the blog was the ability to quickly and easily move to a new Git host. If I want to move the blog to [Gitlab](https://gitlab.com) or my own [self hosted git forge]([https://forgejo.](https://forgejo.org)), I don't to have to labor to get back up and running.
+
+And so Github it is, for now.
+
 ## CI/CD
 
-I spent time planning the structure of [the git repository for the blog](https://github.com/redjax/blog) to make it portable. I have seen a number of blogs switch platforms over the years, and the posts they write at the end of a migration have inspired some of the choices made for this blog. For example, while this project is hosted on Github and I am using Github Actions to do things like lint the content and publish new pages, I also recreated the functionality in [Concourse CI pipelines](https://concourse-ci.org) so I am not tied to a specific git platform. I could move the blog's repository to any other remote, like [Gitlab](https://gitlab.com) or [Codeberg](https://codeberg.org) without breaking my CI/CD. At some point I will probably try writing the pipelines in [Dagger](https://dagger.io) to make them truly portable.
+I spent time planning the structure of [the git repository for the blog](https://github.com/redjax/blog) to make it portable. I have seen a number of blogs switch platforms over the years, and the posts they write at the end of a migration have inspired some of the choices made for this blog.
+
+For example, while this project is hosted on Github and I am using Github Actions to do things like lint the content and publish new pages, I also recreated the functionality in [Concourse CI pipelines](https://concourse-ci.org) so I am not tied to a specific git platform. I could move the blog's repository to any other remote, like [Gitlab](https://gitlab.com) or [Codeberg](https://codeberg.org) without breaking my CI/CD. At some point I will probably try writing the pipelines in [Dagger](https://dagger.io) to make them truly portable.
 
 ## Hosting
 
