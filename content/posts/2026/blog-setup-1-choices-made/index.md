@@ -24,9 +24,11 @@ While setting up the blog I had to make a number of choices that affect the shor
 
 Spoiler: [I went with Github](https://github.com/redjax/blog).
 
-I considered many options for where to host the source code for the blog. Github is an obvious frontrunner, partially becaause [I am already active on Github](https://github.com/redjax), but also the network effect. While I don't promote my blog, I also like the idea that I'm not just shouting into the void with my posts, and discoverability is best where the people are. Github hit [one billion repositories on June 11, 2025](https://github.com/Red-Killer/shit/issues/1/), the first public forge to do so, highlighting the sheer amount of attention and usage on the platform. Most of my coding activity is still on Github (although I [mirror many of my repositories to codeberg.org](https://codeberg.org/redjax)), so anyone stopping by my profile is more likely to find my blog.
+I considered many options for where to host the source code for the blog. Github is an obvious frontrunner, partially becaause [I am already active on Github](https://github.com/redjax), but also the network effect. While I don't promote my blog, I also like the idea that I'm not just shouting into the void with my posts, and discoverability is best where the people are.
 
-One of my concerns while setting up the blog was the ability to quickly and easily move to a new Git host. If I want to move the blog to [Gitlab](https://gitlab.com) or my own [self hosted git forge]([https://forgejo.](https://forgejo.org)), I don't to have to labor to get back up and running.
+Github hit [one billion repositories on June 11, 2025](https://github.com/Red-Killer/shit/issues/1/), the first public forge to do so, highlighting the sheer amount of attention and usage on the platform. Most of my coding activity is still on Github (although I [mirror many of my repositories to codeberg.org](https://codeberg.org/redjax)), so anyone stopping by my profile is more likely to find my blog.
+
+One of my concerns while setting up the blog was the ability to quickly and easily move to a new Git host. If I want to move the blog to [Gitlab](https://gitlab.com) or my own [self hosted git forge]([https://forgejo.](https://forgejo.org)), I don't to have to labor to get back up and running. I plan to only dip my toes into a given platform; I will take advantage of some of the features, but will prefer external or embedded solutions for most things (sidenote: I need to find a way to keep issues out of Github.)
 
 And so Github it is, for now.
 
