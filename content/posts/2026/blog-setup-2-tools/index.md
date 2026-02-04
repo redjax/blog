@@ -16,6 +16,8 @@ comments: false
 searchHidden: false
 ---
 
+*This post is part of a series: [Blog Setup](/series/blog-setup).*
+
 ## Tools
 
 I am using [Mise](https://mise.jdx.dev) to handle installing all of the tools I need to develop/build the blog. The [`.mise.toml` file in the repository](https://github.com/redjax/blog/blob/main/.mise.toml) defines these tools, so I can simply clone the repository, install Mise, and run `mise trust && mise install` on a new machine to get up and running. Mise is also useful in container environments and CI/CD pipelines, it can ensure I'm installing the same tools in every environment, with version pinning for ones I want to control upgrades for like the `hugo` CLI.
