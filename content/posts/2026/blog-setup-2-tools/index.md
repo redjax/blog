@@ -1,5 +1,5 @@
 ---
-title: "Tools"
+title: "Blog Setup: Tools"
 slug: "/blog-setup/tools"
 date: 2026-02-03T00:00:02-05:00
 draft: true
