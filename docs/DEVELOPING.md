@@ -99,3 +99,61 @@ There are 2 types of bundles: "leaf" and "branch."
   - Analogous to a physical branch, a branch bundle may have descendants including leaf bundles and other branch bundles.
   - Top-level directories with or without `_index.md` files are also branch bundles.
   - This includes the home page.
+
+You can also use page bundles to group multiple posts that are related, i.e. in a series. First, create a page bundle:
+
+```text
+content/series-bundle-name/index.md
+```
+
+In the `index.md`'s frontmatter, add a `series: ["series-name"]` tag. Add more posts in the series by creating additional Markdown files in the same directory, i.e.:
+
+```text
+content/series-bundle-name/post-1.md
+content/series-bundle-name/post-2.md
+
+...
+```
+
+In each of these, make sure to add the `series: ["series-name"]` line. You can also add a `slug: ""` to control the URL. For example in `post-1.md`:
+
+```markdown
+---
+title: "Post 1"
+series: ["series-name"]
+slug: "/posts/series-name/post-1
+---
+```
+
+In the site's `hugo.yml`, make sure to add a `taxonomies` key:
+
+```yaml
+baseUrl: https://example.org
+title: "Blog Title"
+
+taxonomies:
+  tag: tags
+  category: categories
+  series: series # Enable series taxonomy for the blog
+```
+
+Now you can navigate to `/series/` to see the series you've written, or `/series/series-name/` to navigate to a specific series.
+
+In the site's `hugo.yml`, you can optionally add a `/series/` page to your navigation:
+
+```yaml
+menu:
+  main:
+    - identifier: posts
+      name: posts
+      url: /posts/
+      weight: 10
+    - identifier: series
+      name: series
+      url: /series/
+      weight: 20
+    - identifier: tags
+      name: tags
+      url: /tags/
+      weight: 30
+```
