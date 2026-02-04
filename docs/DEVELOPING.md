@@ -100,6 +100,8 @@ There are 2 types of bundles: "leaf" and "branch."
   - Top-level directories with or without `_index.md` files are also branch bundles.
   - This includes the home page.
 
+### Blog Series
+
 You can also use page bundles to group multiple posts that are related, i.e. in a series. First, create a page bundle:
 
 ```text
@@ -109,13 +111,13 @@ content/series-bundle-name/index.md
 In the `index.md`'s frontmatter, add a `series: ["series-name"]` tag. Add more posts in the series by creating additional Markdown files in the same directory, i.e.:
 
 ```text
-content/series-bundle-name/post-1.md
-content/series-bundle-name/post-2.md
+content/series-bundle-name/post-1/index.md
+content/series-bundle-name/post-2/index.md
 
 ...
 ```
 
-In each of these, make sure to add the `series: ["series-name"]` line. You can also add a `slug: ""` to control the URL. For example in `post-1.md`:
+In each of these, make sure to add the `series: ["series-name"]` line. You can also add a `slug: ""` to control the URL. For example in `post-1/index.md`:
 
 ```markdown
 ---
