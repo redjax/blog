@@ -1,8 +1,8 @@
 ---
 title: "Blog Setup: Choices Made"
 slug: "/blog-setup/choices-made"
-date: 2026-02-03T00:00:01-05:00
-draft: true
+date: 2026-02-05T00:00:01-05:00
+draft: false
 series: ["blog-setup"]
 summary: ""
 categories: []
