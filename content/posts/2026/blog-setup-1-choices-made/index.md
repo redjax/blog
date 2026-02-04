@@ -16,6 +16,10 @@ comments: false
 searchHidden: false
 ---
 
+{{< notice note >}}
+*This post is part of a series: [Blog Setup](/series/blog-setup).*
+{{< /notice >}}
+
 ## CI/CD
 
 I spent time planning the structure of [the git repository for the blog](https://github.com/redjax/blog) to make it portable. I have seen a number of blogs switch platforms over the years, and the posts they write at the end of a migration have inspired some of the choices made for this blog. For example, while this project is hosted on Github and I am using Github Actions to do things like lint the content and publish new pages, I also recreated the functionality in [Concourse CI pipelines](https://concourse-ci.org) so I am not tied to a specific git platform. I could move the blog's repository to any other remote, like [Gitlab](https://gitlab.com) or [Codeberg](https://codeberg.org) without breaking my CI/CD. At some point I will probably try writing the pipelines in [Dagger](https://dagger.io) to make them truly portable.
