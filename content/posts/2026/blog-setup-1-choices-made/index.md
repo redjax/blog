@@ -18,7 +18,7 @@ searchHidden: false
 
 *This post is part of a series: [Blog Setup](/series/blog-setup).*
 
-During the setup process, I had to make a number of choices that affect the short and long term health of the blog. Deciding where and how to host the code and the static site, what tooling to add, how to structure the repository, etc.
+While setting up the blog I had to make a number of choices that affect the short and long term health of the blog. Deciding where and how to host the code and the static site, what tooling to add, how to structure the repository, etc.
 
 ## Git Forge
 
