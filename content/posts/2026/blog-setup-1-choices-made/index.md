@@ -38,6 +38,8 @@ I spent time planning the structure of [the git repository for the blog](https:/
 
 For example, while this project is hosted on Github and I am using Github Actions to do things like lint the content and publish new pages, I also recreated the functionality in [Concourse CI pipelines](https://concourse-ci.org) so I am not tied to a specific git platform. I could move the blog's repository to any other remote, like [Gitlab](https://gitlab.com) or [Codeberg](https://codeberg.org) without breaking my CI/CD. At some point I will probably try writing the pipelines in [Dagger](https://dagger.io) to make them truly portable.
 
+I also considered [Woodpecker CI](https://woodpecker-ci.org), which is a fork of [Drone](https://www.drone.io), [Crow CI](https://crowci.dev/v5-2/) which felt a bit too simplistic, and [Komodo](https://komo.do). I may still integrate Komodo for GitOps like deploying on specific conditions in a PR.
+
 ## Hosting
 
 As of 01/24/2026, this blog is hosted on [Netlify](https://netlify.com), a platform I have been looking for a reason to try. I disabled Netlify's automated rebuilds on merges to main so I could [write a deployment pipeline of my own](https://github.com/redjax/blog/blob/main/.github/workflows/hugo-deploy.yml), mainly for the experience, but also to ensure I don't break the site when I'm trying new things. I hit Netlify's free tier limit in 2 days because of all the pipeline failures...I mean "tests" that I ran...but the team was generous enough to refresh my credits when I reached out for support. +1 to Netlify!
