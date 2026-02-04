@@ -1,7 +1,12 @@
+---
+####################
+# Hugo core config #
+####################
+
 baseURL: https://example.org/
 languageCode: en-us
 title: Techobyte Blog
-disableSchema: true
+
 permalinks:
   posts: /posts/:slug/
   notes: /notes/:slug/
@@ -13,32 +18,26 @@ menu:
       name: posts
       url: /posts/
       weight: 10
-
     - identifier: notes
       name: notes
       url: /notes/
       weight: 20
-
-    - identifier: categories
-      name: categories
-      url: /categories/
+    - identifier: series
+      name: series
+      url: /series/
       weight: 30
-
     - identifier: tags
       name: tags
       url: /tags/
       weight: 40
-
     - identifier: search
       name: search
       url: /search/
       weight: 50
-
     - identifier: archive
       name: archive
       url: /archive/
       weight: 60
-
     - identifier: rss
       name: "rss"
       url: "/index.xml"
@@ -71,16 +70,22 @@ minify:
   disableXML: true
   minifyOutput: true
 
+pygmentsUseClasses: true
+markup:
+  highlight:
+    codeFences: true
+    guessSyntax: true
+    lineNos: true
+    style: monokai
+
+#########################
+# PaperMod Theme Config #
+#########################
 params:
-  env: production
-  title: Techobyte
-  description: "Personal blog, mostly about technology."
-  keywords: [Blob, Technology, Linux, Open-Source, DevOps, Hugo]
-  author: me
-  DateFormat: "2006-01-02"
-  defaultTheme: auto
-  disableThemeToggle: false
-  ## Controls which folder/section posts appear on home page and in RSS feeds
+  ## Disable schema.org JSON-LD, fixes page bundle navigation
+  disableSchema: true
+  ## Prevent PaperMod from dynamically injecting section menus
+  disableSectionMenus: true
   mainSections:
     - posts
     - notes
@@ -113,17 +118,14 @@ params:
 
   label:
     text: "Techobyte"
-    # icon: <link / abs url>
     iconHeight: 35
 
   profileMode:
     enabled: false
     title: Techobyte
     subtitle: "Personal blog about technology & computing"
-    # imageUrl: "<img location>"
     imageWidth: 120
     imageHeight: 120
-    # imageTitle: my image
     buttons:
       - name: Posts
         url: posts
@@ -150,14 +152,5 @@ params:
     distance: 1000
     threshold: 0.4
     minMatchCharLength: 0
-    ## docs: https://www.fusejs.io/api/methods.html#search
     limit: 10
     keys: ["title", "permalink", "summary", "content"]
-
-pygmentsUseClasses: true
-markup:
-  highlight:
-    codeFences: true
-    guessSyntax: true
-    lineNos: true
-    style: monokai
