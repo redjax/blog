@@ -16,7 +16,9 @@ comments: false
 searchHidden: false
 ---
 
+{{< notice note >}}
 *This post is part of a series: [Blog Setup](/series/blog-setup).*
+{{< /notice >}}
 
 ## CI/CD
 
