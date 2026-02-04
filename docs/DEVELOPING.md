@@ -1,7 +1,16 @@
-# Development Documentation
+# Development Documentation <!-- omit in toc -->
 
 > [!WARNING]
 > This documentation is most likely incomplete. If I ever feel like this site is "well documented," I'll remove this message.
+
+## Table of Contents <!-- omit in toc -->
+
+- [Creating new content pages](#creating-new-content-pages)
+  - [Archetypes](#archetypes)
+- [Serving the site for development](#serving-the-site-for-development)
+- [Building the site](#building-the-site)
+- [Using bundles](#using-bundles)
+  - [Blog Series](#blog-series)
 
 ## Creating new content pages
 
