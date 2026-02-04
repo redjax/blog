@@ -7,6 +7,11 @@ permalinks:
   notes: /notes/:slug/
   snippets: /notes/snippets/:slug
 
+taxonomies:
+  tag: tags
+  category: categories
+  series: series
+
 menu:
   main:
     - identifier: posts
@@ -99,8 +104,9 @@ params:
   comments: false
   hidemeta: false
   hideSummary: false
-  showtoc: false
+  showtoc: true
   tocopen: false
+  showTaxonomies: true
 
   assets:
     disableFingerprinting: true
