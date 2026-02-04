@@ -1,6 +1,7 @@
 baseURL: https://example.org/
 languageCode: en-us
 title: Techobyte Blog
+disableSchema: true
 permalinks:
   posts: /posts/:slug/
   notes: /notes/:slug/
