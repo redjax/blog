@@ -14,11 +14,25 @@ comments: false
 searchHidden: false
 ---
 
+## Outline
+
+- [x] Talk about backups
+  - [x] Story about losing music data
+  - [x] Importance of good backups
+- [ ] Tools
+  - [ ] Duplicati
+  - [ ] Kopia
+  - [ ] Borg
+  - [ ] Restic
+- [ ] Closing
+
+## Article (delete me)
+
 Having a good backup strategy is essential when you host your own data. If you have not experienced the dread of realizing you've lost an important file, consider yourself lucky and continue reading for why you should have a backup strategy.
 
 I have lost important data a number of times throughout my life, and each time my backup strategy has gotten more robust. I have lost my entire music sample collection 3 times, and while I have been able to start fresh with new sounds each time, the work I had put into curating my library was gone. When I started selfhosting to reduce my reliance on solutions from companies I don't trust, I neglected coming up with a backup strategy earlier, and have learned the importance of backups a few too many times.
 
-There are a number of great solutions out there, from [Kopia](kopia.io), [Duplicati](https://duplicati.com) and [Borg](https://www.borgbackup.org) to good ol' [rsync](https://rsync.net), and I have tried most of them.
+There are a number of great solutions out there, from [Kopia](kopia.io), [Duplicati](https://duplicati.com) and [Borg](https://www.borgbackup.org) to good ol' [rsync](https://rsync.net), and I have tried most of them. Let's talk about them, and why I ended up using Restic for all of my backups.
 
 ## The Journey
 
