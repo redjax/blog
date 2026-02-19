@@ -1,12 +1,12 @@
 ---
-title: "Restic Backups"
+title: "Comparing backup solutions (why I picked Restic)"
 date: 2026-02-18T00:14:33-05:00
 draft: true
-url: "/posts/restic-backups/"
+url: "/posts/comparing-backup-solutions/"
 categories: []
-tags: ["backup", "restic"]
+tags: ["backup", "story"]
 author: "me"
-description: "How I use Restic in my homelab for automated, encrypted, space-efficient backups."
+description: "."
 showToc: false
 TocOpen: false
 hidemeta: false
@@ -44,7 +44,7 @@ I eventually started looking for tools I could install, and was surprised to fin
 
 ### Duplicati + Wasabi
 
-*duplicati img here*
+![Duplicati logo](./duplicati-logo.png)
 
 I started with Duplicati, which I used to create scheduled backups to my NAS and [Wasabi S3 storage](https://wasabi.com). Creating the scheduled jobs was easy, and there is a management webUI that made creating and monitoring the backups pretty easy.
 
@@ -62,7 +62,7 @@ Duplicati Cons:
 - Restore operations are much more hit or miss than other solutions. Database corruption was a bit too common, and the manual restore process got tiring.
 - While the WebUI is convenient, it's also not winning any style awards.
 
-*kopia img here*
+![Kopia logo](./kopia-logo.svg)
 
 I really liked being able to add a Wasabi bucket as one of the backup destinations, and my searches eventually lead me to try Kopia. I had read forum posts of people moving to Kopia from Duplicati, and I ran the 2 side-by-side for a while to get a feel for Kopia.
 
@@ -84,7 +84,7 @@ Kopia Cons:
 
 ### Borg Backup
 
-*borg image*
+![Borg Backup](./borg-logo.svg#center)
 
 I will be honest, I probably didn't give Borg enough time to write an honest review about it. I started using it essentially in tandem with picking up restic, and quickly gravitated to restic.
 
@@ -97,12 +97,10 @@ I love Borg in theory, it's a tool known for its relative ease of use and reliab
 
 ## Restic
 
+![Restic icon](./restic-logo.png#center)
+
 As I researched and tried different backup solutions, I kept seeing comments and posts about restic. I learned about people [scripting restic with Bash](https://blog.bithive.space/post/automatic-backups-with-restic/), like I had done with rsync.
 
 Restic has powerful deduplication with their [Contend Defined Chunking (CDC) implementation](https://restic.net/blog/2015-09-12/restic-foundation1-cdc/), leading to smaller backups and better accuracy.
 
 Restic also works with [many different backends](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html), and can use [rclone](https://rclone.org) to expand backup destination options even more.
-
-[Restic](https://restic.net)
-[Resticprofile](https://github.com/creativeprojects/resticprofile)
-[Backrest](https://github.com/garethgeorge/backrest)
