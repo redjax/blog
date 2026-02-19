@@ -14,20 +14,6 @@ comments: false
 searchHidden: false
 ---
 
-## Outline
-
-- [x] Talk about backups
-  - [x] Story about losing music data
-  - [x] Importance of good backups
-- [ ] Tools
-  - [ ] Duplicati
-  - [ ] Kopia
-  - [ ] Borg
-  - [ ] Restic
-- [ ] Closing
-
-## Article (delete me)
-
 Having a good backup strategy is essential when you host your own data. If you have not experienced the dread of realizing you've lost an important file, consider yourself lucky and continue reading for why you should have a backup strategy.
 
 I have lost important data a number of times throughout my life, and each time my backup strategy has gotten more robust. I have lost my entire music sample collection 3 times, and while I have been able to start fresh with new sounds each time, the work I had put into curating my library was gone. When I started selfhosting to reduce my reliance on solutions from companies I don't trust, I neglected coming up with a backup strategy earlier, and have learned the importance of backups a few too many times.
@@ -104,3 +90,21 @@ As I researched and tried different backup solutions, I kept seeing comments and
 Restic has powerful deduplication with their [Contend Defined Chunking (CDC) implementation](https://restic.net/blog/2015-09-12/restic-foundation1-cdc/), leading to smaller backups and better accuracy.
 
 Restic also works with [many different backends](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html), and can use [rclone](https://rclone.org) to expand backup destination options even more.
+
+With restic, you [create a repository](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html) (it's easy to create and use multiple repositories stored in different backends), point the program at a path, give it an [excludes file](https://restic.readthedocs.io/en/stable/040_backup.html#excluding-files) (or an ["includes" file](https://restic.readthedocs.io/en/stable/040_backup.html#including-files)), and [let it rip](https://restic.readthedocs.io/en/stable/040_backup.html). It's pretty much that easy.
+
+Restic makes it easy to [explore your snapshots](https://restic.readthedocs.io/en/stable/045_working_with_repos.html), and in my tests [restoring data](https://restic.readthedocs.io/en/stable/050_restore.html) is quick, simple, and "just woks." You can also [script Restic operations](https://restic.readthedocs.io/en/stable/075_scripting.html), although I never dove too deep into this.
+
+Instead, I found 2 other tools that cemented my choice to use restic for my backups: [Resticprofile](https://github.com/creativeprojects/resticprofile) and [Backrest](https://github.com/garethgeorge/backrest).
+
+Resticprofile works by reading backup [configurations from a file](https://creativeprojects.github.io/resticprofile/configuration/index.html). You can define defaults, the file supports [inheritance](https://creativeprojects.github.io/resticprofile/configuration/inheritance/index.html), [templates](https://creativeprojects.github.io/resticprofile/configuration/templates/index.html), and [template variables](https://creativeprojects.github.io/resticprofile/configuration/templates/index.html); you can "group" individual profiles which you can call with `resticprofile -n <profile-name>`. After defining your backups, you can run `resticprofile schedule install` to add scheduled tasks (systemd on Linux, Task Scheduler on Windows, Launchd on macOS), which fully automates your backups. It can monitor backup status using [a JSON file](https://creativeprojects.github.io/resticprofile/monitoring/status/index.html) or by [sending metrics to Prometheus](https://creativeprojects.github.io/resticprofile/monitoring/prometheus/index.html).
+
+Restic and Resticprofile being cross-platform, with support for Linux, Windows, and macOS, meant I could use the same app and portions of the same configuration file across my machines. Automating the backups meant I did not have to write custom, per-platform scripts, to run the backups on a schedule.
+
+I also add Backrest to some of my servers, which provides a webUI I can use instead of logging into the machine directly. Backrest can import and use existing repositories, and the UI allows for the same level of orchestration as resticprofile or the restic CLI. You can browse snapshots and restore files in the webUI, add notifications to Discord, Slack, Gotify, etc, and it has pre/post command hooks to execute shell scripts. I generally use Backrest *instead of* resticprofile, but since they both use the same backend repository, it's easy to switch them out if I decide I want to manage backups using one or the other.
+
+Backrest also has [a Docker container](https://github.com/garethgeorge/backrest?tab=readme-ov-file#running-with-docker-compose), which makes it a great addition to Docker Compose stacks for automating container data backup.
+
+## Conclusion
+
+After avoiding restic for a while after becoming aware of it, and for no reason in particular, I can say I wish I had tried this tool sooner. While there's a slight learning curve, once you get your first backup running, and especially after using a tool to automate the complexity like resticprofile or backrest, it's clear to me that restic is the perfect combination of user friendliness, security, reliability, and simplicity for a backup solution. I will write another post or 2 describing how I actually use restic, with examples of a resticprofile configuration file and some dos/don'ts.
