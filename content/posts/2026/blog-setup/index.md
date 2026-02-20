@@ -27,9 +27,7 @@ This blog setup series chronicles the process of getting this blog up and runnin
 This series is a work in progress. The list of posts below is incomplete until this message is removed.
 {{< /notice >}}
 
-No posts yet! When new posts are published, they will be linked here.
-
-<!-- 
 - [Part 1: Choices Made](/posts/blog-setup/choices-made)
+<!--
 - [Part 2: Tools](/posts/blog-setup/tools)
 - [Part 3: Challenges](/posts/blog-setup/challenges) -->
