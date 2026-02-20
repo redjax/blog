@@ -118,7 +118,7 @@ Restic pros:
 Restic cons:
 
 - There is a slight learning curve, and the command chains can feel unnatural at first, especially if you're coming from a GUI/webUI application
-- Restic on its own can feel unwieldy, extra tooling like resticprofile or Backrest fills in gaps
+- Restic on its own can feel cumbersome, with long commands and a lot of args. Extra tooling like resticprofile or Backrest helps significantly with this
 
 ## Conclusion
 
