@@ -81,7 +81,8 @@ I love Borg in theory, it's a tool known for its relative ease of use and reliab
 - Restic's cryptography is much better because it has been [endorsed](https://words.filippo.io/restic-cryptography/) by one of Google's cryptography experts that wrote the crypto library for Google's Go language. He ended up choosing Restic as his personal backup system after the investigation.
 - Borg's cryptography has many security flaws and they're working on a rewrite of it for the next 1.3+ release named "Helium". ...*truncated*
   - *Borg 2.0 addresses these concerns, but is still in beta as of February 2026 and not recommended for production use.*
-- Borg requires that the receiver runs Borg on the server, which limits it to rsync.net and borgbase.com for online cloud storage. There's also Hetzner Storage Box which since February 2022 ...*truncated*
+- Borg requires that the receiver runs Borg on the server, which limits it to rsync.net and borgbase.com for online cloud storage. ...*truncated*
+  - *Hetzner storage boxes are also supported now, but the number of available backends for Borg is still limited.*
 
 ## Restic
 
