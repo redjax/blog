@@ -2,7 +2,8 @@
 title: "{{ replace .Name "-" " " | title }}"
 date: {{ .Date }}
 draft: true
-url: "/posts/{{ .File.ContentBaseName }}/"
+slug: "/{{ .File.ContentBaseName | lower }}/"
+# url: "/posts/{{ .File.ContentBaseName | lower }}/"
 categories: []
 tags: []
 author: "me"
