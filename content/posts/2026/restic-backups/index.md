@@ -105,6 +105,18 @@ I also add Backrest to some of my servers, which provides a webUI I can use inst
 
 Backrest also has [a Docker container](https://github.com/garethgeorge/backrest?tab=readme-ov-file#running-with-docker-compose), which makes it a great addition to Docker Compose stacks for automating container data backup.
 
+Restic pros:
+
+- Backup speed, especially during incremental backups
+- Powerful deduplication saves space
+- Great 3rd party tools like resticprofile and backrest
+- Good mix of security and usability
+
+Restic cons:
+
+- There is a slight learning curve, and the command chains can feel unnatural at first, especially if you're coming from a GUI/webUI application
+- Restic on its own can feel unwieldy, extra tooling like resticprofile or Backrest fills in gaps
+
 ## Conclusion
 
 After avoiding restic for a while after becoming aware of it, and for no reason in particular, I can say I wish I had tried this tool sooner. While there's a slight learning curve, once you get your first backup running, and especially after using a tool to automate the complexity like resticprofile or backrest, it's clear to me that restic is the perfect combination of user friendliness, security, reliability, and simplicity for a backup solution. I will write another post or 2 describing how I actually use restic, with examples of a resticprofile configuration file and some dos/don'ts.
