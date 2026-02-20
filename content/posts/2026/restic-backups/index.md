@@ -52,7 +52,7 @@ Duplicati Cons:
 
 ![Kopia logo](./kopia-logo.svg)
 
-I really liked being able to add a Wasabi bucket as one of the backup destinations, and my searches eventually lead me to try Kopia. I had read forum posts of people moving to Kopia from Duplicati, and I ran the 2 side-by-side for a while to get a feel for Kopia.
+I really liked being able to add a Wasabi bucket as one of the backup destinations, and my searches for an alternative to Duplicati eventually lead me to try Kopia. I had read forum posts of people moving to Kopia from Duplicati, and I ran the 2 side-by-side for a while to get a feel for Kopia.
 
 It did not take long to drop Duplicati entirely. It took me a little while to get used to having only 1 repository for backups, and I never got around to setting up a [Kopia server](https://kopia.io/docs/repository-server/) to allow for more. The way I used Kopia was essentially a per-machine repository.
 
