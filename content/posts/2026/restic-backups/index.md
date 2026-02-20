@@ -48,6 +48,8 @@ Duplicati Cons:
 - Restore operations are much more hit or miss than other solutions. Database corruption was a bit too common, and the manual restore process got tiring.
 - While the WebUI is convenient, it's also not winning any style awards.
 
+## Kopia
+
 ![Kopia logo](./kopia-logo.svg)
 
 I really liked being able to add a Wasabi bucket as one of the backup destinations, and my searches eventually lead me to try Kopia. I had read forum posts of people moving to Kopia from Duplicati, and I ran the 2 side-by-side for a while to get a feel for Kopia.
