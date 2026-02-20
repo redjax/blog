@@ -1,8 +1,8 @@
 ---
 title: "Blog Setup: Tools"
 slug: "/blog-setup/tools"
-date: 2026-02-06T00:00:02-05:00
-draft: true
+date: 2026-02-22T05:00:00-05:00
+draft: false
 series: ["blog-setup"]
 categories: []
 tags: ["post", "setup", "hugo"]
