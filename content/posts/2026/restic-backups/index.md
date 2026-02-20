@@ -6,7 +6,7 @@ url: "/posts/comparing-backup-solutions/"
 categories: []
 tags: ["backup", "story"]
 author: "me"
-description: "."
+description: "My thoughts on backup managers I've tried throughout the years, and why I think Restic is the perfect tool for many backup scenarios."
 showToc: false
 TocOpen: false
 hidemeta: false
