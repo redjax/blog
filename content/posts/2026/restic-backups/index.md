@@ -67,7 +67,7 @@ Kopia Pros:
 
 Kopia Cons:
 
-- The webUI, while better than Duplicati, still let something to be desired.
+- The webUI, while better than Duplicati, still left something to be desired.
 - While Kopia has a ton of features, the complexity could be difficult to navigate.
 
 ### Borg Backup
