@@ -26,7 +26,7 @@ For a long time, I used Bash scripts scheduled with cron to create `.tar.gz` arc
 
 These scripts got unwieldy, and I've lost most of them because I was not yet using version control yet so they are lost to time. I also had the problem of having to write different scripts for different Linux distributions and Windows.
 
-I eventually started looking for tools I could install, and was surprised to find a ton of different open source projects with varying approaches to backup.
+I eventually started looking for tools I could install, and was surprised to find a ton of different open source projects with varying approaches to backups.
 
 ### Duplicati + Wasabi
 
