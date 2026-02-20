@@ -1,7 +1,7 @@
 ---
 title: "Blog Setup: Challenges"
 slug: "/blog-setup/challenges"
-date: 2026-02-03T00:00:03-05:00
+date: 2026-02-07T00:00:03-05:00
 draft: true
 series: ["blog-setup"]
 summary: ""
@@ -15,6 +15,8 @@ hidemeta: false
 comments: false
 searchHidden: false
 ---
+
+*This post is part of a series: [Blog Setup](/series/blog-setup).*
 
 I also faced some difficulties getting started with the blog. I spent way too much time creating the Github Action that deploys my content to Netlify. I failed so many times before getting it right, I exceeded Netlify's free tier 🤡. Most of the difficulty actually came from the "extra" functionality with Lychee link checking and Vale linting. Although I was able to get both of these tools running well locally on my machine, I ran into challenges getting them to run in the pipeline.
 
