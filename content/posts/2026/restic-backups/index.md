@@ -34,7 +34,7 @@ I eventually started looking for tools I could install, and was surprised to fin
 
 I started with Duplicati, which I used to create scheduled backups to my NAS and [Wasabi S3 storage](https://wasabi.com). Creating the scheduled jobs was easy, and there is a management webUI that made creating and monitoring the backups pretty easy.
 
-I was able to avert a couple of data loss events by restoring from a Duplicati backup, but I ended up running into database correction a time or 2 (a known issue with Duplicati, if you search "Duplicati database corrupted"). You can recover from this state, but after the 2nd time it happened, I started looking for a different solution.
+I was able to avert a couple of data loss events by restoring from a Duplicati backup, but I ended up running into database corruption a time or 2 (a known issue with Duplicati, if you search "Duplicati database corrupted"). You can recover from this state, but after the 2nd time it happened, I started looking for a different solution.
 
 Duplicati Pros:
 
