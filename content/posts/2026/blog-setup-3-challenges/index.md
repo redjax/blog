@@ -1,7 +1,7 @@
 ---
 title: "Blog Setup: Challenges"
 slug: "/blog-setup/challenges"
-date: 2026-02-03T00:00:03-05:00
+date: 2026-02-07T00:00:03-05:00
 draft: true
 series: ["blog-setup"]
 summary: ""
