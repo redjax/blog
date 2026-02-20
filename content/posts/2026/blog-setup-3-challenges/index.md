@@ -97,3 +97,5 @@ slug: "/post-name/optional-sub-post-name"
 ## Settinng a URL too will override the slug
 url: "post-name/optional-sub-post-name"
 ```
+
+I am sure there will be many other challenges (for instance, I have not tried changing the blog's theme yet, and that looks like a whole adventure if you rely on theme features), but the [community forums](https://discourse.gohugo.io) are filled with very helpful threads, and it is relatively easy to find help for Hugo online. It's a popular tool that's well documented and has an active community. Some of the challenges I've faced are quirks or limitations of Hugo, while some are problems I would have had with any static site generator. I'm overall happy with the Hugo experience.
