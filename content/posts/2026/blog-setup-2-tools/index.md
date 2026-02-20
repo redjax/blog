@@ -1,7 +1,7 @@
 ---
-title: "Tools"
+title: "Blog Setup: Tools"
 slug: "/blog-setup/tools"
-date: 2026-02-03T00:00:02-05:00
+date: 2026-02-06T00:00:02-05:00
 draft: true
 series: ["blog-setup"]
 categories: []
@@ -15,6 +15,8 @@ hidemeta: false
 comments: false
 searchHidden: false
 ---
+
+*This post is part of a series: [Blog Setup](/series/blog-setup).*
 
 ## Tools
 
