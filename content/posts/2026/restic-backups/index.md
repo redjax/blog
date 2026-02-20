@@ -90,7 +90,7 @@ I love Borg in theory, it's a tool known for its relative ease of use and reliab
 
 As I researched and tried different backup solutions, I kept seeing comments and posts about restic. I learned about people [scripting restic with Bash](https://blog.bithive.space/post/automatic-backups-with-restic/), like I had done with rsync.
 
-Restic has powerful deduplication with their [Contend Defined Chunking (CDC) implementation](https://restic.net/blog/2015-09-12/restic-foundation1-cdc/), leading to smaller backups and better accuracy.
+Restic has powerful deduplication with their [Content Defined Chunking (CDC) implementation](https://restic.net/blog/2015-09-12/restic-foundation1-cdc/), leading to smaller backups and better accuracy.
 
 Restic also works with [many different backends](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html), and can use [rclone](https://rclone.org) to expand backup destination options even more.
 
