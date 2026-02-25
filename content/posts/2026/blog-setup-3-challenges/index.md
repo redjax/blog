@@ -1,8 +1,8 @@
 ---
 title: "Blog Setup: Challenges"
 slug: "/blog-setup/challenges"
-date: 2026-02-07T00:00:03-05:00
-draft: true
+date: 2026-02-25T00:00:00-05:00
+draft: false
 series: ["blog-setup"]
 summary: ""
 categories: []
@@ -81,7 +81,9 @@ I tried a few different things:
   - I tried adding `slug: "url-slug-i-want"`. I even added it to my `posts` [archetype](https://gohugo.io/content-management/archetypes/#article)
   - This apparently has no effect on bundles.
 
-I finally found a solution in using the [`url` frontmatter tag](https://gohugo.io/content-management/urls/#url). I added it to my `posts` and `notes` archetypes so when I generate a new page, it will automatically set a URL even if it's in a page bundle.
+I found that using a [`slug`](https://gohugo.io/content-management/urls/#slug) to manually set the URL path works well. For some pages, the [`url`](https://gohugo.io/content-management/urls/#url) option worked better. `slug` is for overriding the last segment of the path, i.e. `/page-name/slug-name`, while `url` gives full control over the URL path, even allowing characters that are reserved by the OS, i.e. adding colons `:` to a URL like `http://example.com/my:example`.
+
+If both `slug` and `url` are set, the `url` parameter takes precedence
 
 For posts, this looks like:
 
@@ -91,6 +93,9 @@ For posts, this looks like:
 title: "{{ replace .Name "-" " " | title }}"
 date: {{ .Date }}
 draft: true
-url: "/posts/{{ .File.ContentBaseName }}/"
-
+slug: "/post-name/optional-sub-post-name"
+## Settinng a URL too will override the slug
+url: "post-name/optional-sub-post-name"
 ```
+
+I am sure there will be many other challenges (for instance, I have not tried changing the blog's theme yet, and that looks like a whole adventure if you rely on theme features), but the [community forums](https://discourse.gohugo.io) are filled with very helpful threads, and it is relatively easy to find help for Hugo online. It's a popular tool that's well documented and has an active community. Some of the challenges I've faced are quirks or limitations of Hugo, while some are problems I would have had with any static site generator. I'm overall happy with the Hugo experience.
