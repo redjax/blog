@@ -1,8 +1,8 @@
 ---
 title: "Blog Setup: Challenges"
 slug: "/blog-setup/challenges"
-date: 2026-02-07T00:00:03-05:00
-draft: true
+date: 2026-02-25T00:00:00-05:00
+draft: false
 series: ["blog-setup"]
 summary: ""
 categories: []

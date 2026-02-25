@@ -29,4 +29,4 @@ This series is a work in progress. The list of posts below is incomplete until t
 
 - [Part 1: Choices Made](/posts/blog-setup/choices-made)
 - [Part 2: Tools](/posts/blog-setup/tools)
-<!-- - [Part 3: Challenges](/posts/blog-setup/challenges) -->
+- [Part 3: Challenges](/posts/blog-setup/challenges)
