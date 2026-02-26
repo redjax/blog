@@ -96,7 +96,7 @@ Restic also works with [many different backends](https://restic.readthedocs.io/e
 
 With restic, you [create a repository](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html) (it's easy to create and use multiple repositories stored in different backends), point the program at a path, give it an [excludes file](https://restic.readthedocs.io/en/stable/040_backup.html#excluding-files) (or an ["includes" file](https://restic.readthedocs.io/en/stable/040_backup.html#including-files)), and [let it rip](https://restic.readthedocs.io/en/stable/040_backup.html). It's pretty much that easy.
 
-Restic makes it easy to [explore your snapshots](https://restic.readthedocs.io/en/stable/045_working_with_repos.html), and in my tests [restoring data](https://restic.readthedocs.io/en/stable/050_restore.html) is quick, simple, and "just woks." You can also [script Restic operations](https://restic.readthedocs.io/en/stable/075_scripting.html), although I never dove too deep into this.
+Restic makes it easy to [explore your snapshots](https://restic.readthedocs.io/en/stable/045_working_with_repos.html), and in my tests [restoring data](https://restic.readthedocs.io/en/stable/050_restore.html) is quick, simple, and "just works." You can also [script Restic operations](https://restic.readthedocs.io/en/stable/075_scripting.html), although I never dove too deep into this.
 
 Instead, I found 2 other tools that cemented my choice to use restic for my backups: [Resticprofile](https://github.com/creativeprojects/resticprofile) and [Backrest](https://github.com/garethgeorge/backrest).
 
