@@ -1,6 +1,6 @@
 ---
 title: "Comparing backup solutions (why I picked Restic)"
-date: 2026-02-18T00:14:33-05:00
+date: 2026-02-25T22:00:00-05:00
 draft: true
 url: "/posts/comparing-backup-solutions/"
 categories: []
@@ -30,7 +30,7 @@ I eventually started looking for tools I could install, and was surprised to fin
 
 ### Duplicati + Wasabi
 
-![Duplicati logo](./duplicati-logo.png)
+![Duplicati logo](./duplicati-logo.png#center)
 
 I started with Duplicati, which I used to create scheduled backups to my NAS and [Wasabi S3 storage](https://wasabi.com). Creating the scheduled jobs was easy, and there is a management webUI that made creating and monitoring the backups pretty easy.
 
@@ -50,7 +50,7 @@ Duplicati Cons:
 
 ## Kopia
 
-![Kopia logo](./kopia-logo.svg)
+![Kopia logo](./kopia-logo.svg#center)
 
 I really liked being able to add a Wasabi bucket as one of the backup destinations, and my searches for an alternative to Duplicati eventually lead me to try Kopia. I had read forum posts of people moving to Kopia from Duplicati, and I ran the 2 side-by-side for a while to get a feel for Kopia.
 
