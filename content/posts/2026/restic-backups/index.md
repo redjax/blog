@@ -1,7 +1,7 @@
 ---
 title: "Comparing backup solutions (why I picked Restic)"
-date: 2026-02-25T22:00:00-05:00
-draft: true
+date: 2026-02-26T10:00:00-05:00
+draft: false
 url: "/posts/comparing-backup-solutions/"
 categories: []
 tags: ["backup", "story"]
