@@ -30,7 +30,7 @@ I eventually started looking for tools I could install, and was surprised to fin
 
 ### Duplicati + Wasabi
 
-![Duplicati logo](./duplicati-logo.png#center)
+![Duplicati logo](duplicati-logo.png#center)
 
 I started with Duplicati, which I used to create scheduled backups to my NAS and [Wasabi S3 storage](https://wasabi.com). Creating the scheduled jobs was easy, and there is a management webUI that made creating and monitoring the backups pretty easy.
 
@@ -50,7 +50,7 @@ Duplicati Cons:
 
 ## Kopia
 
-![Kopia logo](./kopia-logo.svg#center)
+![Kopia logo](kopia-logo.svg#center)
 
 I really liked being able to add a Wasabi bucket as one of the backup destinations, and my searches for an alternative to Duplicati eventually lead me to try Kopia. I had read forum posts of people moving to Kopia from Duplicati, and I ran the 2 side-by-side for a while to get a feel for Kopia.
 
@@ -72,7 +72,7 @@ Kopia Cons:
 
 ### Borg Backup
 
-![Borg Backup](./borg-logo.svg#center)
+![Borg Backup](borg-logo.svg#center)
 
 I will be honest, I probably didn't give Borg enough time to write an honest review about it. I started using it essentially in tandem with picking up restic, and quickly gravitated to restic.
 
@@ -86,7 +86,7 @@ I love Borg in theory, it's a tool known for its relative ease of use and reliab
 
 ## Restic
 
-![Restic icon](./restic-logo.png#center)
+![Restic icon](restic-logo.png#center)
 
 As I researched and tried different backup solutions, I kept seeing comments and posts about restic. I learned about people [scripting restic with Bash](https://blog.bithive.space/post/automatic-backups-with-restic/), like I had done with rsync.
 
