@@ -34,7 +34,7 @@ I eventually started looking for tools I could install, and was pleased to find 
 
 I started with Duplicati, which I used to create scheduled backups to my NAS and [Wasabi S3 storage](https://wasabi.com). Creating the scheduled jobs was easy, and there is a management webUI that made creating and monitoring the backups pretty easy.
 
-I was able to avert a couple of data loss events by restoring from a Duplicati backup, but I ended up running into database corruption a time or 2 (a known issue with Duplicati, if you search "Duplicati database corrupted"). You can recover from this state, but after the 2nd time it happened, I started looking for a different solution.
+I was able to avert a couple of data loss events by restoring from a Duplicati backup, but I ended up running into database corruption a time or two (a known issue with Duplicati, if you search "Duplicati database corrupted"). You can recover from this state, but after the 2nd time it happened, I started looking for a different solution.
 
 {{< notice tip >}}
 Duplicati Pros:
@@ -45,16 +45,19 @@ Duplicati Pros:
 
 Duplicati Cons:
 
-- Slow backups
-- Restore operations are much more hit or miss than other solutions. Database corruption was a bit too common, and the manual restore process got tiring.
-- While the WebUI is convenient, it's also not winning any style awards.
+- Slow backups, slow restores.
+- Restore operations less reliable.
+  - More prone to database corruption.
+  - Manual restore process is tedious.
+- Functional webUI, not winning any style awards.
+
 {{< /notice >}}
 
 ### Kopia
 
 ![Kopia logo](kopia-logo.svg#center)
 
-I really liked being able to add a Wasabi bucket as one of the backup destinations, and my searches for an alternative to Duplicati eventually lead me to try Kopia. I had read forum posts of people moving to Kopia from Duplicati, and I ran the 2 side-by-side for a while to get a feel for Kopia.
+I really liked being able to add a Wasabi bucket as one of the backup destinations, and my searches for an alternative to Duplicati eventually lead me to try Kopia. I had read forum posts of people moving to Kopia from Duplicati, and I ran the two side-by-side for a while to get a feel for Kopia.
 
 It did not take long to drop Duplicati entirely. It took me a little while to get used to having only 1 repository for backups, and I never got around to setting up a [Kopia server](https://kopia.io/docs/repository-server/) to allow for more. The way I used Kopia was essentially a per-machine repository.
 
@@ -81,7 +84,7 @@ Kopia Cons:
 
 I will be honest, I probably didn't give Borg enough time to write an honest review about it. I started using it essentially in tandem with picking up restic, and quickly gravitated to restic.
 
-I love Borg in theory, it's a tool known for its relative ease of use and reliability when it comes time to restore from a backup. In comparing Borg and restic, I found [a helpful Reddit thread](https://www.reddit.com/r/BorgBackup/comments/v3bwfg/why_should_i_switch_from_restic_to_borg/) comparing the 2 tools, and a few of the points were enough for me to move fully to restic. Below are the direct quotes from the post that swayed me (in case the link rots over time):
+I love Borg in theory, it's a tool known for its relative ease of use and reliability when it comes time to restore from a backup. In comparing Borg and restic, I found [a helpful Reddit thread](https://www.reddit.com/r/BorgBackup/comments/v3bwfg/why_should_i_switch_from_restic_to_borg/) comparing the two tools, and a few of the points were enough for me to move fully to restic. Below are the direct quotes from the post that swayed me (in case the link rots over time):
 
 - Restic's cryptography is much better because it has been [endorsed](https://words.filippo.io/restic-cryptography/) by one of Google's cryptography experts that wrote the crypto library for Google's Go language. He ended up choosing Restic as his personal backup system after the investigation.
 - Borg's cryptography has many security flaws and they're working on a rewrite of it for the next 1.3+ release named "Helium". ...*truncated*
@@ -93,33 +96,34 @@ I love Borg in theory, it's a tool known for its relative ease of use and reliab
 
 ![Restic icon](restic-logo.png#center)
 
-As I researched and tried different backup solutions, I kept seeing comments and posts about restic. I learned about people [scripting restic with Bash](https://blog.bithive.space/post/automatic-backups-with-restic/), like I had done with rsync.
+As I researched and tried different backup solutions, I kept seeing comments and posts about restic. I learned about people [scripting restic with Bash](https://blog.bithive.space/post/automatic-backups-with-restic/) like I had done with rsync.
 
 Restic has powerful deduplication with their [Content Defined Chunking (CDC) implementation](https://restic.net/blog/2015-09-12/restic-foundation1-cdc/), leading to smaller backups and better accuracy.
 
 Restic also works with [many different backends](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html), and can use [Rclone](https://rclone.org) to expand backup destination options even more.
 
-With restic, you [create a repository](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html) (it's easy to create and use multiple repositories stored in different backends), point the program at a path, give it an [excludes file](https://restic.readthedocs.io/en/stable/040_backup.html#excluding-files) (or an ["includes" file](https://restic.readthedocs.io/en/stable/040_backup.html#including-files)), and [let it rip](https://restic.readthedocs.io/en/stable/040_backup.html). It's pretty much that easy.
+With restic, you [create a repository](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html) (it's easy to create and use multiple repositories stored in different backends), point the program at a path, give it an [excludes file](https://restic.readthedocs.io/en/stable/040_backup.html#excluding-files) (or an [includes file](https://restic.readthedocs.io/en/stable/040_backup.html#including-files)), and [let it rip](https://restic.readthedocs.io/en/stable/040_backup.html). It's pretty much that easy.
 
-I have tested Restic with an external SSD, a directory on another machine (via SSH, facilitated by Rclone), pCloud (also via Rclone), and a Wasabi S3 bucket. Restic does a great job of making all of this feel insignificant and simple, it doesn't matter if your backup is on the same machine or a cloud bucket in another region of the world, what matters is the contents and integrity of the backup, which Restic handles gracefully.
+I have tested Restic with an external SSD, a directory on another machine (via SSH, facilitated by Rclone), pCloud (also via Rclone), and a Wasabi S3 bucket. Restic does a great job of making all of this feel insignificant and simple; it doesn't matter if your backup is on the same machine or a cloud bucket in another region of the world, what matters is the contents and integrity of the backup, which Restic handles gracefully.
 
 Restic makes it easy to [explore your snapshots](https://restic.readthedocs.io/en/stable/045_working_with_repos.html), and in my tests [restoring data](https://restic.readthedocs.io/en/stable/050_restore.html) is quick, simple, and "just works." You can also [script Restic operations](https://restic.readthedocs.io/en/stable/075_scripting.html), although I never dove too deep into this.
 
-Instead, I found 2 other tools that cemented my choice to use restic for my backups: [Resticprofile](https://github.com/creativeprojects/resticprofile) and [Backrest](https://github.com/garethgeorge/backrest).
+Instead, I found two other tools that cemented my choice to use restic for my backups: [Resticprofile](https://github.com/creativeprojects/resticprofile) and [Backrest](https://github.com/garethgeorge/backrest).
 
 {{< notice tip >}}
 
 Restic pros:
 
-- Backup speed, especially during incremental backups
-- Powerful deduplication saves space
-- Great 3rd party tools like resticprofile and backrest
-- Good mix of security and usability
+- Backup speed, especially during incremental backups.
+- Powerful deduplication saves space.
+- Great 3rd party tools like resticprofile and backrest.
+- Good mix of security and usability.
 
 Restic cons:
 
-- There is a slight learning curve, and the command chains can feel unnatural at first, especially if you're coming from a GUI/webUI application
-- Restic on its own can feel cumbersome, with long commands and a lot of args. Extra tooling like Resticprofile or Backrest helps significantly with this
+- There is a slight learning curve.
+- Command chains can feel unnatural at first, especially if you're coming from a GUI/webUI application.
+- Restic on its own can feel cumbersome, with long commands and a lot of args. Extra tooling like Resticprofile or Backrest helps significantly with this.
 
 {{< /notice >}}
 
@@ -131,10 +135,10 @@ Restic and Resticprofile being cross-platform, with support for Linux, Windows, 
 
 ### Backrest
 
-I also add Backrest to some of my servers, which provides a webUI I can use instead of logging into the machine directly. Backrest can import and use existing repositories, and the UI allows for the same level of orchestration as resticprofile or the restic CLI. You can browse snapshots and restore files in the webUI, add notifications to Discord, Slack, Gotify, etc, and it has pre/post command hooks to execute shell scripts. I generally use either Backrest *or* resticprofile on a given machine, as they both serve essentially the same function. But since they can both use the same backend repository, it's easy to switch them out on-demand if I decide I want to manage backups using one or the other.
+I also add Backrest to some of my servers, which provides a webUI I can use instead of logging into the machine directly. Backrest can import and use existing repositories, and the UI allows for the same level of orchestration as resticprofile or the restic CLI. You can browse snapshots and restore files in the webUI, add notifications to Discord, Slack, Gotify, etc, and it has pre/post command hooks to execute shell scripts. I generally use either Backrest *or* resticprofile on a given machine, as they both serve essentially the same function. But since they can both use the same backend repository, it's easy to switch them out on demand if I decide I want to manage backups using one or the other.
 
 Backrest also has [a Docker container](https://github.com/garethgeorge/backrest?tab=readme-ov-file#running-with-docker-compose), which makes it a great addition to Docker Compose stacks for automating container data backup.
 
 ## Conclusion
 
-I was aware of restic for a while before I actually decided to try it, and I can say I wish I had tried this tool sooner. While there's a slight learning curve, once you get your first backup running, and especially after using a tool to automate the complexity like resticprofile or backrest, it's clear to me that restic is the perfect combination of user friendliness, security, reliability, and simplicity for a backup solution. I will write another post or 2 describing how I actually use restic, with examples of a resticprofile configuration file and some dos/don'ts.
+I was aware of restic for a while before I actually decided to try it, and I can say I wish I had tried this tool sooner. While there's a slight learning curve, once you get your first backup running, and especially after using a tool to automate the complexity like resticprofile or backrest, it's clear to me that restic is the perfect combination of user friendliness, security, reliability, and simplicity for a backup solution. I will write another post or two describing how I actually use restic with examples of a resticprofile configuration file and some dos and don'ts.
