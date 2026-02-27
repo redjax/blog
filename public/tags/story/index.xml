@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Story on Techobyte Blog</title>
+    <link>https://techobyte.cc/tags/story/</link>
+    <description>Recent content in Story on Techobyte Blog</description>
+    <generator>Hugo -- 0.154.3</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 26 Feb 2026 10:00:00 -0500</lastBuildDate>
+    <atom:link href="https://techobyte.cc/tags/story/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Comparing backup solutions (why I picked Restic)</title>
+      <link>https://techobyte.cc/posts/comparing-backup-solutions/</link>
+      <pubDate>Thu, 26 Feb 2026 10:00:00 -0500</pubDate>
+      <guid>https://techobyte.cc/posts/comparing-backup-solutions/</guid>
+      <description>My thoughts on backup managers I&amp;#39;ve tried throughout the years, and why I think Restic is the perfect tool for many backup scenarios.</description>
+      <content:encoded><![CDATA[<p>Having a good backup strategy is essential, especially when you host your own data. If you have not experienced the dread of realizing you&rsquo;ve lost an important file, consider yourself lucky and keep reading to learn why you should have a backup strategy for your data. I have lost important data due to lack of sufficient backups a number of times in my life. It never gets any less devastating, but each time it&rsquo;s happened I have inched closer to a sufficient backup strategy.</p>
+<p>There are a number of great solutions out there, from <a href="kopia.io">Kopia</a>, <a href="https://duplicati.com">Duplicati</a> and <a href="https://www.borgbackup.org">Borg</a>, to good ol&rsquo; <a href="https://rsync.net">rsync</a> and a remote share, and I have tried most of them. Let&rsquo;s talk about them, and why I ended up using Restic for all of my backups.</p>
+<h2 id="the-problem">The Problem</h2>
+<p>For a long time, I used Bash scripts scheduled with cron to create <code>.tar.gz</code> archives of important directories in a directory on my machine, i.e. <code>/opt/backups</code>. I eventually started using the <code>rsync</code> CLI tool to copy the backups via SSH to a central machine with a few extra hard drives.</p>
+<p>These scripts got unwieldy, and I&rsquo;ve lost most of them because I was not using version control yet. I also use both Windows and Linux, and translating my backup scripts to Powershell from Bash was good practice, but tedious.</p>
+<h2 id="the-journey">The Journey</h2>
+<p>I eventually started looking for tools I could install, and was pleased to find a ton of different open source projects with varying approaches to backups. I tried a bunch of them, feeling more and more like Goldilocks as I found one solution too resource intensive, another too complicated, some were too unreliable and others difficult to navigate. In my quest to find the perfect solution for my needs, the following utilities felt closest to my nebulous idea of the perfect solution for my homelab.</p>
+<h3 id="duplicati--wasabi">Duplicati + Wasabi</h3>
+<p><img alt="Duplicati logo" loading="lazy" src="/posts/comparing-backup-solutions/duplicati-logo.png#center"></p>
+<p>I started with Duplicati, which I used to create scheduled backups to my NAS and <a href="https://wasabi.com">Wasabi S3 storage</a>. Creating the scheduled jobs was easy, and there is a management webUI that made creating and monitoring the backups pretty easy.</p>
+<p>I was able to avert a couple of data loss events by restoring from a Duplicati backup, but I ended up running into database corruption a time or two (a known issue with Duplicati, if you search &ldquo;Duplicati database corrupted&rdquo;). You can recover from this state, but after the 2nd time it happened, I started looking for a different solution.</p>
+<style type="text/css">
+     
+    .notice {
+        --title-color: #fff;
+        --title-background-color: #6be;
+        --content-color: #444;
+        --content-background-color: #e7f2fa;
+    }
+
+    .notice.info {
+        --title-background-color: #fb7;
+        --content-background-color: #fec;
+    }
+
+    .notice.tip {
+        --title-background-color: #5a5;
+        --content-background-color: #efe;
+    }
+
+    .notice.warning {
+        --title-background-color: #c33;
+        --content-background-color: #fee;
+    }
+
+     
+    @media (prefers-color-scheme:dark) {
+        .notice {
+            --title-color: #fff;
+            --title-background-color: #069;
+            --content-color: #ddd;
+            --content-background-color: #023;
+        }
+
+        .notice.info {
+            --title-background-color: #a50;
+            --content-background-color: #420;
+        }
+
+        .notice.tip {
+            --title-background-color: #363;
+            --content-background-color: #121;
+        }
+
+        .notice.warning {
+            --title-background-color: #800;
+            --content-background-color: #400;
+        }
+    }
+
+    body.dark .notice {
+        --title-color: #fff;
+        --title-background-color: #069;
+        --content-color: #ddd;
+        --content-background-color: #023;
+    }
+
+    body.dark .notice.info {
+        --title-background-color: #a50;
+        --content-background-color: #420;
+    }
+
+    body.dark .notice.tip {
+        --title-background-color: #363;
+        --content-background-color: #121;
+    }
+
+    body.dark .notice.warning {
+        --title-background-color: #800;
+        --content-background-color: #400;
+    }
+
+     
+    .notice {
+        padding: 18px;
+        line-height: 24px;
+        margin-bottom: 24px;
+        border-radius: 4px;
+        color: var(--content-color);
+        background: var(--content-background-color);
+    }
+
+    .notice p:last-child {
+        margin-bottom: 0
+    }
+
+     
+    .notice-title {
+        margin: -18px -18px 12px;
+        padding: 4px 18px;
+        border-radius: 4px 4px 0 0;
+        font-weight: 700;
+        color: var(--title-color);
+        background: var(--title-background-color);
+    }
+
+     
+    .icon-notice {
+        display: inline-flex;
+        align-self: center;
+        margin-right: 8px;
+    }
+
+    .icon-notice img,
+    .icon-notice svg {
+        height: 1em;
+        width: 1em;
+        fill: currentColor;
+    }
+
+    .icon-notice img,
+    .icon-notice.baseline svg {
+        top: .125em;
+        position: relative;
+    }
+</style><div class="notice tip" >
+    <p class="notice-title">
+        <span class="icon-notice baseline">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="300.5 134 300 300">
+  <path d="M551.281 252.36c0-3.32-1.172-6.641-3.515-8.985l-17.774-17.578c-2.344-2.344-5.469-3.711-8.789-3.711-3.32 0-6.445 1.367-8.789 3.71l-79.687 79.493-44.141-44.14c-2.344-2.344-5.469-3.712-8.79-3.712-3.32 0-6.444 1.368-8.788 3.711l-17.774 17.579c-2.343 2.343-3.515 5.664-3.515 8.984 0 3.32 1.172 6.445 3.515 8.789l70.704 70.703c2.343 2.344 5.664 3.711 8.789 3.711 3.32 0 6.64-1.367 8.984-3.71l106.055-106.056c2.343-2.343 3.515-5.468 3.515-8.789ZM600.5 284c0 82.813-67.188 150-150 150-82.813 0-150-67.188-150-150 0-82.813 67.188-150 150-150 82.813 0 150 67.188 150 150Z"/>
+</svg>
+
+        </span>Tip</p><p>Duplicati Pros:</p>
+<ul>
+<li>WebUI was a nice way to manage the backups graphically.</li>
+<li>Scheduling jobs with retry logic was easy.</li>
+<li>Multiple backends, from local storage to cloud buckets to webDAV.</li>
+</ul>
+<p>Duplicati Cons:</p>
+<ul>
+<li>Slow backups, slow restores.</li>
+<li>Restore operations less reliable.
+<ul>
+<li>More prone to database corruption.</li>
+<li>Manual restore process is tedious.</li>
+</ul>
+</li>
+<li>Functional webUI, not winning any style awards.</li>
+</ul></div>
+
+<h3 id="kopia">Kopia</h3>
+<p><img alt="Kopia logo" loading="lazy" src="/posts/comparing-backup-solutions/kopia-logo.svg#center"></p>
+<p>I really liked being able to add a Wasabi bucket as one of the backup destinations, and my searches for an alternative to Duplicati eventually lead me to try Kopia. I had read forum posts of people moving to Kopia from Duplicati, and I ran the two side-by-side for a while to get a feel for Kopia.</p>
+<p>It did not take long to drop Duplicati entirely. It took me a little while to get used to having only 1 repository for backups, and I never got around to setting up a <a href="https://kopia.io/docs/repository-server/">Kopia server</a> to allow for more. The way I used Kopia was essentially a per-machine repository.</p>
+<p>Kopia worked well for me, and I would still recommend it as an option. The UI was the biggest pain point for me: the CLI commands were long and hard to remember, and the webUI was spartan and at times unintuitive.</p>
+<div class="notice tip" >
+    <p class="notice-title">
+        <span class="icon-notice baseline">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="300.5 134 300 300">
+  <path d="M551.281 252.36c0-3.32-1.172-6.641-3.515-8.985l-17.774-17.578c-2.344-2.344-5.469-3.711-8.789-3.711-3.32 0-6.445 1.367-8.789 3.71l-79.687 79.493-44.141-44.14c-2.344-2.344-5.469-3.712-8.79-3.712-3.32 0-6.444 1.368-8.788 3.711l-17.774 17.579c-2.343 2.343-3.515 5.664-3.515 8.984 0 3.32 1.172 6.445 3.515 8.789l70.704 70.703c2.343 2.344 5.664 3.711 8.789 3.711 3.32 0 6.64-1.367 8.984-3.71l106.055-106.056c2.343-2.343 3.515-5.468 3.515-8.789ZM600.5 284c0 82.813-67.188 150-150 150-82.813 0-150-67.188-150-150 0-82.813 67.188-150 150-150 82.813 0 150 67.188 150 150Z"/>
+</svg>
+
+        </span>Tip</p><p>Kopia Pros:</p>
+<ul>
+<li>Fairly easy to pick up and understand.</li>
+<li>Reliable scheduled backups, faster than Duplicati, and the resulting snapshots were smaller.</li>
+<li>Different apps for different needs (a CLI, an optional web interface, and a desktop app).</li>
+<li>Test data restores worked flawlessly every time, and Kopia allowed for restoring to a destination, or in-place (restoring directly back to the path where the original file/directory was).</li>
+</ul>
+<p>Kopia Cons:</p>
+<ul>
+<li>The webUI, while better than Duplicati, still left something to be desired.</li>
+<li>While Kopia has a ton of features, the complexity could be difficult to navigate.</li>
+</ul></div>
+
+<h3 id="borg-backup">Borg Backup</h3>
+<p><img alt="Borg Backup" loading="lazy" src="/posts/comparing-backup-solutions/borg-logo.svg#center"></p>
+<p>I will be honest, I probably didn&rsquo;t give Borg enough time to write an honest review about it. I started using it essentially in tandem with picking up restic, and quickly gravitated to restic.</p>
+<p>I love Borg in theory, it&rsquo;s a tool known for its relative ease of use and reliability when it comes time to restore from a backup. In comparing Borg and restic, I found <a href="https://www.reddit.com/r/BorgBackup/comments/v3bwfg/why_should_i_switch_from_restic_to_borg/">a helpful Reddit thread</a> comparing the two tools, and a few of the points were enough for me to move fully to restic. Below are the direct quotes from the post that swayed me (in case the link rots over time):</p>
+<ul>
+<li>Restic&rsquo;s cryptography is much better because it has been <a href="https://words.filippo.io/restic-cryptography/">endorsed</a> by one of Google&rsquo;s cryptography experts that wrote the crypto library for Google&rsquo;s Go language. He ended up choosing Restic as his personal backup system after the investigation.</li>
+<li>Borg&rsquo;s cryptography has many security flaws and they&rsquo;re working on a rewrite of it for the next 1.3+ release named &ldquo;Helium&rdquo;. &hellip;<em>truncated</em>
+<ul>
+<li><em>Borg 2.0 addresses these concerns, but is still in beta as of February 2026 and not recommended for production use.</em></li>
+</ul>
+</li>
+<li>Borg requires that the receiver runs Borg on the server, which limits it to rsync.net and borgbase.com for online cloud storage. &hellip;<em>truncated</em>
+<ul>
+<li><em>Hetzner storage boxes are also supported now, but the number of available backends for Borg is still limited.</em></li>
+</ul>
+</li>
+</ul>
+<h2 id="arriving-at-restic">Arriving at Restic</h2>
+<p><img alt="Restic icon" loading="lazy" src="/posts/comparing-backup-solutions/restic-logo.png#center"></p>
+<p>As I researched and tried different backup solutions, I kept seeing comments and posts about restic. I learned about people <a href="https://blog.bithive.space/post/automatic-backups-with-restic/">scripting restic with Bash</a> like I had done with rsync.</p>
+<p>Restic has powerful deduplication with their <a href="https://restic.net/blog/2015-09-12/restic-foundation1-cdc/">Content Defined Chunking (CDC) implementation</a>, leading to smaller backups and better accuracy.</p>
+<p>Restic also works with <a href="https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html">many different backends</a>, and can use <a href="https://rclone.org">Rclone</a> to expand backup destination options even more.</p>
+<p>With restic, you <a href="https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html">create a repository</a> (it&rsquo;s easy to create and use multiple repositories stored in different backends), point the program at a path, give it an <a href="https://restic.readthedocs.io/en/stable/040_backup.html#excluding-files">excludes file</a> (or an <a href="https://restic.readthedocs.io/en/stable/040_backup.html#including-files">includes file</a>), and <a href="https://restic.readthedocs.io/en/stable/040_backup.html">let it rip</a>. It&rsquo;s pretty much that easy.</p>
+<p>I have tested Restic with an external SSD, a directory on another machine (via SSH, facilitated by Rclone), pCloud (also via Rclone), and a Wasabi S3 bucket. Restic does a great job of making all of this feel insignificant and simple; it doesn&rsquo;t matter if your backup is on the same machine or a cloud bucket in another region of the world, what matters is the contents and integrity of the backup, which Restic handles gracefully.</p>
+<p>Restic makes it easy to <a href="https://restic.readthedocs.io/en/stable/045_working_with_repos.html">explore your snapshots</a>, and in my tests <a href="https://restic.readthedocs.io/en/stable/050_restore.html">restoring data</a> is quick, simple, and &ldquo;just works.&rdquo; You can also <a href="https://restic.readthedocs.io/en/stable/075_scripting.html">script Restic operations</a>, although I never dove too deep into this.</p>
+<p>Instead, I found two other tools that cemented my choice to use restic for my backups: <a href="https://github.com/creativeprojects/resticprofile">Resticprofile</a> and <a href="https://github.com/garethgeorge/backrest">Backrest</a>.</p>
+<div class="notice tip" >
+    <p class="notice-title">
+        <span class="icon-notice baseline">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="300.5 134 300 300">
+  <path d="M551.281 252.36c0-3.32-1.172-6.641-3.515-8.985l-17.774-17.578c-2.344-2.344-5.469-3.711-8.789-3.711-3.32 0-6.445 1.367-8.789 3.71l-79.687 79.493-44.141-44.14c-2.344-2.344-5.469-3.712-8.79-3.712-3.32 0-6.444 1.368-8.788 3.711l-17.774 17.579c-2.343 2.343-3.515 5.664-3.515 8.984 0 3.32 1.172 6.445 3.515 8.789l70.704 70.703c2.343 2.344 5.664 3.711 8.789 3.711 3.32 0 6.64-1.367 8.984-3.71l106.055-106.056c2.343-2.343 3.515-5.468 3.515-8.789ZM600.5 284c0 82.813-67.188 150-150 150-82.813 0-150-67.188-150-150 0-82.813 67.188-150 150-150 82.813 0 150 67.188 150 150Z"/>
+</svg>
+
+        </span>Tip</p><p>Restic pros:</p>
+<ul>
+<li>Backup speed, especially during incremental backups.</li>
+<li>Powerful deduplication saves space.</li>
+<li>Great 3rd party tools like resticprofile and backrest.</li>
+<li>Good mix of security and usability.</li>
+</ul>
+<p>Restic cons:</p>
+<ul>
+<li>There is a slight learning curve.</li>
+<li>Command chains can feel unnatural at first, especially if you&rsquo;re coming from a GUI/webUI application.</li>
+<li>Restic on its own can feel cumbersome, with long commands and a lot of args. Extra tooling like Resticprofile or Backrest helps significantly with this.</li>
+</ul></div>
+
+<h3 id="resticprofile">Resticprofile</h3>
+<p>Resticprofile is a wrapper for restic that works by reading backup <a href="https://creativeprojects.github.io/resticprofile/configuration/index.html">configurations from a file</a>. You can define defaults, the file supports <a href="https://creativeprojects.github.io/resticprofile/configuration/inheritance/index.html">inheritance</a>, <a href="https://creativeprojects.github.io/resticprofile/configuration/templates/index.html">templates</a>, and <a href="https://creativeprojects.github.io/resticprofile/configuration/templates/index.html">template variables</a>; you can &ldquo;group&rdquo; individual profiles which you can call with <code>resticprofile -n &lt;profile-name&gt;</code>. After defining your backups, you can run <code>resticprofile schedule install</code> to add scheduled tasks (systemd on Linux, Task Scheduler on Windows, Launchd on macOS), which fully automates your backups. It can monitor backup status using <a href="https://creativeprojects.github.io/resticprofile/monitoring/status/index.html">a JSON file</a> or by <a href="https://creativeprojects.github.io/resticprofile/monitoring/prometheus/index.html">sending metrics to Prometheus</a>.</p>
+<p>Restic and Resticprofile being cross-platform, with support for Linux, Windows, and macOS, meant I could use the same app and portions of the same configuration file across my machines. Automating the backups meant I did not have to write custom, per-platform scripts to run the backups on a schedule.</p>
+<h3 id="backrest">Backrest</h3>
+<p>I also add Backrest to some of my servers, which provides a webUI I can use instead of logging into the machine directly. Backrest can import and use existing repositories, and the UI allows for the same level of orchestration as resticprofile or the restic CLI. You can browse snapshots and restore files in the webUI, add notifications to Discord, Slack, Gotify, etc, and it has pre/post command hooks to execute shell scripts. I generally use either Backrest <em>or</em> resticprofile on a given machine, as they both serve essentially the same function. But since they can both use the same backend repository, it&rsquo;s easy to switch them out on demand if I decide I want to manage backups using one or the other.</p>
+<p>Backrest also has <a href="https://github.com/garethgeorge/backrest?tab=readme-ov-file#running-with-docker-compose">a Docker container</a>, which makes it a great addition to Docker Compose stacks for automating container data backup.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>I was aware of restic for a while before I actually decided to try it, and I can say I wish I had tried this tool sooner. While there&rsquo;s a slight learning curve, once you get your first backup running, and especially after using a tool to automate the complexity like resticprofile or backrest, it&rsquo;s clear to me that restic is the perfect combination of user friendliness, security, reliability, and simplicity for a backup solution. I will write another post or two describing how I actually use restic with examples of a resticprofile configuration file and some dos and don&rsquo;ts.</p>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>How Linux Frustrated Me Into Loving It</title>
+      <link>https://techobyte.cc/posts/linux-frustrated-loving/</link>
+      <pubDate>Thu, 24 Mar 2016 00:00:00 -0500</pubDate>
+      <guid>https://techobyte.cc/posts/linux-frustrated-loving/</guid>
+      <description>Re-post of an old Medium article I wrote in 2016.</description>
+      <content:encoded><![CDATA[<p><img alt="Header image" loading="lazy" src="/posts/linux-frustrated-loving/linux-story.jpeg#center"></p>
+<p>I have been very interested in Linux since my entry into the Wonderful World of Unix in 2006. I found Ubuntu and installed it on a crappy Dell desktop computer I was given when I was doing online schooling. The computer originally came with Windows, and one day while I was browsing, I decided to search for “alternative to Windows.” Linux popped up right away. I had never heard of Linux before, but after voraciously reading article after article, I decided Linux was the path for my future.</p>
+<p><img alt="&ldquo;Linux for human beings&rdquo; was not applicable in 2006" loading="lazy" src="/posts/linux-frustrated-loving/ubuntu-logo.jpeg#center"></p>
+<p>Like most Linux newbies, <a href="https://ubuntu.com">Ubuntu</a> was the first distribution I found. Back in 2006, Ubuntu wasn’t ugly, necessarily, but it definitely was not a pretty distribution. When I first found Ubuntu, they were on version 6.10, “Edgy Eft.” My initial thoughts were that their naming convention was stupid (Ubuntu picks an animal for each release and creates an adjective-noun alliteration for it), but it looked interesting, and I decided to try it. I downloaded the image and burnt it to a CD (I’ve since moved to multibooting Linux images from a USB stick), popped it in my CD tray, and jumped straight down the rabbit hole.</p>
+<p><img alt="Ubuntu Linux 6.10 &ldquo;Edgy Eft&rdquo;" loading="lazy" src="/posts/linux-frustrated-loving/ubuntu-edgyeft-desktop.jpeg#center"></p>
+<p>I was always interested in computers as a kid, but I had never entered into the world of partition and driver hell that was such a reality back in 2006. When I booted the disk, I was presented with an installer (back then, I believe it was still a command line installer of sorts…it was graphical, but not like today’s installers; there was a lot of room for error). Before I started the installation, I had printed out a “how to install Ubuntu” guide, but I didn’t read very much of it previous to my first attempt. At that point, I had not had much trouble in figuring out how to install, configure, and use software in the Windows world.</p>
+<p><img alt="The modern Ubuntu installer is nearly foolproof" loading="lazy" src="/posts/linux-frustrated-loving/ubuntu-installer.jpeg#center"></p>
+<p>During my first attempt, I completely wiped out my Windows partition and deleted everything I had on my computer, because I had no idea what “format” meant, or what a partition even was. I also did not successfully install Linux on my first attempt. I thought I had destroyed my computer.</p>
+<p><img alt="&ldquo;Lesson learned&hellip;read about what I&rsquo;m doing before I do it.&rdquo;" loading="lazy" src="/posts/linux-frustrated-loving/frustrated-lady-computer.jpeg#center"></p>
+<p>I had no idea what I did wrong, but I read through the guide I printed, and realized retroactively that I should have done that initially. I learned about partitions, and realized with my skillset, there was no way to get the data I had lost back. I accepted that truth, and realized I had no hope of restoring a Windows install, because I had not been sent a recovery disk with the computer. I wiped the tears off my face and resolved to get Linux installed on my computer, no matter how difficult the task was.</p>
+<p>I put the Ubuntu CD I had made back in the tray, cracked my knuckles like I saw people on TV do, and braced for impact. The installation window came back up, and this time, armed with my handy installation guide, managed to install Ubuntu. I didn’t do any fancy partitioning or anything, seems how I had just learned partitioning was even a thing, so Ubuntu was on my entire disk. I booted up my computer, and all was right in the world.</p>
+<p>Actually, that’s not the case at all. Back in 2006, Linux was awesome, but had a ton of driver problems. My computer was a low end Dell with an Ethernet driver that was not included in the installation image. After many hours of developing my troubleshooting skills without an Internet connection, I used my brother’s working Windows computer (and I’d be lying if I said I wasn’t envious of his working computer, or that he had not decided to be adventurous with me) to research installing the driver for Ubuntu. I found some documentation for the model of Dell I was using, and found that there were a few other driver problems as well. I downloaded the drivers, put them on a USB stick, and printed the guide for installing the drivers on Ubuntu (what a year 2006 was, where we didn’t have smartphones to just pull up the guides when we needed them. So much wasted paper…).</p>
+<p><img alt="YOU WILL NOT GET THE BEST OF ME, YOU STUPID MACHINE!" loading="lazy" src="/posts/linux-frustrated-loving/guy-screaming-at-monitor.jpeg#center"></p>
+<p>Let’s recap. At this point, I had a CD burnt with the Ubuntu live image on it, a USB stick with a few drivers, and about 25 pages worth of documentation. I had failed the installation initially, destroyed my Windows partition, lost some data that was pretty important at the time (I had to redo a few assignments), and scared myself a little into thinking Linux might not be for me. Luckily, I am a bit (ok, very) defiant when it comes to computers besting me, and I was not about to let this low end Dell tell me who’s boss. This stupid computer was going to run Linux whether it liked it or not, and based on my experience trying to install Linux and getting the proper drivers, it did <em>not</em> want to run Ubuntu. Tough luck, you stupid Optiplex.</p>
+<p>Back to the story! I popped the USB stick into the computer to install the drivers I had found online…only to find that in 2006, Ubuntu did not support FAT formatted drives out of the box. I punched myself in the face in frustration, and went back to my brother’s computer to learn about different file systems. I didn’t understand any of what I was reading, but it boiled down to me learning what the “Format” option does when right clicking a drive on Windows. I formatted the drive, and in my young stupidity, forgot to back up the drivers. After curling up in a ball and rolling around the floor in frustration, on the verge of giving up and accepting that my computer was currently as useful as an uncomfortable footrest, I decided this was all a learning process, and shifting my mentality from “why in the world do so many people love Linux” to “there must be a reason so many people love Linux,” I got back on my brother’s computer, downloaded the drivers again, and took my newly formatted EXT3 drive back to my room. I sat at the computer, prayed to any gods who were listening, and put the USB stick into the slot on my computer.</p>
+<p><img alt="&ldquo;Computer god, please let this work, because if it doesn&rsquo;t, I&rsquo;m jumping out the window with this PC in my arms" loading="lazy" src="/posts/linux-frustrated-loving/guy-praying-to-monitor.jpeg#center"></p>
+<p>A wave of relief rushed over me as I saw a neat little animation pop up on my desktop, confirming that my disk had properly mounted (of course, I didn’t know what “mounting” a disk was, but thankfully I didn’t have to play around in my FSTAB file, or else I would probably not be enjoying Linux today, stuck instead with Windows in Microsoft Land). I opened the drive, found my drivers, and moved them to my Downloads folder in Ubuntu. I double clicked them to install, just like you would on Windows, right?</p>
+<p><img alt="WRONG" loading="lazy" src="/posts/linux-frustrated-loving/wrong.jpeg#center"></p>
+<p>Of course it wouldn’t be that simple! What was I even thinking? Linux is a complex beast, and until you know what you’re doing and see the efficiency, Linux’s simplicity feels like complexity. Through my tears of frustration, I consulted the guide I had printed for installing the drivers on Ubuntu. Some thoughts running through my head while reading were “Shell? Terminal? Why do I have to type something in this weird program, just to install a driver?! What have I gotten myself into…” I decided not to think, and just to follow the guide. I found the Terminal program, opened it up, and noticed it looked a lot like the command prompt on Windows. I previously used the command prompt for the ping command exclusively, because on my Windstream connection (little plug: Windstream sucks. Don’t use.), pinging could help me determine if my computer was the problem, or if our connection was out, and based on past experiences with Windstream, it was usually the latter.</p>
+<p>Anyway, with the terminal opened, the guide told me to “cd” to the Downloads folder, and use a command called “chmod +x” to tell the computer the driver files were executable. “Hold up…the computer doesn’t just know I want to run something? I have to actually tell it this file can be executed? Good lord, I hate Linux.” I think that is a more common thought for newbies than people realize/remember. It’s honestly a miracle and a testament to how great Linux is that any converters actually stay with it.</p>
+<h2 id="getting-back-on-the-internet-and-next-steps">Getting Back on the Internet, and Next Steps</h2>
+<p>So, my computer was finally ready to install the drivers. I had to type some weird command with a dot in front of it (./[driver name]) to get the driver to install. I later learned that the “./” portion of the command tells the computer to run whatever input you’re giving it through the shell.</p>
+<p>A bunch of text started flying through the terminal, and I thought for sure I had either broken my computer again, or that I had learned how to hack, since this is how it looked in the movies. Of course, neither of those scenarios were my reality, but I let the commands run with faith that my computer would not catch fire in front of my eyes.</p>
+<p><img alt="This looks pretty intimidating to anyone new to a terminal shell" loading="lazy" src="/posts/linux-frustrated-loving/terminal-output.jpeg#center"></p>
+<p>When the command finally stopped running and the terminal was dutifully waiting for more commands, my network connection icon in the statusbar started spinning, and I got a little popup that my network connection was active. I sat stunned for a minute that I’d Forrest Gump’d my way into a working Linux installation. I opened an Internet browser (I had been using Firefox on Windows, so this was <em>one</em> thing I was familiar with in this new land), went to Google, and danced with joy that I had a working Internet connection.</p>
+<p>I could go into more detail about the troubles I had learning Linux, but suffice it to say, learning Linux coming from never even hearing about it before was a long, arduous process of trial and extremely frustrating error. The thought of adjusting to the command line alone was daunting enough to keep me wondering if I had made a huge mistake, but after a couple days of using Ubuntu, I was captivated by the uniqueness and simultaneous familiarity. I love change, and I love experimenting with computers, and this was a whole new world for me. I got comfortable with the command line, and found it to be far superior to the click and drag interface I was used to, although people new to Linux will be happy to hear you can do pretty much everything graphically, especially on Ubuntu. No scary terminal window necessary!</p>
+<h2 id="my-time-with-linux-since-then">My Time with Linux Since Then</h2>
+<p>It didn’t take me very long to learn that Linux was just the core of the operating system, and there were loads of different “flavors,” or “distributions,” of Linux. I had started on Ubuntu, which I learned was an offshoot of the great Debian distribution, plus a few enhancements. Once I traced Ubuntu’s roots back to Debian, I found that there were many, <em>many</em> different offshoots of Debian, and even some that came from Ubuntu. The more I searched, the more I found that Linux is one hell of an ecosystem, with distributions for just about anything you can want. There are distributions crafted to be run solely as a server; distributions that value security and stability over cutting edge technology; distributions like Arch Linux that are always up to date, to the point of being unstable at times; and distributions with a nice mix of stability and freshness, like Fedora.</p>
+<p><img alt="A graphic with a very small sampling of different Linux distributions" loading="lazy" src="/posts/linux-frustrated-loving/varied-linux-distros.jpeg#center"></p>
+<p>I decided to try Fedora out, and found that Gnome 3 looked much nicer than Ubuntu’s desktop, which was based on the older Gnome 2. Ubuntu eventually created their own entirely unique environment, called Unity, and caused <em>quite</em> a divide in the community: some people loved the fresh, unique take on the desktop, and some people despised the fact that Ubuntu tried to pigeon hole them into change. One thing I’ve learned about the Linux community is that people really, really value their freedom of choice, and when a distribution makes an executive decision, they will hear loud and clear the displeasure of the people they pissed off.</p>
+<p><img alt="Ubuntu’s “Unity” desktop was a major shock to some people with how different it was from their previous desktop" loading="lazy" src="/posts/linux-frustrated-loving/ubuntu-unity-desktop.jpeg#center"></p>
+<p>Since trying Ubuntu and Fedora out, I have become what the community dubbed a “distro hopper.” Distro hoppers want to get their feet wet with as many distributions as they can find. I’ve tried ’em all, starting with Ubuntu, moving to Fedora, and from there travelling swiftly through <a href="https://linuxmint.com/">Linux Mint</a>, to <a href="http://www.debian.org/">Debian</a> when I felt I had learned enough about Linux to try the mother distribution; I tried <a href="http://zorinos.com/">ZorinOS</a> because it promised to be familiar to people coming from Windows, and they were right; I installed <a href="https://www.opensuse.org/">openSUSE</a> because I liked the green lizard, but I eventually made my way back to Debian-land and settled on Linux Mint. It felt fresh and clean, but still offered the simplicity and idiot-proof nature of Ubuntu. I stuck with Mint for a long time, but eventually the itch hit me again, and I started hopping around.</p>
+<p><img alt="Linux Mint was my home for a long time, mostly because it had all the drivers I needed pre-packaged with the image" loading="lazy" src="linux-mint-desktop.jpeg#center"></p>
+<p>When I got bored of the safeness of Linux Mint, I branched out into fringe and new distributions. I found <a href="http://elementary.io/">elementaryOS</a>, which was, at the time, a very new branch from Ubuntu. Its main offering was a positively <em>gorgeous</em> interface, taking obvious inspiration from Apple’s Mac OS X (they deny that they were inspired by Apple’s OS, but it’s pretty apparent to anyone that they at least valued OS X’s clean, consistent interface and color scheme). I bounced from elementaryOS over to <a href="https://www.deepin.org/">DeepinOS</a>, which is a Chinese distribution that’s doing a lot of new and exciting things to the Ubuntu desktop world.</p>
+<p>Eventually I got tired of hopping around and not finding the one distribution that fit all my needs. I wanted something that was stable, had up to date packages so I could try new things, was easy to manage, and was modifiable in a way I had not found yet. I am a compulsive modder, changing things just for the sake of change. I had heard of <a href="https://www.archlinux.org/">Arch Linux</a>, a distribution that the community likes to tout as “for hardcore users only.” There is surely a steep learning curve, but the documentation and community is so passionate about their distribution that the entire process of installing and maintaining an Arch Linux install is very demystified at this point. I had read about how customizable Arch Linux is, and decided this was surely the next step in my journey.</p>
+<p><img alt="The main reason I picked Arch was their pretty logo" loading="lazy" src="/posts/linux-frustrated-loving/archlinux-logo.jpeg#center"></p>
+<p>I downloaded the net install (a <em>very</em> small image that requires you to be connected to the Internet, where it then downloads the rest of the installation) and set to work. And good lord did I mess a lot of things up. Setting Arch Linux up is to this day one of the hardest, most time consuming, and frustrating things I have ever done. It took me <em>weeks</em> to get a working installation. After failing the first 5 times, I decided to try in a virtual machine. I would go through the Arch installer, get a system up and running, delete the virtual machine, and try again. I probably did this 20 times before I felt comfortable trying again on my computer.</p>
+<p>And I still failed. I’ve only ever had 1 working Arch install, and at that point I was too scared to mess with it and screw things up even more. I read around, and a lot of people suggested <a href="https://antergos.com/">Antergos</a>, which is essentially a simple, graphical installer for Arch Linux that adds a repository for themes.</p>
+<p><img alt="Antergos’s motto is very true, unlike 2006 Ubuntu’s “Linux for humans”" loading="lazy" src="/posts/linux-frustrated-loving/antergos-logo.jpeg#center"></p>
+<p>The Cnchi graphical installer for Antergos was beautiful, and worked like a charm. I had a working Arch Linux install on my computer within 15 minutes. And as it turns out, Arch Linux is the absolute perfect distribution for me. It’s stable, it’s <em>faaaast</em>, it’s customizable beyond belief, and most importantly for me, it’s as up to date as you can be. As soon as a program is updated, it gets added to Arch Linux’s central repository, or its indescribably useful User Repository (AUR), and you can download it with a simple <em>pacman -S</em> command. I could write a whole post about my journey with Antergos, and perhaps I will…but for now, suffice it to say I had found my home.</p>
+<p>With Arch Linux, I had everything I wanted. No more distro hopping to get a package update I wanted, or a theme that only worked with a certain base (Debian or Redhat, for instance). No more obliterating my installation with a simple update, which happened far too frequently in my time with openSUSE. Antergos was <em>it</em> for me. I grew to love how configurable it was, which initially was a very daunting task (pretty much everything is configured through the command line by editing text files).</p>
+<h2 id="where-i-am-now-with-linux">Where I Am Now with Linux</h2>
+<p>This post is getting long, as I forgot how passionate I am about Linux until I took this nostalgic trip down Linux-Hell memory lane.</p>
+<p>Since I first accidentally wiped out my Windows installation, I have been treading deeper and deeper into the Linux forest. I have learned more about computers and their inner workings in my ~10 years with Linux than I ever knew with a Windows installation. I have lost data, formatted my hard drive every which way hundreds of times, found new uses for Linux in my everyday life, and set up my own home server using an ESXi host running a few Linux virtual machines (another post for another time).</p>
+<p>I took the plunge and decided to use Linux as my main operating system a couple years ago, booting into Windows infrequently to use a couple of programs I simply can’t use to their full potential in Linux (namely FL Studio and a couple of Windows only games). It’s true that at first, Linux is scary. You have to learn the command line if you want to do anything besides basic Internet browsing and word processing; you have to read a lot of documentation and forum posts to learn how you stupidly messed up your installation, and you have to develop a tough skin to deal with the community, which is made up of some really grumpy old timers and a disproportionately large group of newcomers who ask a <em>lot</em> of questions. It’s a testament to Linux’s greatness that so many people put up with all of that, just to use the operating system on their computer.</p>
+<p>Because of my love for Linux, I am now working towards learning what I need to learn to become a Linux Systems Administrator, where I will get to work with Linux computers and servers for a living, and learn even more about this wonderful software project that has broken so much ground over the years. I’m sure there will be many more long nights spent figuring out where I went wrong in an update, or why my configuration files aren’t working as intended, but I look forward to being tired the next day from staying up too late playing on my computer, feeling satisfied that I fixed whatever went wrong, and that I am still loving the Linux Life.</p>
+<p><img alt="Got Linux?" loading="lazy" src="/posts/linux-frustrated-loving/got-linux.jpeg#center"></p>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

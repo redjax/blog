@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>First on Techobyte Blog</title>
+    <link>https://techobyte.cc/tags/first/</link>
+    <description>Recent content in First on Techobyte Blog</description>
+    <generator>Hugo -- 0.154.3</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 04 Jan 2026 23:21:26 -0500</lastBuildDate>
+    <atom:link href="https://techobyte.cc/tags/first/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>First</title>
+      <link>https://techobyte.cc/posts/first/</link>
+      <pubDate>Sun, 04 Jan 2026 23:21:26 -0500</pubDate>
+      <guid>https://techobyte.cc/posts/first/</guid>
+      <description>The first post on the site</description>
+      <content:encoded><![CDATA[<p>Welcome to Techobyte, a personal blog about technology. This blog covers varied topics with no posting cadence or central theme. The blog&rsquo;s content is text-heavy, although some articles may use images to enhance or clarify things.</p>
+<p>I write about tools I use and projects I work on in my homelab, and share the knowledge on this blog. In my free time I like to try new technologies and tools, and I love to share that knowledge with others. I hope the hours I spend struggling on certain things and choose to write about can get you over a hump.</p>
+<p>You can subscribe to the <a href="/index.xml">RSS feed</a>, a feed of the entire site. Add <code>/index.xml</code> to individual pages/sections on the site to subscribe to content of that type. For example, check the <a href="/posts/index.xml"><code>posts</code> feed</a> to see a feed of only the <a href="/posts/">posts</a> made on this site (no <a href="/notes/">notes</a> or <a href="/notes/snippets/">code snippets</a>). Or if you <em>only</em> want to see snippets, subscribe to <a href="/notes/snippets/index.xml"><code>notes/snippets/index.xml</code></a>.</p>
+<p>Techobyte is a <a href="https://gohugo.io">Hugo</a> static site. Feel free to <a href="https://github.com/Techobytedigital/blog">check out the source code for this blog</a>!</p>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

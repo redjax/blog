@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Categories on Techobyte Blog</title>
+    <link>https://techobyte.cc/categories/</link>
+    <description>Recent content in Categories on Techobyte Blog</description>
+    <generator>Hugo -- 0.154.3</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 09 Jan 2026 01:56:08 -0500</lastBuildDate>
+    <atom:link href="https://techobyte.cc/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CI/CD</title>
+      <link>https://techobyte.cc/categories/ci/cd/</link>
+      <pubDate>Fri, 09 Jan 2026 01:56:08 -0500</pubDate>
+      <guid>https://techobyte.cc/categories/ci/cd/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>DevOps</title>
+      <link>https://techobyte.cc/categories/devops/</link>
+      <pubDate>Fri, 09 Jan 2026 01:56:08 -0500</pubDate>
+      <guid>https://techobyte.cc/categories/devops/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Example</title>
+      <link>https://techobyte.cc/categories/example/</link>
+      <pubDate>Sun, 04 Jan 2026 23:21:26 -0500</pubDate>
+      <guid>https://techobyte.cc/categories/example/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

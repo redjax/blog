@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Backup on Techobyte Blog</title>
+    <link>https://techobyte.cc/tags/backup/</link>
+    <description>Recent content in Backup on Techobyte Blog</description>
+    <generator>Hugo -- 0.154.3</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 26 Feb 2026 10:00:00 -0500</lastBuildDate>
+    <atom:link href="https://techobyte.cc/tags/backup/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Comparing backup solutions (why I picked Restic)</title>
+      <link>https://techobyte.cc/posts/comparing-backup-solutions/</link>
+      <pubDate>Thu, 26 Feb 2026 10:00:00 -0500</pubDate>
+      <guid>https://techobyte.cc/posts/comparing-backup-solutions/</guid>
+      <description>My thoughts on backup managers I&amp;#39;ve tried throughout the years, and why I think Restic is the perfect tool for many backup scenarios.</description>
+      <content:encoded><![CDATA[<p>Having a good backup strategy is essential, especially when you host your own data. If you have not experienced the dread of realizing you&rsquo;ve lost an important file, consider yourself lucky and keep reading to learn why you should have a backup strategy for your data. I have lost important data due to lack of sufficient backups a number of times in my life. It never gets any less devastating, but each time it&rsquo;s happened I have inched closer to a sufficient backup strategy.</p>
+<p>There are a number of great solutions out there, from <a href="kopia.io">Kopia</a>, <a href="https://duplicati.com">Duplicati</a> and <a href="https://www.borgbackup.org">Borg</a>, to good ol&rsquo; <a href="https://rsync.net">rsync</a> and a remote share, and I have tried most of them. Let&rsquo;s talk about them, and why I ended up using Restic for all of my backups.</p>
+<h2 id="the-problem">The Problem</h2>
+<p>For a long time, I used Bash scripts scheduled with cron to create <code>.tar.gz</code> archives of important directories in a directory on my machine, i.e. <code>/opt/backups</code>. I eventually started using the <code>rsync</code> CLI tool to copy the backups via SSH to a central machine with a few extra hard drives.</p>
+<p>These scripts got unwieldy, and I&rsquo;ve lost most of them because I was not using version control yet. I also use both Windows and Linux, and translating my backup scripts to Powershell from Bash was good practice, but tedious.</p>
+<h2 id="the-journey">The Journey</h2>
+<p>I eventually started looking for tools I could install, and was pleased to find a ton of different open source projects with varying approaches to backups. I tried a bunch of them, feeling more and more like Goldilocks as I found one solution too resource intensive, another too complicated, some were too unreliable and others difficult to navigate. In my quest to find the perfect solution for my needs, the following utilities felt closest to my nebulous idea of the perfect solution for my homelab.</p>
+<h3 id="duplicati--wasabi">Duplicati + Wasabi</h3>
+<p><img alt="Duplicati logo" loading="lazy" src="/posts/comparing-backup-solutions/duplicati-logo.png#center"></p>
+<p>I started with Duplicati, which I used to create scheduled backups to my NAS and <a href="https://wasabi.com">Wasabi S3 storage</a>. Creating the scheduled jobs was easy, and there is a management webUI that made creating and monitoring the backups pretty easy.</p>
+<p>I was able to avert a couple of data loss events by restoring from a Duplicati backup, but I ended up running into database corruption a time or two (a known issue with Duplicati, if you search &ldquo;Duplicati database corrupted&rdquo;). You can recover from this state, but after the 2nd time it happened, I started looking for a different solution.</p>
+<style type="text/css">
+     
+    .notice {
+        --title-color: #fff;
+        --title-background-color: #6be;
+        --content-color: #444;
+        --content-background-color: #e7f2fa;
+    }
+
+    .notice.info {
+        --title-background-color: #fb7;
+        --content-background-color: #fec;
+    }
+
+    .notice.tip {
+        --title-background-color: #5a5;
+        --content-background-color: #efe;
+    }
+
+    .notice.warning {
+        --title-background-color: #c33;
+        --content-background-color: #fee;
+    }
+
+     
+    @media (prefers-color-scheme:dark) {
+        .notice {
+            --title-color: #fff;
+            --title-background-color: #069;
+            --content-color: #ddd;
+            --content-background-color: #023;
+        }
+
+        .notice.info {
+            --title-background-color: #a50;
+            --content-background-color: #420;
+        }
+
+        .notice.tip {
+            --title-background-color: #363;
+            --content-background-color: #121;
+        }
+
+        .notice.warning {
+            --title-background-color: #800;
+            --content-background-color: #400;
+        }
+    }
+
+    body.dark .notice {
+        --title-color: #fff;
+        --title-background-color: #069;
+        --content-color: #ddd;
+        --content-background-color: #023;
+    }
+
+    body.dark .notice.info {
+        --title-background-color: #a50;
+        --content-background-color: #420;
+    }
+
+    body.dark .notice.tip {
+        --title-background-color: #363;
+        --content-background-color: #121;
+    }
+
+    body.dark .notice.warning {
+        --title-background-color: #800;
+        --content-background-color: #400;
+    }
+
+     
+    .notice {
+        padding: 18px;
+        line-height: 24px;
+        margin-bottom: 24px;
+        border-radius: 4px;
+        color: var(--content-color);
+        background: var(--content-background-color);
+    }
+
+    .notice p:last-child {
+        margin-bottom: 0
+    }
+
+     
+    .notice-title {
+        margin: -18px -18px 12px;
+        padding: 4px 18px;
+        border-radius: 4px 4px 0 0;
+        font-weight: 700;
+        color: var(--title-color);
+        background: var(--title-background-color);
+    }
+
+     
+    .icon-notice {
+        display: inline-flex;
+        align-self: center;
+        margin-right: 8px;
+    }
+
+    .icon-notice img,
+    .icon-notice svg {
+        height: 1em;
+        width: 1em;
+        fill: currentColor;
+    }
+
+    .icon-notice img,
+    .icon-notice.baseline svg {
+        top: .125em;
+        position: relative;
+    }
+</style><div class="notice tip" >
+    <p class="notice-title">
+        <span class="icon-notice baseline">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="300.5 134 300 300">
+  <path d="M551.281 252.36c0-3.32-1.172-6.641-3.515-8.985l-17.774-17.578c-2.344-2.344-5.469-3.711-8.789-3.711-3.32 0-6.445 1.367-8.789 3.71l-79.687 79.493-44.141-44.14c-2.344-2.344-5.469-3.712-8.79-3.712-3.32 0-6.444 1.368-8.788 3.711l-17.774 17.579c-2.343 2.343-3.515 5.664-3.515 8.984 0 3.32 1.172 6.445 3.515 8.789l70.704 70.703c2.343 2.344 5.664 3.711 8.789 3.711 3.32 0 6.64-1.367 8.984-3.71l106.055-106.056c2.343-2.343 3.515-5.468 3.515-8.789ZM600.5 284c0 82.813-67.188 150-150 150-82.813 0-150-67.188-150-150 0-82.813 67.188-150 150-150 82.813 0 150 67.188 150 150Z"/>
+</svg>
+
+        </span>Tip</p><p>Duplicati Pros:</p>
+<ul>
+<li>WebUI was a nice way to manage the backups graphically.</li>
+<li>Scheduling jobs with retry logic was easy.</li>
+<li>Multiple backends, from local storage to cloud buckets to webDAV.</li>
+</ul>
+<p>Duplicati Cons:</p>
+<ul>
+<li>Slow backups, slow restores.</li>
+<li>Restore operations less reliable.
+<ul>
+<li>More prone to database corruption.</li>
+<li>Manual restore process is tedious.</li>
+</ul>
+</li>
+<li>Functional webUI, not winning any style awards.</li>
+</ul></div>
+
+<h3 id="kopia">Kopia</h3>
+<p><img alt="Kopia logo" loading="lazy" src="/posts/comparing-backup-solutions/kopia-logo.svg#center"></p>
+<p>I really liked being able to add a Wasabi bucket as one of the backup destinations, and my searches for an alternative to Duplicati eventually lead me to try Kopia. I had read forum posts of people moving to Kopia from Duplicati, and I ran the two side-by-side for a while to get a feel for Kopia.</p>
+<p>It did not take long to drop Duplicati entirely. It took me a little while to get used to having only 1 repository for backups, and I never got around to setting up a <a href="https://kopia.io/docs/repository-server/">Kopia server</a> to allow for more. The way I used Kopia was essentially a per-machine repository.</p>
+<p>Kopia worked well for me, and I would still recommend it as an option. The UI was the biggest pain point for me: the CLI commands were long and hard to remember, and the webUI was spartan and at times unintuitive.</p>
+<div class="notice tip" >
+    <p class="notice-title">
+        <span class="icon-notice baseline">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="300.5 134 300 300">
+  <path d="M551.281 252.36c0-3.32-1.172-6.641-3.515-8.985l-17.774-17.578c-2.344-2.344-5.469-3.711-8.789-3.711-3.32 0-6.445 1.367-8.789 3.71l-79.687 79.493-44.141-44.14c-2.344-2.344-5.469-3.712-8.79-3.712-3.32 0-6.444 1.368-8.788 3.711l-17.774 17.579c-2.343 2.343-3.515 5.664-3.515 8.984 0 3.32 1.172 6.445 3.515 8.789l70.704 70.703c2.343 2.344 5.664 3.711 8.789 3.711 3.32 0 6.64-1.367 8.984-3.71l106.055-106.056c2.343-2.343 3.515-5.468 3.515-8.789ZM600.5 284c0 82.813-67.188 150-150 150-82.813 0-150-67.188-150-150 0-82.813 67.188-150 150-150 82.813 0 150 67.188 150 150Z"/>
+</svg>
+
+        </span>Tip</p><p>Kopia Pros:</p>
+<ul>
+<li>Fairly easy to pick up and understand.</li>
+<li>Reliable scheduled backups, faster than Duplicati, and the resulting snapshots were smaller.</li>
+<li>Different apps for different needs (a CLI, an optional web interface, and a desktop app).</li>
+<li>Test data restores worked flawlessly every time, and Kopia allowed for restoring to a destination, or in-place (restoring directly back to the path where the original file/directory was).</li>
+</ul>
+<p>Kopia Cons:</p>
+<ul>
+<li>The webUI, while better than Duplicati, still left something to be desired.</li>
+<li>While Kopia has a ton of features, the complexity could be difficult to navigate.</li>
+</ul></div>
+
+<h3 id="borg-backup">Borg Backup</h3>
+<p><img alt="Borg Backup" loading="lazy" src="/posts/comparing-backup-solutions/borg-logo.svg#center"></p>
+<p>I will be honest, I probably didn&rsquo;t give Borg enough time to write an honest review about it. I started using it essentially in tandem with picking up restic, and quickly gravitated to restic.</p>
+<p>I love Borg in theory, it&rsquo;s a tool known for its relative ease of use and reliability when it comes time to restore from a backup. In comparing Borg and restic, I found <a href="https://www.reddit.com/r/BorgBackup/comments/v3bwfg/why_should_i_switch_from_restic_to_borg/">a helpful Reddit thread</a> comparing the two tools, and a few of the points were enough for me to move fully to restic. Below are the direct quotes from the post that swayed me (in case the link rots over time):</p>
+<ul>
+<li>Restic&rsquo;s cryptography is much better because it has been <a href="https://words.filippo.io/restic-cryptography/">endorsed</a> by one of Google&rsquo;s cryptography experts that wrote the crypto library for Google&rsquo;s Go language. He ended up choosing Restic as his personal backup system after the investigation.</li>
+<li>Borg&rsquo;s cryptography has many security flaws and they&rsquo;re working on a rewrite of it for the next 1.3+ release named &ldquo;Helium&rdquo;. &hellip;<em>truncated</em>
+<ul>
+<li><em>Borg 2.0 addresses these concerns, but is still in beta as of February 2026 and not recommended for production use.</em></li>
+</ul>
+</li>
+<li>Borg requires that the receiver runs Borg on the server, which limits it to rsync.net and borgbase.com for online cloud storage. &hellip;<em>truncated</em>
+<ul>
+<li><em>Hetzner storage boxes are also supported now, but the number of available backends for Borg is still limited.</em></li>
+</ul>
+</li>
+</ul>
+<h2 id="arriving-at-restic">Arriving at Restic</h2>
+<p><img alt="Restic icon" loading="lazy" src="/posts/comparing-backup-solutions/restic-logo.png#center"></p>
+<p>As I researched and tried different backup solutions, I kept seeing comments and posts about restic. I learned about people <a href="https://blog.bithive.space/post/automatic-backups-with-restic/">scripting restic with Bash</a> like I had done with rsync.</p>
+<p>Restic has powerful deduplication with their <a href="https://restic.net/blog/2015-09-12/restic-foundation1-cdc/">Content Defined Chunking (CDC) implementation</a>, leading to smaller backups and better accuracy.</p>
+<p>Restic also works with <a href="https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html">many different backends</a>, and can use <a href="https://rclone.org">Rclone</a> to expand backup destination options even more.</p>
+<p>With restic, you <a href="https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html">create a repository</a> (it&rsquo;s easy to create and use multiple repositories stored in different backends), point the program at a path, give it an <a href="https://restic.readthedocs.io/en/stable/040_backup.html#excluding-files">excludes file</a> (or an <a href="https://restic.readthedocs.io/en/stable/040_backup.html#including-files">includes file</a>), and <a href="https://restic.readthedocs.io/en/stable/040_backup.html">let it rip</a>. It&rsquo;s pretty much that easy.</p>
+<p>I have tested Restic with an external SSD, a directory on another machine (via SSH, facilitated by Rclone), pCloud (also via Rclone), and a Wasabi S3 bucket. Restic does a great job of making all of this feel insignificant and simple; it doesn&rsquo;t matter if your backup is on the same machine or a cloud bucket in another region of the world, what matters is the contents and integrity of the backup, which Restic handles gracefully.</p>
+<p>Restic makes it easy to <a href="https://restic.readthedocs.io/en/stable/045_working_with_repos.html">explore your snapshots</a>, and in my tests <a href="https://restic.readthedocs.io/en/stable/050_restore.html">restoring data</a> is quick, simple, and &ldquo;just works.&rdquo; You can also <a href="https://restic.readthedocs.io/en/stable/075_scripting.html">script Restic operations</a>, although I never dove too deep into this.</p>
+<p>Instead, I found two other tools that cemented my choice to use restic for my backups: <a href="https://github.com/creativeprojects/resticprofile">Resticprofile</a> and <a href="https://github.com/garethgeorge/backrest">Backrest</a>.</p>
+<div class="notice tip" >
+    <p class="notice-title">
+        <span class="icon-notice baseline">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="300.5 134 300 300">
+  <path d="M551.281 252.36c0-3.32-1.172-6.641-3.515-8.985l-17.774-17.578c-2.344-2.344-5.469-3.711-8.789-3.711-3.32 0-6.445 1.367-8.789 3.71l-79.687 79.493-44.141-44.14c-2.344-2.344-5.469-3.712-8.79-3.712-3.32 0-6.444 1.368-8.788 3.711l-17.774 17.579c-2.343 2.343-3.515 5.664-3.515 8.984 0 3.32 1.172 6.445 3.515 8.789l70.704 70.703c2.343 2.344 5.664 3.711 8.789 3.711 3.32 0 6.64-1.367 8.984-3.71l106.055-106.056c2.343-2.343 3.515-5.468 3.515-8.789ZM600.5 284c0 82.813-67.188 150-150 150-82.813 0-150-67.188-150-150 0-82.813 67.188-150 150-150 82.813 0 150 67.188 150 150Z"/>
+</svg>
+
+        </span>Tip</p><p>Restic pros:</p>
+<ul>
+<li>Backup speed, especially during incremental backups.</li>
+<li>Powerful deduplication saves space.</li>
+<li>Great 3rd party tools like resticprofile and backrest.</li>
+<li>Good mix of security and usability.</li>
+</ul>
+<p>Restic cons:</p>
+<ul>
+<li>There is a slight learning curve.</li>
+<li>Command chains can feel unnatural at first, especially if you&rsquo;re coming from a GUI/webUI application.</li>
+<li>Restic on its own can feel cumbersome, with long commands and a lot of args. Extra tooling like Resticprofile or Backrest helps significantly with this.</li>
+</ul></div>
+
+<h3 id="resticprofile">Resticprofile</h3>
+<p>Resticprofile is a wrapper for restic that works by reading backup <a href="https://creativeprojects.github.io/resticprofile/configuration/index.html">configurations from a file</a>. You can define defaults, the file supports <a href="https://creativeprojects.github.io/resticprofile/configuration/inheritance/index.html">inheritance</a>, <a href="https://creativeprojects.github.io/resticprofile/configuration/templates/index.html">templates</a>, and <a href="https://creativeprojects.github.io/resticprofile/configuration/templates/index.html">template variables</a>; you can &ldquo;group&rdquo; individual profiles which you can call with <code>resticprofile -n &lt;profile-name&gt;</code>. After defining your backups, you can run <code>resticprofile schedule install</code> to add scheduled tasks (systemd on Linux, Task Scheduler on Windows, Launchd on macOS), which fully automates your backups. It can monitor backup status using <a href="https://creativeprojects.github.io/resticprofile/monitoring/status/index.html">a JSON file</a> or by <a href="https://creativeprojects.github.io/resticprofile/monitoring/prometheus/index.html">sending metrics to Prometheus</a>.</p>
+<p>Restic and Resticprofile being cross-platform, with support for Linux, Windows, and macOS, meant I could use the same app and portions of the same configuration file across my machines. Automating the backups meant I did not have to write custom, per-platform scripts to run the backups on a schedule.</p>
+<h3 id="backrest">Backrest</h3>
+<p>I also add Backrest to some of my servers, which provides a webUI I can use instead of logging into the machine directly. Backrest can import and use existing repositories, and the UI allows for the same level of orchestration as resticprofile or the restic CLI. You can browse snapshots and restore files in the webUI, add notifications to Discord, Slack, Gotify, etc, and it has pre/post command hooks to execute shell scripts. I generally use either Backrest <em>or</em> resticprofile on a given machine, as they both serve essentially the same function. But since they can both use the same backend repository, it&rsquo;s easy to switch them out on demand if I decide I want to manage backups using one or the other.</p>
+<p>Backrest also has <a href="https://github.com/garethgeorge/backrest?tab=readme-ov-file#running-with-docker-compose">a Docker container</a>, which makes it a great addition to Docker Compose stacks for automating container data backup.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>I was aware of restic for a while before I actually decided to try it, and I can say I wish I had tried this tool sooner. While there&rsquo;s a slight learning curve, once you get your first backup running, and especially after using a tool to automate the complexity like resticprofile or backrest, it&rsquo;s clear to me that restic is the perfect combination of user friendliness, security, reliability, and simplicity for a backup solution. I will write another post or two describing how I actually use restic with examples of a resticprofile configuration file and some dos and don&rsquo;ts.</p>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

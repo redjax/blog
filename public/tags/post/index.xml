@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Post on Techobyte Blog</title>
+    <link>https://techobyte.cc/tags/post/</link>
+    <description>Recent content in Post on Techobyte Blog</description>
+    <generator>Hugo -- 0.154.3</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 25 Feb 2026 00:00:00 -0500</lastBuildDate>
+    <atom:link href="https://techobyte.cc/tags/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Blog Setup: Challenges</title>
+      <link>https://techobyte.cc/posts/blog-setup/challenges/</link>
+      <pubDate>Wed, 25 Feb 2026 00:00:00 -0500</pubDate>
+      <guid>https://techobyte.cc/posts/blog-setup/challenges/</guid>
+      <description>&lt;p&gt;&lt;em&gt;This post is part of a series: &lt;a href=&#34;https://techobyte.cc/series/blog-setup&#34;&gt;Blog Setup&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;I also faced some difficulties getting started with the blog. I spent way too much time creating the Github Action that deploys my content to Netlify. I failed so many times before getting it right, I exceeded Netlify&amp;rsquo;s free tier 🤡. Most of the difficulty actually came from the &amp;ldquo;extra&amp;rdquo; functionality with Lychee link checking and Vale linting. Although I was able to get both of these tools running well locally on my machine, I ran into challenges getting them to run in the pipeline.&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p><em>This post is part of a series: <a href="/series/blog-setup">Blog Setup</a>.</em></p>
+<p>I also faced some difficulties getting started with the blog. I spent way too much time creating the Github Action that deploys my content to Netlify. I failed so many times before getting it right, I exceeded Netlify&rsquo;s free tier 🤡. Most of the difficulty actually came from the &ldquo;extra&rdquo; functionality with Lychee link checking and Vale linting. Although I was able to get both of these tools running well locally on my machine, I ran into challenges getting them to run in the pipeline.</p>
+<p>Linting with Vale was very difficult to nail down. I was able to get it to work reliabily in the local repository, but struggled with containerizing it and running in a pipeline. I also had invalid syntax in my Lychee link scanning for a while. I resolved both issues, but definitely got caught up in the weeds and did not write any new blog posts in the meantime.</p>
+<p>I reposted [one of my old blogs from Medium](/posts/linux-frustrated-lovingI don&rsquo;t), and realized Hugo doesn&rsquo;t have a great way of centering images. You can use <a href="https://gohugo.io/content-management/shortcodes/">Hugo shortcodes</a>, but those are specific to/dependent on Hugo, and in the interest of keeping the content as decoupled from the site generator as possible, I did not want to invest too heavily in shortcodes. I found <a href="http://www.ebadf.net/2016/10/19/centering-images-in-hugo/">a really helpful blog post on ebaddf.net</a> that had a simple, elegant fix that should work across site generators.</p>
+<p>It involves creating a custom CSS file, i.e. at <code>static/css/custom.css</code>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-css" data-lang="css"><span class="line"><span class="cl"><span class="nt">img</span><span class="o">[</span><span class="nt">src</span><span class="o">$=</span><span class="s1">&#39;#center&#39;</span><span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">display</span><span class="p">:</span> <span class="kc">block</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">margin</span><span class="p">:</span> <span class="mf">0.7</span><span class="kt">rem</span> <span class="kc">auto</span><span class="p">;</span> <span class="c">/* you can replace the vertical &#39;0.7rem&#39; by
+</span></span></span><span class="line"><span class="cl"><span class="c">                            whatever floats your boat, but keep the
+</span></span></span><span class="line"><span class="cl"><span class="c">                            horizontal &#39;auto&#39; for this to work */</span>
+</span></span><span class="line"><span class="cl">    <span class="c">/* whatever else styles you fancy here */</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nt">img</span><span class="o">[</span><span class="nt">src</span><span class="o">$=</span><span class="s1">&#39;#floatleft&#39;</span><span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">float</span><span class="p">:</span><span class="kc">left</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">margin</span><span class="p">:</span> <span class="mf">0.7</span><span class="kt">rem</span><span class="p">;</span>      <span class="c">/* this margin is totally up to you */</span>
+</span></span><span class="line"><span class="cl">    <span class="c">/* whatever else styles you fancy here */</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nt">img</span><span class="o">[</span><span class="nt">src</span><span class="o">$=</span><span class="s1">&#39;#floatright&#39;</span><span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">float</span><span class="p">:</span><span class="kc">right</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">margin</span><span class="p">:</span> <span class="mf">0.7</span><span class="kt">rem</span><span class="p">;</span>      <span class="c">/* this margin is totally up to you */</span>
+</span></span><span class="line"><span class="cl">    <span class="c">/* whatever else styles you fancy here */</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>And embedding images using that class:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl">![<span class="nt">your_img</span>](<span class="na">/img/your_img.png#center</span>)
+</span></span><span class="line"><span class="cl">![<span class="nt">your_img</span>](<span class="na">/img/your_img.png#floatleft</span>)
+</span></span><span class="line"><span class="cl">![<span class="nt">your_img</span>](<span class="na">/img/your_img.png#floatright</span>)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Getting URL slugs to work for content nested in directories by year (i.e. <code>content/posts/&lt;year&gt;/post-name.md</code> in the source code) to work proved harder than I expected. I wanted to organize the source code for my blogs by year (both as a way to reduce clutter/page loads in Github, and because it&rsquo;s easier to manage in a code editor), but I wanted the URLs to omit the year (i.e. <code>/posts/post-name</code> without the year).</p>
+<p>I tried a few different things:</p>
+<ul>
+<li>Using <a href="https://gohugo.io/configuration/cascade/#target">the <code>cascade</code> configuration option</a> to &ldquo;collapse&rdquo; URLs
+<ul>
+<li>This was supposed to move anything in subdirectories under <code>content/posts/**</code> up to the root <code>posts/</code> path when building the site.</li>
+<li>It worked, but it also caused <code>/posts/</code> to return a <code>404</code> error.</li>
+</ul>
+</li>
+<li>Creating a branch bundle with <code>content/posts/&lt;year&gt;/_index.md</code>.
+<ul>
+<li>
+<p>This solution also made use of the <code>cascade</code> option, but in a more targeted way:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl">---
+</span></span><span class="line"><span class="cl">cascade:
+</span></span><span class="line"><span class="cl">url: &#34;/posts/:slug/&#34;
+</span></span><span class="line"><span class="cl">---
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>I originally used <code>headless: true</code>, but this option contributed to my <code>404</code> problem, because I use <a href="/posts"><code>/posts</code></a> to aggregate all of my posts.</p>
+</li>
+</ul>
+</li>
+<li>Adding a <code>slug</code> to each page.
+<ul>
+<li>I tried adding <code>slug: &quot;url-slug-i-want&quot;</code>. I even added it to my <code>posts</code> <a href="https://gohugo.io/content-management/archetypes/#article">archetype</a></li>
+<li>This apparently has no effect on bundles.</li>
+</ul>
+</li>
+</ul>
+<p>I found that using a <a href="https://gohugo.io/content-management/urls/#slug"><code>slug</code></a> to manually set the URL path works well. For some pages, the <a href="https://gohugo.io/content-management/urls/#url"><code>url</code></a> option worked better. <code>slug</code> is for overriding the last segment of the path, i.e. <code>/page-name/slug-name</code>, while <code>url</code> gives full control over the URL path, even allowing characters that are reserved by the OS, i.e. adding colons <code>:</code> to a URL like <code>http://example.com/my:example</code>.</p>
+<p>If both <code>slug</code> and <code>url</code> are set, the <code>url</code> parameter takes precedence</p>
+<p>For posts, this looks like:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl"><span class="gh"># archetypes/posts.md
+</span></span></span><span class="line"><span class="cl">---
+</span></span><span class="line"><span class="cl">title: &#34;{{ replace .Name &#34;-&#34; &#34; &#34; | title }}&#34;
+</span></span><span class="line"><span class="cl">date: {{ .Date }}
+</span></span><span class="line"><span class="cl">draft: true
+</span></span><span class="line"><span class="cl">slug: &#34;/post-name/optional-sub-post-name&#34;
+</span></span><span class="line"><span class="cl"><span class="gu">## Settinng a URL too will override the slug
+</span></span></span><span class="line"><span class="cl">url: &#34;post-name/optional-sub-post-name&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>I am sure there will be many other challenges (for instance, I have not tried changing the blog&rsquo;s theme yet, and that looks like a whole adventure if you rely on theme features), but the <a href="https://discourse.gohugo.io">community forums</a> are filled with very helpful threads, and it is relatively easy to find help for Hugo online. It&rsquo;s a popular tool that&rsquo;s well documented and has an active community. Some of the challenges I&rsquo;ve faced are quirks or limitations of Hugo, while some are problems I would have had with any static site generator. I&rsquo;m overall happy with the Hugo experience.</p>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Blog Setup: Tools</title>
+      <link>https://techobyte.cc/posts/blog-setup/tools/</link>
+      <pubDate>Sun, 22 Feb 2026 05:00:00 -0500</pubDate>
+      <guid>https://techobyte.cc/posts/blog-setup/tools/</guid>
+      <description>&lt;p&gt;&lt;em&gt;This post is part of a series: &lt;a href=&#34;https://techobyte.cc/series/blog-setup&#34;&gt;Blog Setup&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&#34;tools&#34;&gt;Tools&lt;/h2&gt;
+&lt;p&gt;I am using &lt;a href=&#34;https://mise.jdx.dev&#34;&gt;Mise&lt;/a&gt; to handle installing all of the tools I need to develop/build the blog. The &lt;a href=&#34;https://github.com/redjax/blog/blob/main/.mise.toml&#34;&gt;&lt;code&gt;.mise.toml&lt;/code&gt; file in the repository&lt;/a&gt; defines these tools, so I can simply clone the repository, install Mise, and run &lt;code&gt;mise trust &amp;amp;&amp;amp; mise install&lt;/code&gt; on a new machine to get up and running. Mise is also useful in container environments and CI/CD pipelines, it can ensure I&amp;rsquo;m installing the same tools in every environment, with version pinning for ones I want to control upgrades for like the &lt;code&gt;hugo&lt;/code&gt; CLI.&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p><em>This post is part of a series: <a href="/series/blog-setup">Blog Setup</a>.</em></p>
+<h2 id="tools">Tools</h2>
+<p>I am using <a href="https://mise.jdx.dev">Mise</a> to handle installing all of the tools I need to develop/build the blog. The <a href="https://github.com/redjax/blog/blob/main/.mise.toml"><code>.mise.toml</code> file in the repository</a> defines these tools, so I can simply clone the repository, install Mise, and run <code>mise trust &amp;&amp; mise install</code> on a new machine to get up and running. Mise is also useful in container environments and CI/CD pipelines, it can ensure I&rsquo;m installing the same tools in every environment, with version pinning for ones I want to control upgrades for like the <code>hugo</code> CLI.</p>
+<p><a href="https://taskfile.dev">Taskfile</a> is a new tool I found that lets you write YAML files to define tasks that can be called with the <code>task</code> CLI. It&rsquo;s a very versatile tool, and because it uses an embedded shell, it&rsquo;s (pretty much) fully cross platform. This is very useful, because it means the same tasks can run on Windows, Mac, or Linux, in CI/CD pipelines, Dockerfiles, etc. I use it for simplifying some commands I run frequently, like <a href="https://github.com/redjax/blog/blob/main/.tasks/dockertasks.yml">Docker commands</a> or <a href="https://github.com/redjax/blog/blob/main/.tasks/hugotasks.yml">Hugo commands</a>.</p>
+<p><a href="https://vale.sh">Vale</a> is a utility that lets you define a style guide and lint text content against it. You can use predefined styles, like Microsoft or Google&rsquo;s, and can mix and match. When Vale runs, it will surface writing and readability issues from the chosen style guides.</p>
+<p><a href="https://lychee.cli.rs">Lychee</a> is a fast, easy to use link checker. I found it while setting up this blog, tried it once, and immediately added it to the stack. Lychee can scan live sites/URLs, but can also be pointed at the raw Markdown files that comprise this blog, or the rendered HTML. This allows me to catch broken links on the site before deploying, or to detect <a href="https://en.wikipedia.org/wiki/Link_rot">linkrot</a>.</p>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Blog Setup: Choices Made</title>
+      <link>https://techobyte.cc/posts/blog-setup/choices-made/</link>
+      <pubDate>Thu, 19 Feb 2026 23:00:00 -0500</pubDate>
+      <guid>https://techobyte.cc/posts/blog-setup/choices-made/</guid>
+      <description>The setup &amp;amp; hosting choices I made for creating this blog.</description>
+      <content:encoded><![CDATA[<p><em>This post is part of a series: <a href="/series/blog-setup">Blog Setup</a>.</em></p>
+<p>While setting up the blog I had to make a number of choices that affect the short and long term health of the blog. Deciding where and how to host the code and the static site, what tooling to add, how to structure the repository, etc.</p>
+<h2 id="git-forge">Git Forge</h2>
+<p>Spoiler: <a href="https://github.com/redjax/blog">I went with Github</a>.</p>
+<p>I considered many options for where to host the source code for the blog. Github is an obvious frontrunner, partially becaause <a href="https://github.com/redjax">I am already active on Github</a>, but also the network effect. While I don&rsquo;t promote my blog, I also like the idea that I&rsquo;m not just shouting into the void with my posts, and discoverability is best where the people are.</p>
+<p>Github hit <a href="https://github.com/Red-Killer/shit/issues/1/">one billion repositories on June 11, 2025</a>, the first public forge to do so, highlighting the sheer amount of attention and usage on the platform. Most of my coding activity is still on Github (although I <a href="https://codeberg.org/redjax">mirror many of my repositories to codeberg.org</a>), so anyone stopping by my profile is more likely to find my blog.</p>
+<p>One of my concerns while setting up the blog was the ability to quickly and easily move to a new Git host. If I want to move the blog to <a href="https://gitlab.com">Gitlab</a> or my own <a href="%5Bhttps://forgejo.%5D(https://forgejo.org)">self hosted git forge</a>, I don&rsquo;t to have to labor to get back up and running. I plan to only dip my toes into a given platform; I will take advantage of some of the features, but will prefer external or embedded solutions for most things (sidenote: I need to find a way to keep issues out of Github.)</p>
+<p>And so Github it is, for now.</p>
+<h2 id="cicd">CI/CD</h2>
+<p>I spent time planning the structure of <a href="https://github.com/redjax/blog">the git repository for the blog</a> to make it portable. I have seen a number of blogs switch platforms over the years, and the posts they write at the end of a migration have inspired some of the choices made for this blog.</p>
+<p>For example, while this project is hosted on Github and I am using Github Actions to do things like lint the content and publish new pages, I also recreated the functionality in <a href="https://concourse-ci.org">Concourse CI pipelines</a> so I am not tied to a specific git platform. I could move the blog&rsquo;s repository to any other remote, like <a href="https://gitlab.com">Gitlab</a> or <a href="https://codeberg.org">Codeberg</a> without breaking my CI/CD. At some point I will probably try writing the pipelines in <a href="https://dagger.io">Dagger</a> to make them truly portable.</p>
+<p>I also considered <a href="https://woodpecker-ci.org">Woodpecker CI</a>, which is a fork of <a href="https://www.drone.io">Drone</a>, <a href="https://crowci.dev/v5-2/">Crow CI</a> which felt a bit too simplistic, and <a href="https://komo.do">Komodo</a>. I may still integrate Komodo for GitOps like deploying on specific conditions in a PR.</p>
+<h2 id="hosting">Hosting</h2>
+<p>As of 01/24/2026, this blog is hosted on <a href="https://netlify.com">Netlify</a>, a platform I have been looking for a reason to try. I disabled Netlify&rsquo;s automated rebuilds on merges to main so I could <a href="https://github.com/redjax/blog/blob/main/.github/workflows/hugo-deploy.yml">write a deployment pipeline of my own</a>, mainly for the experience, but also to ensure I don&rsquo;t break the site when I&rsquo;m trying new things. I hit Netlify&rsquo;s free tier limit in 2 days because of all the pipeline failures&hellip;I mean &ldquo;tests&rdquo; that I ran&hellip;but the team was generous enough to refresh my credits when I reached out for support. +1 to Netlify!</p>
+<p>Because the site is just static HTML/JS/CSS, I leave the option open to move the site&rsquo;s hosting to basically anywhere. I build a <a href="https://github.com/redjax/blog/tree/main/.containers/prod">production Docker image</a>, so I could deploy a container somewhere and route the <code>techobyte.cc</code> domain to it, or simply copy the static files to any host that can serve files via a web server. This ensures I won&rsquo;t get &ldquo;stuck&rdquo; with a specific host, or with a specific deployment method. I have heard of many bloggers who run their blogs off a Raspberry Pi they have in their house, and there&rsquo;s really nothing stopping me from doing the same!</p>
+<p>I also evaluated <a href="https://fly.io">Fly</a>, but decided they were more geared at full blown application deployments, <a href="https://azure.microsoft.com/en-us/products/category/containers/">Azure Containers</a>, a <a href="https://www.hetzner.com">Hetzner VPS</a> I would have to maintain, <a href="https://www.digitalocean.com/products/droplets">DigitalOcean Droplets</a>, and of course hosting it myself on a machine in my home, behind a reverse proxy.</p>
+<h2 id="theme">Theme</h2>
+<p>This was a tough one&hellip; Hugo has <a href="https://themes.gohugo.io">a lot of themes</a>. Most of them look good, some of them look great, but I had a few requirements in mind:</p>
+<ul>
+<li>Optimized for text-based posts. Most of my posts will be text-heavy, so optimizing layout for reading was an important factor.</li>
+<li>Simplicity, I didn&rsquo;t want to use a highly customizable theme that would require a lot of configuration and tweaks.
+<ul>
+<li>I am aware of my tendency to find <a href="https://en.wiktionary.org/wiki/yak_shaving">yaks to shave</a>, and want to focus on writing.</li>
+<li>Limiting myself to themes that are opinionated and rigid narrowed the selection pretty significantly.</li>
+</ul>
+</li>
+<li>As generic as possible. Themes like <a href="https://themes.gohugo.io/themes/blowfish/">Blowfish</a> are amazing, but you have to go all-in to really take advantage.
+<ul>
+<li>I am building this blog for the long term. The ability to switch themes/site generators is highly appealing.</li>
+<li>The more customization I need to do to the blog, the more I am building the site around the theme rather than the content.</li>
+</ul>
+</li>
+<li>Content is front and center, no landing pages or superflous sections.</li>
+<li>Support RSS (this is <a href="https://gohugo.io/templates/rss/">officially supported by Hugo</a>, but some themes handle revealing the functionality to readers better than others).</li>
+</ul>
+<p>I decided to start with <a href="https://themes.gohugo.io/themes/hugo-papermod/">PaperMod</a> as my theme. While it is kind of opinionated and has some theme-specific configurations, they seem easy enough to &ldquo;rip out&rdquo; if I ever want to change it later. It has a light and dark mode, and center-aligns the content for distraction-free reading. RSS setup was easy, and the icon is very obvious on pages that support it.</p>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>
