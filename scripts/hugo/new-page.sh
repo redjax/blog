@@ -22,7 +22,7 @@ if [[ $# -eq 0 ]]; then
 fi
 
 if ! hugo new "$@" 2>&1; then
-  echo "[ERROR] Failed creating page: $@"
+  echo "[ERROR] Failed creating page: $@" >&2
   exit 1
 else
   echo "Created new page: $@"

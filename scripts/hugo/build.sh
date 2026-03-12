@@ -23,6 +23,6 @@ cd "${REPO_ROOT}"
 
 echo "Building Hugo site using base URL: ${HUGO_BASEURL}"
 if ! hugo --minify --gc --baseURL "$HUGO_BASEURL" 2>&1; then
-  echo "[ERROR] Failed building Hugo site."
+  echo "[ERROR] Failed building Hugo site." >&2
   exit 1
 fi
