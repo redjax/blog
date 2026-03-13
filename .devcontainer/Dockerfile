@@ -16,5 +16,9 @@ ENV LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
 
 RUN curl https://mise.run | sh
 
+RUN mise activate bash --shims-only >> /etc/bash.bashrc \
+ && mise activate bash --shims-only >> /etc/profile \
+ && echo 'eval "$(/mise/bin/mise activate bash)"' >> /etc/bash.bashrc
+
 WORKDIR /workspace
-CMD ["/bin/bash"]
+CMD ["/bin/bash", "-i"]
