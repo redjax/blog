@@ -41,7 +41,7 @@ This is the concept I wish to convey with "tech brutalism." A focus/emphasis on 
 
 ## Abstraction Layers
 
-As time went on and computers reached the masses, there was a push for a more excessible computing experience for the "average person." This was a good thing! In the decades since the early 2000's, when more and more homes had a family computer, and then individual computers, into personal mobile devices, the push to make the devices and software more accessible opened the door for many more people to approach a computer. It is unequivocally good to "democratize computing," and to make the technology accessible to those with disabilities.
+As time went on and computers reached the masses, there was a push for a more accesssible computing experience for the "average person." This was a good thing! In the decades since the early 2000's, when more and more homes had a family computer, and then individual computers, into personal mobile devices, the push to make the devices and software more accessible opened the door for many more people to approach a computer. It is unequivocally good to "democratize computing," and to make the technology accessible to those with disabilities.
 
 Somewhere along the way in this pursuit, we began to place more of an emphasis on the *form* of technology, rather than its *function*. In our quest to make a UI approachable, we have come almost full circle to Fisher Price-esque buttons, massive amounts of wasted screen real estate with intentional whitespace where underlying components could be exposed, shoving more and more of the program's functionality behind nested toolbar menus, and generally polishing a thing into extinction.
 
