@@ -56,3 +56,13 @@ Just look at this old filesystem UI:
 If your initial reaction was to cringe at how ugly it is, stop for a moment and look past the design and layout. This interface is functional, and discoverable. Large, clearly labeled buttons, clearly labeled windows with simple, identifiable controls and icons, and a legible font. OS elements like window resizing and help menus are exposed in the UI, similar to how a Brutalist building exposes its structural elements.
 
 This is the concept I wish to convey with "tech brutalism." A focus/emphasis on the underlying components a UI layer facilitates, focused on the essential function of the technology rather than how pretty it looks. There is nothing wrong with a polished, pleasant interface, but if it serves to obfuscate function in the pursuit of form, there is a detrimental effect to the user's understanding of how that technology works.
+
+## Abstraction Layers
+
+As time went on and computers reached the masses, there was a push for a more excessible computing experience for the "average person." This was a good thing! In the decades since the early 2000's, when more and more homes had a family computer, and then individual computers, into personal mobile devices, the push to make the devices and software more accessible opened the door for many more people to approach a computer. It is unequivocally good to "democratize computing," and to make the technology accessible to those with disabilities.
+
+Somewhere along the way in this pursuit, we began to place more of an emphasis on the *form* of technology, rather than its *function*. In our quest to make a UI approachable, we have come almost full circle to Fisher Price-esque buttons, massive amounts of wasted screen real estate with intentional whitespace where underlying components could be exposed, shoving more and more of the program's functionality behind nested toolbar menus, and generally polishing a thing into extinction.
+
+Function and form can and should balance each other. But if we were to overemphasize one of these traits, should we not focus more on the ability of the machine to perform its task, rather than how good it looks doing it?
+
+While a Chromebook or iPad may be more accessible to the masses, what benefit are we giving them teaching UI patterns that only work in 1 ecosystem? How are they supposed to transfer knowledge when the concept of a filesystem is abstracted in its entirety?
