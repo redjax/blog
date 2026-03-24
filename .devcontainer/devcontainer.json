@@ -6,11 +6,10 @@
     },
     "workspaceFolder": "/workspace",
     "remoteEnv": {
-        "MISE_DIR": "/mise",
-        "PATH": "/mise/bin:/mise/shims:${containerEnv:PATH}"
+        "PATH": "/root/.local/bin:/root/.local/share/mise/shims:${containerEnv:PATH}"
     },
-    "postCreateCommand": "mise trust && mise install",
-    "postStartCommand": "hugo server -D --bind 0.0.0.0:1313 --baseURL http://localhost:1313 --appendPort=false",
+    "postCreateCommand": "/root/.local/bin/mise trust && /root/.local/bin/mise install && /root/.local/bin/mise shims",
+    "postStartCommand": "hugo server -D --bind 0.0.0.0:1313 --baseURL http://localhost:1313",
     "customizations": {
         "vscode": {
             "settings": {
@@ -25,10 +24,5 @@
     },
     "forwardPorts": [
         1313
-    ],
-    "portsAttributes": {
-        "1313": {
-            "label": "Hugo Dev Server"
-        }
-    }
+    ]
 }
