@@ -15,24 +15,6 @@ comments: false
 searchHidden: false
 ---
 
-## Outline
-
-- [x] Define real brutalism
-- [x] Explain tech brutalism
-  - [x] Function over form (these are machines)
-  - [x] Utility over beauty
-- [ ] Examples
-  - [ ] Using less/least
-    - [ ] Shitty peripherals
-    - [ ] Built-in tooling
-  - [ ] Learning the hard way
-- [ ] Seeking difficulty to practice for real difficulty
-- [ ] AI
-  - [ ] Use only for things you already know
-  - [ ] If you use it for something you don't already know, recreate it from memory
-  - [ ] Type generated code, don't copy/paste
-    - [ ] Read and interpret, change as you type
-
 Like all good blog posts, I will start by defining the word this article is about: "brutalism"
 
 > Brutalist architecture is an architectural style that emerged during the 1950s in the United Kingdom, among the reconstruction projects of the post-war era.
