@@ -76,3 +76,19 @@ And in the process, you learned a ton about how a computer actually works. When 
 Fast forward a bit to the 2010's and beyond, if you were (or are) a kid, you have more access to computers than anyone in history, and from a far younger age than the previous generation. Hundreds of millions of dollars have been pumped into usability studies and UX designers for the past 15 years. You are handed a device that has been designed to be so easy, you can get by almost on instinct alone. There are only a few UI elemnents, with pretty colors and unnecessary animations guiding your attention and hooking into parts of your psychology you aren't even aware of, leading you to use the machine the exact way the UX designer wants you to. You are discouraged or outright prevented from peeking under the hood, discovering and applying tweaks and modifications to personalize your device to you or enhance its functionality. Your concept of a filesystem is a folder in a cloud storage account.
 
 In the pursuit of "form," a marketable device with a pleasant user interface and thousands of times more computing power than necessary for the simple web browsing you'll be primarily using the device for, the people who built it have successfully hid the most useful, functional parts from you. Using the device will feel uninspired, routine, maybe even ordinary.
+
+## Technology, the Hard Way
+
+Although it feels like a lost battle at this point to pull the world back towards a focus on functionality, there are some things a dedicated technologist (or hobbyist computer enthusiast) can do to force learning. You will need to make an intentional effort to ignore "the easy way," which will constantly tempt you by popping up first in any of your searches, and offer comfort when you feel stuck.
+
+Reject that temptation!
+
+Using a computer "the hard way" is one of the best learning catalysts. Don't reach for AI every time you see an error message or want to add a feature to an app. If you're using a program like Neovim, build your configuration by hand, learn the Lua you're writing as you do it, before reaching for plugins or a preconfigured distribution. When you want to learn a programming language, resist the urge to start installing 3rd party packages immediately, don't seek out linters or formatters or VS Code plugins. Just open the documentation and start working through examples.
+
+Force yourself to hold onto and use a computer longer than you naturally would. Resist the consumerist urge to buy this year's latest and greatest, and instead spend time learning how to optimize the system you already have. Eek as much power as you can out of as little as you can.
+
+When you look into tooling that exists around building and using technology, understand why it came into existence and what problem it solves. Force yourself to experience that problem, whether it's doing something by hand instead of automating it, until it becomes so boring and routine you don't feel there are any other corners or surprises. Then you will understand and appreciate why the tool that makes it easier exists.
+
+Technology has become dogmatic. People repeat maxims they've heard, or best practices they've read, or they argue for or against something because they've spent more time amongst a community that holds a particular side in an argument. But how many dogmatic people understand where their opinions came from, or why a particular flame war raged?
+
+By forcing yourself to experience and learn the hard way, you are taking a slower, more deliberate approach to that learning, and will end up with a far deeper understanding of the topic than someone who picked it up as it was the latest trend. Many trends in computing are just another iteration or abstraction layer, and understanding the layer beneath will help you when the abstraction fails.
