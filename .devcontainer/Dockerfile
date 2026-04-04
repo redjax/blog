@@ -8,11 +8,11 @@ RUN apt-get update && apt-get install -y \
  && locale-gen en_US.UTF-8
 
 ARG USERNAME=developer
-ARG USER_UID=1000
+ARG USER_UID=1001
+ARG USER_GID=1001
 
-RUN if ! id -u ${USERNAME} >/dev/null 2>&1; then \
-      useradd -m -s /bin/bash -u ${USER_UID} ${USERNAME}; \
-    fi \
+RUN groupadd --gid ${USER_GID} ${USERNAME} \
+ && useradd --uid ${USER_UID} --gid ${USER_GID} -m -s /bin/bash ${USERNAME} \
  && echo "${USERNAME} ALL=(ALL) NOPASSWD:ALL" >/etc/sudoers.d/${USERNAME} \
  && chmod 0440 /etc/sudoers.d/${USERNAME}
 
@@ -20,8 +20,8 @@ RUN curl -fsSL https://mise.jdx.dev/install.sh | sh
 
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
-ENV PATH="/home/developer/.local/bin:/home/developer/.local/share/mise/shims:${PATH}"
 ENV HOME=/home/developer
+ENV PATH="/home/developer/.local/bin:/home/developer/.local/share/mise/shims:${PATH}"
 
 RUN mkdir -p /workspace \
  && chown -R developer:developer /workspace /home/developer
