@@ -18,14 +18,13 @@ RUN groupadd --gid ${USER_GID} ${USERNAME} \
 
 USER developer
 WORKDIR /home/developer
+
 RUN curl -fsSL https://mise.jdx.dev/install.sh | bash
 
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 ENV HOME=/home/developer
 ENV PATH="/home/developer/.local/bin:/home/developer/.local/share/mise/shims:${PATH}"
-
-RUN mkdir -p /workspace && chown -R developer:developer /workspace /home/developer
 
 USER developer
 
