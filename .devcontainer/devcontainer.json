@@ -5,8 +5,9 @@
         "context": ".."
     },
     "workspaceFolder": "/workspace",
+    "remoteUser": "developer",
     "remoteEnv": {
-        "PATH": "/root/.local/bin:/root/.local/share/mise/shims:${containerEnv:PATH}"
+        "PATH": "/home/developer/.local/bin:/home/developer/.local/share/mise/shims:${containerEnv:PATH}"
     },
     "postCreateCommand": "bash -lc 'cd /workspace && if [ -f .mise.toml ] || [ -f mise.toml ]; then mise trust && mise install; else echo \"No mise config found in /workspace\"; fi'",
     "customizations": {
