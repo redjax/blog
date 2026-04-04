@@ -8,7 +8,7 @@
     "remoteEnv": {
         "PATH": "/root/.local/bin:/root/.local/share/mise/shims:${containerEnv:PATH}"
     },
-    "postCreateCommand": "mise trust && mise install",
+    "postCreateCommand": "cd /workspace/blog && mise trust && mise install",
     "customizations": {
         "vscode": {
             "settings": {
