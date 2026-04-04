@@ -18,7 +18,7 @@ HUGO_CMD="$HUGO_CMD --baseURL ${HUGO_BASEURL:-http://localhost:1313}"
 HUGO_CMD="$HUGO_CMD --appendPort=false"
 
 ## Add dev flags if --dev passed
-if [[ "$1" == "--dev" ]]; then
+if [[ "${1:-}" == "--dev" ]]; then
     HUGO_CMD="$HUGO_CMD -D"
 
     ## Remove --dev from args
