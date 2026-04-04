@@ -16,7 +16,7 @@ RUN groupadd --gid ${USER_GID} ${USERNAME} \
  && echo "${USERNAME} ALL=(ALL) NOPASSWD:ALL" >/etc/sudoers.d/${USERNAME} \
  && chmod 0440 /etc/sudoers.d/${USERNAME}
 
-RUN curl -fsSL https://mise.jdx.dev/install.sh | sh
+RUN curl -fsSL https://mise.jdx.dev/install.sh | su - developer -c bash
 
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
