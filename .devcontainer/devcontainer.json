@@ -8,7 +8,7 @@
     "remoteEnv": {
         "PATH": "/root/.local/bin:/root/.local/share/mise/shims:${containerEnv:PATH}"
     },
-    // "postCreateCommand": "bash -lc 'pwd; ls -la; if [ -f .mise.toml ] || [ -f mise.toml ]; then mise trust && mise install; else echo \"No mise config found in current directory\"; fi'",
+    "postCreateCommand": "bash -lc 'cd /workspace && if [ -f .mise.toml ] || [ -f mise.toml ]; then mise trust && mise install; else echo \"No mise config found in /workspace\"; fi'",
     "customizations": {
         "vscode": {
             "settings": {
