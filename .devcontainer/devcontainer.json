@@ -8,8 +8,7 @@
     "remoteEnv": {
         "PATH": "/root/.local/bin:/root/.local/share/mise/shims:${containerEnv:PATH}"
     },
-    "postCreateCommand": "/root/.local/bin/mise trust && /root/.local/bin/mise install && /root/.local/bin/mise shims",
-    "postStartCommand": "hugo server -D --bind 0.0.0.0:1313 --baseURL http://localhost:1313",
+    "postCreateCommand": "mise trust && mise install",
     "customizations": {
         "vscode": {
             "settings": {
