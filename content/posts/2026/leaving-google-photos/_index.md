@@ -52,6 +52,7 @@ searchHidden: false
       - `job.create`
       - `job.read`
     - [ ] Show example install & upload scripts.
+    - [ ] Show example of script to parse Immich upload log file for failed uploads.
   - [ ] Remove duplicates in the Immich UI.
 - [ ] Future plans
   - [ ] Cloud storage mounted in Immich
