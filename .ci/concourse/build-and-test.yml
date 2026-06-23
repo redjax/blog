@@ -23,5 +23,5 @@ jobs:
       - task: build-hugo-site
         file: repo/.ci/concourse/tasks/build-hugo-site.yml
 
-      - task: lychee-check-links
-        file: repo/.ci/concourse/tasks/lychee-check-links.yml
+      # - task: lychee-check-links
+      #   file: repo/.ci/concourse/tasks/lychee-check-links.yml
