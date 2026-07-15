@@ -42,6 +42,7 @@ jobs:
     with:
       hugo-version: "0.154.3"
       site-root: "."
+      checkout-ref: ${{ github.sha }}
       versioned: false
       artifact-name: "hugo-site"
       release-prefix: "site"
