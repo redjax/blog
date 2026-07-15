@@ -53,6 +53,7 @@ jobs:
       runner-image: ${{ inputs.runner-img-or-label || 'ubuntu-latest' }}
       templates-ref: ${{ inputs.pipelinetemplates-ref || 'main' }}
       hugo-build-flags: "--gc --enableGitInfo"
+      debug-hugo-build-state: "true"
     secrets:
       release-bot-pat: ${{ secrets.RELEASE_BOT_PAT }}
       netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
