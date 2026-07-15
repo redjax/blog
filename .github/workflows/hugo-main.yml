@@ -40,7 +40,7 @@ jobs:
       id-token: write
     uses: redjax/pipelinetemplates/.github/workflows/hugo-site-main.yml@feat/hugo-netlify-publish
     with:
-      hugo-version: "0.154.3"
+      hugo-version: "0.164.0"
       site-root: "."
       checkout-ref: ${{ github.sha }}
       versioned: false
