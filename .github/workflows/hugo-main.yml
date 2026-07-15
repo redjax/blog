@@ -52,6 +52,7 @@ jobs:
       netlify-dir: public
       runner-image: ${{ inputs.runner-img-or-label || 'ubuntu-latest' }}
       templates-ref: ${{ inputs.pipelinetemplates-ref || 'main' }}
+      build-flags: "--gc --enableGitInfo"
     secrets:
       release-bot-pat: ${{ secrets.RELEASE_BOT_PAT }}
       netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
