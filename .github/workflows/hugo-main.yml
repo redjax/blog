@@ -5,15 +5,16 @@ on:
   push:
     branches:
       - main
-    paths:
-      - "archetypes/**"
-      - "content/**"
-      - "data/**"
-      - "i18n/**"
-      - "static/**"
-      - "hugo.yml"
-      - "go.mod"
-      - "go.sum"
+      - feat/use-central-pipeline
+    # paths:
+    #   - "archetypes/**"
+    #   - "content/**"
+    #   - "data/**"
+    #   - "i18n/**"
+    #   - "static/**"
+    #   - "hugo.yml"
+    #   - "go.mod"
+    #   - "go.sum"
 
   workflow_dispatch:
     inputs:
