@@ -1,0 +1,54 @@
+---
+name: Hugo Site Main
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "archetypes/**"
+      - "content/**"
+      - "data/**"
+      - "i18n/**"
+      - "static/**"
+      - "hugo.yml"
+      - "go.mod"
+      - "go.sum"
+
+  workflow_dispatch:
+    inputs:
+      publish-netlify:
+        type: boolean
+        required: false
+        default: true
+      runner-img-or-label:
+        type: string
+        default: ubuntu-latest
+      pipelinetemplates-ref:
+        description: "Branch, tag, or commit SHA to use when checking out PipelineTemplates repository."
+        type: string
+        default: feat/hugo-netlify-publish
+
+jobs:
+  pipeline:
+    permissions:
+      contents: write
+      actions: write
+      pull-requests: write
+      pages: write
+      id-token: write
+    uses: redjax/pipelinetemplates/.github/workflows/hugo-site-main.yml@feat/hugo-netlify-publish
+    with:
+      site-root: "."
+      versioned: false
+      artifact-name: "hugo-site"
+      release-prefix: "site"
+      publish-netlify: ${{ github.event_name == 'push' || inputs.publish-netlify || false }}
+      netlify-site-id: ${{ vars.NETLIFY_SITE_ID }}
+      netlify-branch: main
+      netlify-dir: public
+      runner-image: ${{ inputs.runner-img-or-label || 'ubuntu-latest' }}
+      templates-ref: ${{ inputs.pipelinetemplates-ref || 'main' }}
+    secrets:
+      release-bot-pat: ${{ secrets.RELEASE_BOT_PAT }}
+      netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
