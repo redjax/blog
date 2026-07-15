@@ -52,7 +52,7 @@ jobs:
       netlify-dir: public
       runner-image: ${{ inputs.runner-img-or-label || 'ubuntu-latest' }}
       templates-ref: ${{ inputs.pipelinetemplates-ref || 'main' }}
-      # hugo-build-flags: "--gc --enableGitInfo"
+      hugo-build-flags: "--gc --minify"
       debug-hugo-build-state: true
     secrets:
       release-bot-pat: ${{ secrets.RELEASE_BOT_PAT }}
