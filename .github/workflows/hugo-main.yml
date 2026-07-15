@@ -29,6 +29,21 @@ on:
         description: "Branch, tag, or commit SHA to use when checking out PipelineTemplates repository."
         type: string
         default: feat/hugo-netlify-publish
+      use-cache:
+        description: "Enable/disable cache save/restore between runs"
+        type: choice
+        options:
+          - true
+          - false
+        default: "true"
+
+      clean-cache:
+        description: "Clean Hugo generated cache before building"
+        type: choice
+        options:
+          - true
+          - false
+        default: "false"
 
 jobs:
   pipeline:
@@ -54,7 +69,9 @@ jobs:
       templates-ref: ${{ inputs.pipelinetemplates-ref || 'main' }}
       hugo-build-flags: "--gc --minify"
       debug-hugo-build-state: true
-      use-hugo-cache: false
+      # use-cache: ${{ github.event_name == 'workflow_dispatch' && inputs.use-cache || 'true' }}
+      use-cache: ${{ github.event_name == 'workflow_dispatch' && inputs.use-cache || 'false' }}
+      clean-cache: ${{ github.event_name == 'workflow_dispatch' && inputs.clean-cache || 'false' }}
     secrets:
       release-bot-pat: ${{ secrets.RELEASE_BOT_PAT }}
       netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
