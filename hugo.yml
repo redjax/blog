@@ -4,7 +4,7 @@
 ####################
 
 baseURL: https://example.org/
-languageCode: en-us
+locale: en-US
 title: Techobyte Blog
 
 permalinks:
