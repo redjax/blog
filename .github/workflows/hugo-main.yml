@@ -62,7 +62,7 @@ jobs:
       netlify-dir: public
       runner-image: ${{ inputs.runner-img-or-label || 'ubuntu-latest' }}
       templates-ref: ${{ inputs.pipelinetemplates-ref || 'main' }}
-      hugo-build-flags: "--gc --minify"
+      hugo-build-flags: "--gc"
       debug-hugo-build-state: true
       # use-hugo-cache: ${{ github.event.inputs.use-cache == 'true' }}
       # clean-hugo-cache: ${{ github.event.inputs.clean-cache == 'true' }}
