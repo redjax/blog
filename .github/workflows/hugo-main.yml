@@ -64,8 +64,8 @@ jobs:
       templates-ref: ${{ inputs.pipelinetemplates-ref || 'main' }}
       hugo-build-flags: "--gc --minify"
       debug-hugo-build-state: true
-      use-hugo-cache: ${{ inputs.use-cache }}
-      clean-hugo-cache: ${{ inputs.clean-cache }}
+      use-hugo-cache: ${{ github.event.inputs.use-cache != 'false' }}
+      clean-hugo-cache: ${{ github.event.inputs.clean-cache == 'true' }}
     secrets:
       release-bot-pat: ${{ secrets.RELEASE_BOT_PAT }}
       netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
