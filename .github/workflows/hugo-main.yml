@@ -31,19 +31,14 @@ on:
         default: feat/hugo-netlify-publish
       use-cache:
         description: "Enable/disable cache save/restore between runs"
-        type: choice
-        options:
-          - true
-          - false
-        default: "true"
-
+        type: boolean
+        required: false
+        default: true
       clean-cache:
         description: "Clean Hugo generated cache before building"
-        type: choice
-        options:
-          - true
-          - false
-        default: "false"
+        type: boolean
+        required: false
+        default: false
 
 jobs:
   pipeline:
