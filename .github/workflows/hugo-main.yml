@@ -1,0 +1,70 @@
+---
+name: Hugo Site Main
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "archetypes/**"
+      - "content/**"
+      - "data/**"
+      - "i18n/**"
+      - "static/**"
+      - "hugo.yml"
+      - "go.mod"
+      - "go.sum"
+
+  workflow_dispatch:
+    inputs:
+      publish-netlify:
+        type: boolean
+        required: false
+        default: true
+      runner-img-or-label:
+        type: string
+        default: ubuntu-latest
+      pipelinetemplates-ref:
+        description: "Branch, tag, or commit SHA to use when checking out PipelineTemplates repository."
+        type: string
+        default: main
+      use-cache:
+        description: "Enable/disable cache save/restore between runs"
+        type: boolean
+        required: false
+        default: true
+      clean-cache:
+        description: "Clean Hugo generated cache before building"
+        type: boolean
+        required: false
+        default: false
+
+jobs:
+  pipeline:
+    permissions:
+      contents: write
+      actions: write
+      pull-requests: write
+      pages: write
+      id-token: write
+    uses: redjax/pipelinetemplates/.github/workflows/hugo-site-main.yml@main
+    with:
+      hugo-version: "0.164.0"
+      site-root: "."
+      checkout-ref: ${{ github.sha }}
+      versioned: false
+      artifact-name: "hugo-site"
+      release-prefix: "site"
+      publish-netlify: ${{ github.event_name == 'push' || inputs.publish-netlify || false }}
+      netlify-branch: main
+      netlify-dir: public
+      netlify-site-id: ${{ vars.NETLIFY_SITE_ID }}
+      runner-image: ${{ inputs.runner-img-or-label || 'ubuntu-latest' }}
+      templates-ref: ${{ inputs.pipelinetemplates-ref || 'main' }}
+      hugo-build-flags: "--gc"
+      debug-hugo-build-state: true
+      use-hugo-cache: ${{ github.event.inputs.use-cache == 'true' }}
+      clean-hugo-cache: ${{ github.event.inputs.clean-cache == 'true' }}
+    secrets:
+      release-bot-pat: ${{ secrets.RELEASE_BOT_PAT }}
+      netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
