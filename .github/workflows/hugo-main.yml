@@ -57,7 +57,6 @@ jobs:
       artifact-name: "hugo-site"
       release-prefix: "site"
       publish-netlify: ${{ github.event_name == 'push' || inputs.publish-netlify || false }}
-      netlify-site-id: ${{ vars.NETLIFY_SITE_ID }}
       netlify-branch: main
       netlify-dir: public
       runner-image: ${{ inputs.runner-img-or-label || 'ubuntu-latest' }}
