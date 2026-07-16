@@ -27,7 +27,7 @@ on:
       pipelinetemplates-ref:
         description: "Branch, tag, or commit SHA to use when checking out PipelineTemplates repository."
         type: string
-        default: feat/hugo-netlify-publish
+        default: main
       use-cache:
         description: "Enable/disable cache save/restore between runs"
         type: boolean
