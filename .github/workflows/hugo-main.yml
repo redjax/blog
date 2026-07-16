@@ -33,7 +33,7 @@ on:
         description: "Enable/disable cache save/restore between runs"
         type: boolean
         required: false
-        default: true
+        default: false
       clean-cache:
         description: "Clean Hugo generated cache before building"
         type: boolean
@@ -64,9 +64,8 @@ jobs:
       templates-ref: ${{ inputs.pipelinetemplates-ref || 'main' }}
       hugo-build-flags: "--gc --minify"
       debug-hugo-build-state: true
-      # use-hugo-cache: ${{ github.event_name == 'workflow_dispatch' && inputs.use-cache || 'true' }}
-      use-hugo-cache: ${{ github.event_name == 'workflow_dispatch' && inputs.use-cache || 'false' }}
-      clean-hugo-cache: ${{ github.event_name == 'workflow_dispatch' && inputs.clean-cache || 'false' }}
+      use-hugo-cache: ${{ inputs.use-cache }}
+      clean-hugo-cache: ${{ inputs.clean-cache }}
     secrets:
       release-bot-pat: ${{ secrets.RELEASE_BOT_PAT }}
       netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
