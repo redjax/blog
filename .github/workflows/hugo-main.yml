@@ -59,6 +59,7 @@ jobs:
       publish-netlify: ${{ github.event_name == 'push' || inputs.publish-netlify || false }}
       netlify-branch: main
       netlify-dir: public
+      netlify-site-id: ${{ vars.NETLIFY_SITE_ID }}
       runner-image: ${{ inputs.runner-img-or-label || 'ubuntu-latest' }}
       templates-ref: ${{ inputs.pipelinetemplates-ref || 'main' }}
       hugo-build-flags: "--gc"
@@ -70,4 +71,3 @@ jobs:
     secrets:
       release-bot-pat: ${{ secrets.RELEASE_BOT_PAT }}
       netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-      netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
