@@ -4,7 +4,7 @@
 #                                                             #
 # Calls the PipelineTemplates repository's hugo-site-main.yml #
 # workflow to orchestrate version bumping, building, tagging, #
-# releasing, and publishing to Github Pages.                  #
+# releasing, and publishing to Netlify.                       #
 ###############################################################
 
 name: Hugo Site Main
@@ -26,10 +26,10 @@ on:
   workflow_dispatch:
     inputs:
       publish-targets:
-        description: 'JSON array of publish targets, e.g. ["github-pages"]'
+        description: 'JSON array of publish targets, e.g. ["netlify"]'
         required: false
         type: string
-        default: '["github-pages"]'
+        default: '["netlify"]'
       runner-img-or-label:
         type: string
         default: ubuntu-latest
@@ -64,12 +64,19 @@ jobs:
       versioned: false
       artifact-name: "hugo-site"
       release-prefix: "site"
-      publish-targets: ${{ inputs.publish-targets || '["github-pages"]' }}
+      publish-targets: ${{ inputs.publish-targets || '["netlify"]' }}
+      # branch-name: "gh-pages"
+      # cloudflare-pages-project: ""
+      # cloudflare-pages-branch: "main"
+      netlify-site-id: ${{ vars.NETLIFY_SITE_ID }}
+      netlify-branch: main
+      netlify-dir: public
       runner-image: ${{ inputs.runner-img-or-label || 'ubuntu-latest' }}
       templates-ref: ${{ inputs.pipelinetemplates-ref || 'main' }}
-      hugo-build-flags: "--gc"
+      hugo-build-flags: "--gc --minify"
       debug-hugo-build-state: true
       use-hugo-cache: ${{ github.event.inputs.use-cache == 'true' }}
       clean-hugo-cache: ${{ github.event.inputs.clean-cache == 'true' }}
     secrets:
       release-bot-pat: ${{ secrets.RELEASE_BOT_PAT }}
+      netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
