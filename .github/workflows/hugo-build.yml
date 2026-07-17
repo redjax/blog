@@ -9,10 +9,9 @@
 name: Build Hugo site
 
 on:
-  push:
-    branches:
-      - main
-      - feat/pr-build-pipeline
+  # push:
+  #   branches:
+  #     - main
   #   paths:
   #     - "archetypes/**"
   #     - "content/**"
