@@ -1,0 +1,84 @@
+---
+###############################################################
+# Build, release, & publish the Techobyte blog                #
+#                                                             #
+# Calls the PipelineTemplates repository's hugo-site-main.yml #
+# workflow to orchestrate version bumping, building, tagging, #
+# releasing, and publishing to Netlify.                       #
+###############################################################
+
+name: Hugo Site Main
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "archetypes/**"
+      - "content/**"
+      - "data/**"
+      - "i18n/**"
+      - "static/**"
+      - "hugo.yml"
+      - "go.mod"
+      - "go.sum"
+
+  workflow_dispatch:
+    inputs:
+      publish-targets:
+        description: 'JSON array of publish targets, e.g. ["netlify"]'
+        required: false
+        type: string
+        default: '["netlify"]'
+      runner-img-or-label:
+        type: string
+        default: ubuntu-latest
+      pipelinetemplates-ref:
+        description: "Branch, tag, or commit SHA to use when checking out PipelineTemplates repository."
+        type: string
+        default: main
+      use-cache:
+        description: "Enable/disable cache save/restore between runs"
+        type: boolean
+        required: false
+        default: true
+      clean-cache:
+        description: "Clean Hugo generated cache before building"
+        type: boolean
+        required: false
+        default: false
+
+jobs:
+  pipeline:
+    permissions:
+      contents: write
+      actions: write
+      pull-requests: write
+      pages: write
+      id-token: write
+    uses: redjax/pipelinetemplates/.github/workflows/hugo-site-main.yml@main
+    with:
+      hugo-version: "0.164.0"
+      site-root: "."
+      checkout-ref: ${{ github.sha }}
+      versioned: false
+      artifact-name: "hugo-site"
+      release-prefix: "site"
+      publish-targets: ${{ inputs.publish-targets || '["netlify"]' }}
+      # branch-name: "gh-pages"
+      # cloudflare-pages-project: ""
+      # cloudflare-pages-branch: "main"
+      netlify-site-id: ${{ vars.NETLIFY_SITE_ID }}
+      netlify-branch: main
+      netlify-dir: public
+      runner-image: ${{ inputs.runner-img-or-label || 'ubuntu-latest' }}
+      templates-ref: ${{ inputs.pipelinetemplates-ref || 'main' }}
+      hugo-build-flags: "--gc --minify"
+      ## Set to true to enable very verbose debug logging in build stage.
+      #  It's best to leave this as false until needed.
+      debug-hugo-build-state: false
+      use-hugo-cache: ${{ github.event.inputs.use-cache == 'true' }}
+      clean-hugo-cache: ${{ github.event.inputs.clean-cache == 'true' }}
+    secrets:
+      release-bot-pat: ${{ secrets.RELEASE_BOT_PAT }}
+      netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}

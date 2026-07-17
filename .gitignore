@@ -6,3 +6,6 @@
 
 !*.example*
 !*example*.*
+
+hugo-trace.txt
+trace.txt
