@@ -7,8 +7,10 @@ showToc: true
 
 categories: []
 description: "Code snippet or command reference"
-tags: ["note", "git"]
-
+summary: "Code snippet or command reference"
+tags: 
+  - "note"
+  - "git"
 ---
 
 If you have ever accidentally committed code under the wrong `git.user`/`git.email`, you should know you can rewrite the `git log` to change commit authors using `git filter-branch`.
@@ -21,7 +23,7 @@ Install the [`git-filter-repo`](https://github.com/newren/git-filter-repo/blob/m
 pip install git-filter-repo
 ```
 
-This plugin is required to run the `git filter-repo` command. It is ok to install this using "system Python." 
+This plugin is required to run the `git filter-repo` command. It is ok to install this using "system Python."
 
 If you are running Linux, you can install it with `apt install -y git-filter-repo` (or whatever package manager your distribution uses, i.e. `dnf` for RedHat/Fedora).
 
