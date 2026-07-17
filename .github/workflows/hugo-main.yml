@@ -56,7 +56,8 @@ jobs:
       pull-requests: write
       pages: write
       id-token: write
-    uses: redjax/pipelinetemplates/.github/workflows/hugo-site-main.yml@topic/hugo-pipeline-refinement
+    # uses: redjax/pipelinetemplates/.github/workflows/hugo-site-main.yml@topic/hugo-pipeline-refinement
+    uses: redjax/pipelinetemplates/.github/workflows/hugo-site-main.yml@feat/raw-go-hugo-install
     with:
       hugo-version: "0.164.0"
       site-root: "."
