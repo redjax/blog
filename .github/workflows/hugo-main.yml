@@ -74,7 +74,9 @@ jobs:
       runner-image: ${{ inputs.runner-img-or-label || 'ubuntu-latest' }}
       templates-ref: ${{ inputs.pipelinetemplates-ref || 'main' }}
       hugo-build-flags: "--gc --minify"
-      debug-hugo-build-state: true
+      ## Set to true to enable very verbose debug logging in build stage.
+      #  It's best to leave this as false until needed.
+      debug-hugo-build-state: false
       use-hugo-cache: ${{ github.event.inputs.use-cache == 'true' }}
       clean-hugo-cache: ${{ github.event.inputs.clean-cache == 'true' }}
     secrets:
