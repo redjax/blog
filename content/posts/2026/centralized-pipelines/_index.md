@@ -15,12 +15,6 @@ comments: false
 searchHidden: false
 ---
 
-**TODO**
-
-- [ ] Add paragraph detailing versioned components & idempotency
-- [ ] Add examples of caller pipelines
-- [ ] Proofread & edit
-
 I recently began centralizing my CI/CD pipelines in [a Github repository named "PipelineTemplates"](https://github.com/redjax/PipelineTemplates). For years, I have copied/pasted and slightly modified pipelines, workflows, and configurations between repositories. These pipelines handled tasks like linting and formatting my Python and Go code on PR open to the `main` branch, building/compiling code, creating Github tags and releases, deploying artifacts, and most of them were performing the same larger role, but in ways that were tailored to each individual repository.
 
 ## The Problems
