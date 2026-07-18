@@ -15,26 +15,11 @@ comments: false
 searchHidden: false
 ---
 
-## Outline
+**TODO**
 
-- [x] Problem: many repos, copy/paste pipelines with slight changes
-  - [x] High maintenance burden
-  - [x] Blind spots (deprecated Actions)
-- Solution: centralized 'PipelineTemplates' repository
-  - Components for code forges (Github Actions, Gitlab CI, Concourse, etc)
-  - Pipeline 'stubs' in each consuming repository
-- Examples:
-  - Renovate
-  - Hugo
-
-## Writing Notes
-
-Example Github Actions message when an Action is deprecated:
-
-```shell
-Update submodules and create PR if needed
-Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: peter-evans/create-pull-request@v5.
-```
+- [ ] Add paragraph detailing versioned components & idempotency
+- [ ] Add examples of caller pipelines
+- [ ] Proofread & edit
 
 I recently began centralizing my CI/CD pipelines in [a Github repository named "PipelineTemplates"](https://github.com/redjax/PipelineTemplates). For years, I have copied/pasted and slightly modified pipelines, workflows, and configurations between repositories. These pipelines handled tasks like linting and formatting my Python and Go code on PR open to the `main` branch, building/compiling code, creating Github tags and releases, deploying artifacts, and most of them were performing the same larger role, but in ways that were tailored to each individual repository.
 
