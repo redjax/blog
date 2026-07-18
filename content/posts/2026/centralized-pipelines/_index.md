@@ -64,6 +64,86 @@ This repository has taken the maintenance burden of keeping pipelines and versio
 
 Because each pipeline component is versioned, I can use or SHA hashes to lock a calling repository to a specific version of the component, ensuring repdroducible and (ideally) idempotent runs each time the central pipeline is called. I can rest easy knowing "this ran last time, so it will run this time," more or less.
 
+## Example
+
+The [`PipelineTemplates-Test` repository](https://github.com/redjax/PipelineTemplates-Test) serves as both my testing environment/sandbox, and as a set of examples for calling pipelines stored in the central `PipelineTemplates` repository. For the purposes of this blog, I will discuss my Renovate workflow to demonstrate how I develop, test, and use these pipelines.
+
+In the central `PipelineTemplates` repository, I have a [`.github/workflows/renovate.yml` workflow definition](https://github.com/redjax/PipelineTemplates/blob/main/.github/workflows/renovate.yml). This pipeline runs on a schedule and accepts inputs from a calling repository or manual dispatch to control how the Renovate pipeline runs. It expects a path to a `renovate.json` file, but also supports repositories that do not provide this file. When a repository calls this pipeline and does not provide a `renovate.json`, the [default configuration in `PipelineTemplates/config/renovate/default.json` is used](https://github.com/redjax/PipelineTemplates/blob/main/config/renovate/default.json).
+
+When I want to use this pipeline in one of my other repositories, I create a workflow in `.github/workflows/renovate.yml`, and copy the [`test-renovate.yml` pipeline from the `PipelineTemplates-Test` repository](https://github.com/redjax/PipelineTemplates-Test/blob/main/.github/workflows/test-renovate.yml). If the consuming repository has a `renovate.json` file, I pass it to the central pipeline using the `config-file` input. When the pipeline runs in the consuming repository, it uses the logic from the central workflow in `PipelineTemplates`.
+
+The calling repository may not look much simpler than the central pipeline, but the benefit is that I can just copy and paste this and make very minimal modifications to add the same Renovate functionality to new repositories. An example caller pipeline from a consuming repository might look like:
+
+```yaml
+---
+name: Run Renovate
+
+on:
+  schedule:
+    ## Runs every day at 3am
+    - cron: "0 3 * * *"
+  ## Manual trigger
+  workflow_dispatch:
+    inputs:
+      ## Control whether the run is informational/debug, or a "live
+      #  execution that will open PRs and update a dashboard issue.
+      mode:
+        description: "Renovate mode"
+        required: false
+        default: "lookup"
+        type: choice
+        options:
+          - extract
+          - lookup
+          - run
+      log-level:
+        description: "Renovate log level"
+        required: false
+        default: "info"
+        type: choice
+        options:
+          - info
+          - debug
+          - trace
+
+## The caller pipeline has to forward the permissions the
+#  central pipeline needs.
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  actions: write
+
+jobs:
+  renovate:
+    ## Tells Github to use the renovate.yml from the central repository
+    uses: redjax/pipelinetemplates/.github/workflows/renovate.yml@main
+    with:
+      mode: ${{ github.event_name == 'schedule' && 'run' || inputs.mode }}
+      log-level: ${{ inputs.log-level || 'info' }}
+      repository: ${{ github.repository }}
+      ## If the consuming repository provides a renovate.json, pass it here
+      config-file: renovate.json
+      ## If no renovate.json file exists in the consuming repository and this
+      #  is 'optional', the central renovate.json config will be used
+      require-config: optional
+      ## When 'true', the consuming repository running this pipeline will discover
+      #  and monitor/interact with all of your other repositories on that platform.
+      #  I almost never set this to 'true'
+      autodiscover: false
+      runner-image: ubuntu-latest
+      renovate-author-email: "1111111+your-username@users.noreply.github.com"
+    ## You must set these secrets in the consuming repository's secrets. The documentation
+    #  for this pipeline describes the permissions each of these tokens need, and how to
+    #  create them on Github
+    secrets:
+      renovate-token: ${{ secrets.RENOVATE_TOKEN }}
+      gh-api-token: ${{ secrets.GH_API_TOKEN }}
+
+```
+
+This blog uses the central Renovate pipeline, [here is an example of what a Renovate pipeline run looks like](https://github.com/redjax/blog/actions/runs/29632444841/job/88048674129).
+
 ## Future Plans
 
 I still have a lot of disparate pipelines to bring into the fold in this centralized repository. I need to create centralized workflows and Actions for formatting, linting, testing, building, and deploying a variety of apps in languages I use (Python, Go, Bash, Powershell, Astro, etc). As I create new pipelines, I find more efficient ways of doing things, and I run into plenty of scenarios where the goal I set out with is impossible or infeasible. This process helps to refine the centralized pipeline into a repeatable, assembly-line style process, and forces me to write more generic and capable of pipelines, rather than customizing each workflow specifically to the repository it's running in. It forces me to be more diligent and disciplined about how I structure the consuming repositories. This rigidity is also freeing, in that I no longer have to think about when I should start automating a repository and how I should do it. If I am writing a new Hugo site, I can add the calling pipeline very early on in the process and let the repository benefit from the workflow I've ironed out for building Hugo websites, and get right back to work on building the actual site.
