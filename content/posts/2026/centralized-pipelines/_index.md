@@ -1,5 +1,5 @@
 ---
-title: "Centralized Pipelines"
+title: "Centralized CI/CD Pipelines"
 date: 2026-07-15T01:07:19-04:00
 draft: true
 slug: "/centralized-pipelines/"
@@ -8,7 +8,7 @@ categories: []
 tags: []
 author: "me"
 description: ""
-showToc: false
+showToc: true
 TocOpen: false
 hidemeta: false
 comments: false
