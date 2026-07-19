@@ -64,7 +64,7 @@ I have been using Google Photos to backup my pictures since it was released in M
 
 Like many people, I am trying to reduce my reliance on Google products. I have not gone as hard as some people, like the users of the [DeGoogle subreddit](https://reddit.com/r/degoogle), although I admire their efforts and agree with their philosophy. I have so, so many things tied to the Google/Gmail account I created in 2005. A younger me had no concept of being the product when a service is free, and I foolishly tied so much of my online life to my Gmail account. Extricating is a long, difficult process, and one I'm doing in baby steps.
 
-The AI craze has been just the push I needed to take my privacy more seriously. Companies are changing their TOS, shoving AI hamfistedly into every corner of their product suite, trampling privacy and protection, and will not face any consequences for it in the foreseeable future.
+The AI craze has been just the push I needed to take my privacy more seriously. Companies are changing their TOS, shoving AI hamfistedly into every corner of their product suite, trampling privacy and protection, and will not face any consequences for it in the foreseeable future. While it is too late to keep anything I've currently handed over to another entity to hold (like my pictures and personal information), I can limit further damage by pulling my most sensitive pieces of data back under my own control, and my photos felt like a good starting point.
 
 ## Reasons for Leaving
 
