@@ -139,3 +139,151 @@ On the next screen, scroll past the QR code and copy the link below it. This is 
 ![Immich shareable link access token](/immich-shareable-link-access-token.png#center)
 
 You will use this link and the access token to allow the Immich app to communicate with the server behind the Pangolin proxy.
+
+### Setup Android App
+
+In the Immich Android app, navigate to Settings > Advanced > Custom proxy headers, and click "Add new header." Name the header `P-Access-Token-Id` and paste the value from when you created the token. Create another header named `P-Access-Token`.
+
+![Immich proxy headers](/immich-android-proxy-headers.png#center)
+
+This setup authenticates requests from the Android app to the Pangolin proxy, then passes the traffic to the Immich server.
+
+### Upload Photos
+
+I uploaded the collection I exported with Google Takeout to Immich using the `immich-go` CLI tool. First, I had to create an API key in Immich with the following permissions:
+
+- `asset.read`
+- `asset.statistics`
+- `asset.update`
+- `asset.upload`
+- `asset.copy`
+- `asset.replace`
+- `asset.delete`
+- `asset.download`
+- `album.create`
+- `album.read`
+- `albumAsset.create`
+- `server.about`
+- `stack.create`
+- `tag.asset`
+- `tag.create`
+- `user.read`
+- `job.create`
+- `job.read`
+
+I also created an admin key in Immich from the administrator account, with full permissions. The `immich-go` CLI uses the admin token to pause Immich jobs during upload. Othewrise, the regular API key will be used for operations. I created a `.env` file to store these values:
+
+```plaintext
+export IMMICH_SERVER_URL=https://photos.mydomain.com
+export IMMICH_KEY=<Immich user key>
+export IMMICH_ADMIN_KEY=<Immich admin key>
+export IMMICH_LOCAL_PHOTOS="/path/to/google-takeout/Takeout/Google Photos/"
+```
+
+I wrote a script so I could repeat this upload process in the future if needed. Before running the script, I source the `.env` file with `. .env`, exporting the Immich variables to my environment.
+
+This is the script I used to upload my photos:
+
+```shell
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! command -v immich-go >&/dev/null; then
+  echo "[ERROR] immich-go is not installed." >&2
+  exit 1
+fi
+
+IMMICH_URL="${IMMICH_SERVER_URL:-}"
+IMMICH_KEY="${IMMICH_KEY:-}"
+IMMICH_ADMIN_KEY="${IMMICH_ADMIN_KEY:-}"
+PHOTO_DIR="${IMMICH_LOCAL_PHOTOS:-}"
+## Trim trailing slashes
+PHOTO_DIR="${PHOTO_DIR%/}"
+
+DRY_RUN="false"
+
+function usage() {
+  cat <<EOF
+Usage: ${0} [OPTIONS]
+
+Options:
+  -h, --help        Print this help menu
+  -u, --server-url  Immich server URL
+  -k, --api-key     Immich API token
+  -K, --admin-key   Immich API token with admin privileges
+  -p, --local-path  Path to local photos directory
+  --dry-run         Describe actions without taking them
+EOF
+}
+
+## Parse CLI arguments
+while [[ $# -gt 0 ]]; do
+  case $1 in
+  -h | --help)
+    usage
+    exit 0
+    ;;
+  -u | --server-url)
+    IMMICH_URL="${2}"
+    shift 2
+    ;;
+  -k | --api-key)
+    IMMICH_KEY="${2}"
+    shift 2
+    ;;
+  -K | --admin-key)
+    IMMICH_ADMIN_KEY="${2}"
+    shift 2
+    ;;
+  -p | --local-path)
+    PHOTO_DIR="${2}"
+    shift 2
+    ;;
+  --dry-run)
+    DRY_RUN="true"
+    shift
+    ;;
+  *)
+    echo "[ERROR] Invalid arg: $1" >&2
+    usage
+    exit 1
+    ;;
+  esac
+done
+
+## Validate inputs
+[[ -z "${IMMICH_URL}" ]] && echo "[ERROR] Missing --server-url" >&2 && usage && exit 1
+[[ -z "${IMMICH_KEY}" ]] && echo "[ERROR] Missing --api-key" >&2 && usage && exit 1
+[[ -z "${PHOTO_DIR}" ]] && echo "[ERROR] Missing --local-path" >&2 && usage && exit 1
+
+if [[ ! -d "${PHOTO_DIR}" ]]; then
+  echo "[ERROR] Could not find local photos dir: ${PHOTO_DIR}" >&2
+  exit 1
+fi
+
+cmd=(immich-go upload from-google-photos -s "$IMMICH_URL" -k "$IMMICH_KEY" --on-errors continue)
+
+if [[ -n "${IMMICH_ADMIN_KEY}" ]]; then
+  cmd+=(--admin-api-key "${IMMICH_ADMIN_KEY}")
+else
+  cmd+=(--pause-immich-jobs=FALSE)
+fi
+
+## Append photo dir to end of command
+cmd+=("$PHOTO_DIR")
+
+if [[ "$DRY_RUN" == "true" ]]; then
+  echo "[DRY RUN] Running immich-go in dry-run mode"
+  cmd+=(--dry-run)
+fi
+
+echo "Starting upload from $PHOTO_DIR to server: $IMMICH_URL"
+
+if ! "${cmd[@]}"; then
+  echo "[ERROR] Failed uploading photos" >&2
+  exit 1
+fi
+
+echo "Upload complete"
+
+```
