@@ -71,24 +71,34 @@ function download_lychee() {
 
   arch="$(detect_arch)"
   os="$(detect_os)"
-  filename="lychee-${version}-${arch}-${os}.tar.gz"
+
+  ## Asset filename format: lychee-{arch}-{os}.tar.gz
+  filename="lychee-${arch}-${os}.tar.gz"
   url="https://github.com/${LYCHEE_REPO}/releases/download/${version}/${filename}"
 
-  echo "[INFO] Downloading lychee ${version}"
+  echo "[INFO] Downloading lychee ${version} (${arch}-${os})" >&2
 
   if command -v curl &>/dev/null; then
-    curl -sLO "${url}"
+    curl -fsLO "${url}" || {
+      echo "[ERROR] Download failed with curl: ${url}" >&2
+      exit 1
+    }
   elif command -v wget &>/dev/null; then
-    wget -q "${url}"
+    wget -q "${url}" || {
+      echo "[ERROR] Download failed with wget: ${url}" >&2
+      exit 1
+    }
   else
     echo "[ERROR] Neither curl nor wget found" >&2
     exit 1
   fi
 
   if [[ ! -f "${filename}" ]]; then
-    echo "[ERROR] Download failed" >&2
+    echo "[ERROR] File not found after download: ${filename}" >&2
     exit 1
   fi
+
+  echo "${filename}"
 }
 
 function install_lychee() {
@@ -158,12 +168,12 @@ done
 
 VERSION="${VERSION:-$(get_latest_version)}"
 
-download_lychee "${VERSION}"
-install_lychee "lychee-${VERSION}-$(detect_arch)-$(detect_os).tar.gz" "${FORCE}"
+FILENAME="$(download_lychee "${VERSION}")"
+install_lychee "${FILENAME}" "${FORCE}"
 
 if [[ ":${PATH}:" != *":${INSTALL_DIR}:"* ]]; then
   echo "[WARNING] ${INSTALL_DIR} is not in PATH"
   echo "[INFO] Add to PATH: export PATH=\"${INSTALL_DIR}:\$PATH\""
 fi
 
-echo "[INFO] Finished installing Lychee"
+echo "[INFO] Done"
