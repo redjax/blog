@@ -90,7 +90,7 @@ Immich can perform many of the same functions as PhotoPrism, automatically recog
 
 ![Immich logo](/immich-logo-stacked-light.svg#center)
 
-Immich is backed by [Futo](https://futo.tech), a company that makes local, privacy-respecting AI tools and whose [keyboard](https://keyboard.futo.org) I use and love on my phone. They have a [host of features I care about](https://github.com/immich-app/immich#features), and their [Android app](https://play.google.com/store/apps/details?id=app.alextran.immich) works great.
+Immich is backed by [Futo](https://futo.tech), a company that makes local, privacy-respecting AI tools and whose [keyboard](https://keyboard.futo.org) I use on my phone. They have a [host of features I care about](https://github.com/immich-app/immich#features), and their [Android app](https://play.google.com/store/apps/details?id=app.alextran.immich) works great.
 
 Moving my photos out of Google Photos and into Immich was also relatively painless. Below I detail the steps in detail, but I was able to use Google Takeout to export my photos, and the `immich-go` CLI to import them into my Immich server. After that, I merely had to install the Immich app, sign into my server, and turn on backups from my phone.
 
