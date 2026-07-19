@@ -117,3 +117,17 @@ docker compose \
 ```
 
 The `-f overlays/service-name.yml` syntax is for [merging Docker Compose files](https://docs.docker.com/compose/how-tos/multiple-compose-files/merge/). Running `docker compose <command>` without any additional `-f` paths runs only the services in `compose.yml`. These overlays provide Immich with a database, web server, and cache. If I am using a database or redis cache on another host, I would omit the `-f overlays/{postgres,redis}.yml` files and provide connection details for the remote.
+
+### Networking
+
+I use [Pangolin](https://github.com/fosrl/pangolin) as a reverse proxy for my services. This allows me to route web traffic incoming to `https://immich.mydomain.com` to the Immich container running on a machine in my homelab. When protecting my site with [Pangolin's SSO authentication](https://docs.pangolin.net/manage/resources/public/authentication), I found I could not reach the URL when using the [Immich Android app](https://docs.immich.app/features/mobile-app/). I found [this answer on Github](https://docs.pangolin.net/manage/resources/public/authentication) that shows the custom request headers required to enable [passing an access token](https://docs.pangolin.net/manage/resources/public/authentication#shareable-links-and-access-tokens).
+
+After setting up Immich as an HTTPS resource in Pangolin, create a shareable link and set the new Immich service as the resource. Set this link to "never expire" for convenience; if you set an expiration date, you will need to update the app with a new link each time it expires.
+
+![Immich create shareable link](/immich-create-shareable-link.png#center)
+
+On the next screen, scroll past the QR code and copy the link below it. This is the link you will provide to the Android app. Click the `Usage Examples` button and note the `P-Access-Token-Id` and `P-Access-Token` values.
+
+![Immich shareable link access token](/immich-shareable-link-access-token.png#center)
+
+You will use this link and the access token to allow the Immich app to communicate with the server behind the Pangolin proxy.
