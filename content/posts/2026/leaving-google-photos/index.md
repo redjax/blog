@@ -80,7 +80,7 @@ The `-f overlays/service-name.yml` syntax is for [merging Docker Compose files](
 
 ![Google Takeout logo](/google-takeout-img.png#center)
 
-Google offers a feature for exporting your Google Photos (and more accout/app data) with [Google Takeout](https://takeout.google.com). Using this feature, I exported ~200GB of photos and videos I've taken over the years into a .zip archive.
+Google offers a feature for exporting your Google Photos (and more account/app data) with [Google Takeout](https://takeout.google.com). Using this feature, I exported ~200GB of photos and videos I've taken over the years into a .zip archive.
 
 ![Google Takeout photos](/google-takeout-selected.png#center)
 
