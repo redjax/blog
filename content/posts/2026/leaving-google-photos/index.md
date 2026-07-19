@@ -26,8 +26,8 @@ searchHidden: false
   - [x] [Training AI on our photos](https://www.digitalinformationworld.com/2025/08/google-gemini-will-soon-use-your.html).
     - [x] [Google Docs: Gemini features in Photos privacy hub](https://support.google.com/photos/answer/15344015?sjid=10263950563787648465-NC) states they do not use your photos to train, but the capability is there and I don't trust them to resist temptation.
 - [ ] Moving to Immich
-  - [ ] Run Immich in Docker Compose.
-    - [ ] Resource limits to prevent runaway CPU usage.
+  - [x] Run Immich in Docker Compose.
+    - [x] Resource limits to prevent runaway CPU usage.
   - [ ] (Optional) Pangolin proxy/auth.
   - [ ] Prepare a [Google Takeout](https://takeout.google.com).
   - [ ] Use [`immich-go`](https://github.com/simulot/immich-go) to upload photos from CLI.
@@ -96,4 +96,24 @@ Moving my photos out of Google Photos and into Immich was also relatively painle
 
 ## Moving to Immich
 
-The setup was relatively simple, I have the whole thing [running in Docker](https://github.com/redjax/docker_templates/tree/main/templates/media/docker_immich).
+The setup was relatively simple, I have the whole thing [running in Docker](https://github.com/redjax/docker_templates/tree/main/templates/media/docker_immich). On a machine where I want to run my Immich stack, I use git's [sparse checkout feature](https://git-scm.com/docs/git-sparse-checkout) to download only the `media/docker_immich` directory:
+
+- First, clone the repository without checking out a branch:
+  - `git clone --no-checkout https://github.com/redjax/docker_templates docker_immich`
+  - `cd docker_immich`
+- Initialize the sparse checkout: `git sparse-checkout init --cone`
+- Set the checkout path: `git sparse-checkout set templates/media/docker_immich`
+- Checkout the main branch: `git checkout main`
+
+Bring the whole stack up with:
+
+```shell
+docker compose \
+  -f compose.yml \
+  -f overlays/postgres.yml \
+  -f overlays/redis.yml \
+  -f overlays/caddy.yml \
+  up -d
+```
+
+The `-f overlays/service-name.yml` syntax is for [merging Docker Compose files](https://docs.docker.com/compose/how-tos/multiple-compose-files/merge/). Running `docker compose <command>` without any additional `-f` paths runs only the services in `compose.yml`. These overlays provide Immich with a database, web server, and cache. If I am using a database or redis cache on another host, I would omit the `-f overlays/{postgres,redis}.yml` files and provide connection details for the remote.
