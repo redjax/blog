@@ -1,7 +1,7 @@
 ---
 title: "Leaving Google Photos"
-date: 2026-05-16T12:23:38-04:00
-draft: true
+date: 2026-07-20T00:00:00-04:00
+draft: false
 slug: "/leaving-google-photos/"
 # url: "/posts/leaving-google-photos/"
 categories: []
