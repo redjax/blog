@@ -30,7 +30,7 @@ The AI craze has been just the push I needed to take my privacy more seriously. 
 
 There are also horror stories, like the one where [a whole house/family lost access to their Google accounts because of 1 user's data](https://www.pcworld.com/article/3104521/teenagers-gemini-mistake-locks-entire-family-out-of-google-accounts.html). There is also the fact that [Google quietly enabled photo scanning on user devices, and made it opt-out by default](https://www.forbes.com/sites/zakdoffman/2025/02/28/google-starts-scanning-your-photos-without-any-warning/), an evil pattern we did not react strongly enough to a decade ago.
 
-There is also the potential for losing access to your account simply because [Google decides your pictures are dangerous, without a care for context and with no recourse](https://www.koffellaw.com/blog/google-ai-technology-flags-dad-who-took-photos-o/).
+Additionally, you could potentially lose access to your account simply because [Google decides your pictures are dangerous, without a care for context and with no recourse](https://www.koffellaw.com/blog/google-ai-technology-flags-dad-who-took-photos-o/).
 
 With how sensitive my Google account is, and with how much I currently rely on them, anything I can do to pull my data back into my own control is worth the effort. I researched a few products (hosted and self-hosted, free and paid), and while I did find some promising options, I ultimately settled on 1 self hosted piece of software and a backup plan that I control.
 
