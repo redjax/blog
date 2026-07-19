@@ -289,3 +289,21 @@ echo "Upload complete"
 ```
 
 If I ever need to re-import my collection, or if I create a new Google Takeout with my photos, I can use this script to upload them to my Immich server. The tool works great, it even imported my albums and all of the EXIF data from Google.
+
+## Tradeoffs
+
+Immich feels like a true replacement for Google Photos. The app is familiar enough if you've used Google Photos. It has many of the same features, like duplicate and face detection, searches for objects like "dog" or "tree," and creating shareable links for photos, videos, and galleries. But there are several real tradeoffs you need to be aware of, and risks you need to accept, when moving from a hosted photo provider to your own self-hosted setup.
+
+The first and biggest concern is security. A large company like Google has an interest in protecting what you upload to their servers. While they may use this data in objectionable ways, it is undeniably more secure to entrust your memories to a corporation with a dedicated security team and another team of engineers improving the service over time. While Google is famous for [abruptly killing useful services](https://killedbygoogle.com/), when you self host your media, you are also responsible for how you expose the server to the world (if you do this at all), and protecting the resources from active and passive attacks, and for ensuring your authentication layer and firewall keep unsavory traffic out of your systems.
+
+The next important factor to consider is backups. When you host your own media collection, you will want to ensure memories aren't lost from hardware failures or containerization problems. Keeping backups is crucial, and entirely your responsibility. When backing up important data, you should follow the ["3-2-1 backups" principle](https://www.acronis.com/en/blog/posts/backup-rule/), which boil down to:
+
+- Keep 3 copies of your data: the original data on your primary device, and at least 2 copies.
+- Use 2 different storage devices: a PC, external disk, USB flash drive, NAS or SAN, or cloud storage services; pick any 2.
+- Keep 1 backup copy off-site: always have a copy of the backup somewhere other than where all of the main data and backups are. For example, if you are backing up to an external drive and a NAS on your home network, keeping a backup copy in an encrypted S3 bucket will prevent total data loss due to damage that might occur at home, like a fire/flood or heat damage.
+
+This strategy can be intense for a homelab, and it increases the size your collection uses on-disk. I generally keep 1 copy somewhere local (an external drive or my NAS), and upload an encrypted copy to [Wasabi cloud storage](https://wasabi.com/). If you want to avoid cloud hosting, you could also do a "buddy backup," which is where you keep a storage device at a "buddy's" location (a relative or friend's house, or rented networked storage at a local datacenter, etc).
+
+[I use Restic for backups](/posts/comparing-backup-solutions), and which makes it simple to keep a local backup, a backup on another machine on my LAN via [Rclone SFTP copy](https://rclone.org/sftp/), and a remote copy in [pCloud](https://pcloud.com) or Wasabi S3.
+
+Finally, there is the maintenance cost to consider. Comparing again to a hosted service, the company will have a dedicated team of engineers responsible for keeping hardware and software up to date, managing storage and quotas, and fixing things when they break. When you self-host, you become a 1-person maintenance team. The upside of choosing your own SLA is that you choose your own SLA; the downside is that shit's broken until you fix it. And if you experience a hardware failure, you also become the data recovery team. This can be a burden, but tools like [Dockhand](https://github.com/redjax/docker_templates/tree/main/templates/networking/docker_dockhand) can simplify maintenance operations.
