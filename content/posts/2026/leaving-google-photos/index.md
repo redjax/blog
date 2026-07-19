@@ -68,7 +68,7 @@ The AI craze has been just the push I needed to take my privacy more seriously. 
 
 ## Reasons for Leaving
 
-[Google Docs: Gemini features in Photos privacy hub](https://support.google.com/photos/answer/15344015?sjid=10263950563787648465-NC) states they do not use your photos to train, but the capability is there and I don't trust them to resist temptation. And whether or not they directly access my photos, enough of my life is wrapped up in Google's products that I don't believe they'd even need direct access to my pictures to abuse my privacy for their products.
+[Google Docs: Gemini features in Photos privacy hub](https://support.google.com/photos/answer/15344015?sjid=10263950563787648465-NC) states they do not use your photos to train, but the capability is there and I don't trust them to resist temptation. And whether or not they directly access my photos, enough of my life is wrapped up in Google's products that I don't believe they'd even need direct access to my pictures to abuse my privacy.
 
 There are also horror stories, like the one where [a whole house/family lost access to their Google accounts because of 1 user's data](https://www.pcworld.com/article/3104521/teenagers-gemini-mistake-locks-entire-family-out-of-google-accounts.html). There is also the fact that [Google quietly enabled photo scanning on user devices, and made it opt-out by default](https://www.forbes.com/sites/zakdoffman/2025/02/28/google-starts-scanning-your-photos-without-any-warning/), an evil pattern we did not react strongly enough to a decade ago.
 
