@@ -287,3 +287,5 @@ fi
 echo "Upload complete"
 
 ```
+
+If I ever need to re-import my collection, or if I create a new Google Takeout with my photos, I can use this script to upload them to my Immich server. The tool works great, it even imported my albums and all of the EXIF data from Google.
