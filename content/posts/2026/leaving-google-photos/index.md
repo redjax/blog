@@ -18,48 +18,6 @@ comments: false
 searchHidden: false
 ---
 
-## Outline
-
-- [x] Reason(s) for leaving
-  - [x] Many stories about people losing access to their account due to misunderstandings or inaccurate "illicit material" detection.
-  - [x] [Whole houses/families losing their account because of 1 user](https://www.pcworld.com/article/3104521/teenagers-gemini-mistake-locks-entire-family-out-of-google-accounts.html).
-  - [x] [Training AI on our photos](https://www.digitalinformationworld.com/2025/08/google-gemini-will-soon-use-your.html).
-    - [x] [Google Docs: Gemini features in Photos privacy hub](https://support.google.com/photos/answer/15344015?sjid=10263950563787648465-NC) states they do not use your photos to train, but the capability is there and I don't trust them to resist temptation.
-- [ ] Moving to Immich
-  - [x] Run Immich in Docker Compose.
-    - [x] Resource limits to prevent runaway CPU usage.
-  - [ ] (Optional) Pangolin proxy/auth.
-  - [ ] Prepare a [Google Takeout](https://takeout.google.com).
-  - [ ] Use [`immich-go`](https://github.com/simulot/immich-go) to upload photos from CLI.
-    - [ ] API key permissions:
-      - `asset.read`
-      - `asset.statistics`
-      - `asset.update`
-      - `asset.upload`
-      - `asset.copy`
-      - `asset.replace`
-      - `asset.delete`
-      - `asset.download`
-      - `album.create`
-      - `album.read`
-      - `albumAsset.create`
-      - `server.about`
-      - `stack.create`
-      - `tag.asset`
-      - `tag.create`
-      - `user.read`
-      - `job.create`
-      - `job.read`
-    - [ ] Show example install & upload scripts.
-    - [ ] Show example of script to parse Immich upload log file for failed uploads.
-  - [ ] Remove duplicates in the Immich UI.
-- [ ] Future plans
-  - [ ] Cloud storage mounted in Immich
-  - [ ] Automated backups
-    - [ ] Restic + rclone for S3/cloud, local, and NAS destinations.
-
----
-
 I have been using Google Photos to backup my pictures since it was released in May of 2015. The software works great, seamlessly backing up any picture or video I take on my phone and making it simple to share photos and albums with my friends.
 
 Like many people, I am trying to reduce my reliance on Google products. I have not gone as hard as some people, like the users of the [DeGoogle subreddit](https://reddit.com/r/degoogle), although I admire their efforts and agree with their philosophy. I have so, so many things tied to the Google/Gmail account I created in 2005. A younger me had no concept of being the product when a service is free, and I foolishly tied so much of my online life to my Gmail account. Extricating is a long, difficult process, and one I'm doing in baby steps.
