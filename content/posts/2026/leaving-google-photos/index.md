@@ -118,6 +118,14 @@ docker compose \
 
 The `-f overlays/service-name.yml` syntax is for [merging Docker Compose files](https://docs.docker.com/compose/how-tos/multiple-compose-files/merge/). Running `docker compose <command>` without any additional `-f` paths runs only the services in `compose.yml`. These overlays provide Immich with a database, web server, and cache. If I am using a database or redis cache on another host, I would omit the `-f overlays/{postgres,redis}.yml` files and provide connection details for the remote.
 
+### Export Google Photos
+
+![Google Takeout logo](/google-takeout-img.png#center)
+
+Google offers a feature for exporting your Google Photos (and more accout/app data) with [Google Takeout](https://takeout.google.com). Using this feature, I exported ~200GB of photos and videos I've taken over the years into a .zip archive.
+
+![Google Takeout photos](/google-takeout-selected.png#center)
+
 ### Networking
 
 I use [Pangolin](https://github.com/fosrl/pangolin) as a reverse proxy for my services. This allows me to route web traffic incoming to `https://immich.mydomain.com` to the Immich container running on a machine in my homelab. When protecting my site with [Pangolin's SSO authentication](https://docs.pangolin.net/manage/resources/public/authentication), I found I could not reach the URL when using the [Immich Android app](https://docs.immich.app/features/mobile-app/). I found [this answer on Github](https://docs.pangolin.net/manage/resources/public/authentication) that shows the custom request headers required to enable [passing an access token](https://docs.pangolin.net/manage/resources/public/authentication#shareable-links-and-access-tokens).
