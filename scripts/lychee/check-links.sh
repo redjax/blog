@@ -18,7 +18,6 @@ DEFAULT_CONFIG="${REPO_ROOT}/.lychee.toml"
 LYCHEE_CONFIG_FILE="${LYCHEE_CONFIG:-}"
 LYCHEE_ROOT_DIR="${HUGO_STATIC_FILES_DIR:-public}"
 OFFLINE="${LYCHEE_OFFLINE:-false}"
-BUILD_HUGO_SITE="false"
 
 ## Help menu
 function usage() {
@@ -31,7 +30,6 @@ Options:
   -c, --config-file   Path to a .lychee.toml
   -p, --root-dir      Path where Lychee should start scanning in offline mode
   -o, --offline       Run scan against locally rendered Hugo files
-  --build             Build site with Hugo before testing. Useful for offline tests
 EOF
 }
 
@@ -55,16 +53,6 @@ function parse_args() {
       LYCHEE_ROOT_DIR="${2}"
       shift 2
       ;;
-    --build)
-      if ! command -v hugo >&/dev/null; then
-        echo "[ERROR] Cannot rebuild site, Hugo is not installed" >* &
-        2
-        exit 1
-      fi
-
-      BUILD_HUGO_SITE="true"
-      shift
-      ;;
     -o | --offline)
       OFFLINE="true"
       shift
@@ -80,8 +68,13 @@ function parse_args() {
 
 ## Build Hugo site
 function build_site() {
-  echo "Building Hugo site"
-  hugo
+  if ! command -v hugo >&/dev/null; then
+    echo "[ERROR] Hugo is not installed, cannot build site" >&2
+    exit 1
+  else
+    echo "Building Hugo site"
+    hugo
+  fi
 }
 
 ## Run lychee against local generated static files
@@ -150,13 +143,11 @@ function main() {
 
   cd "${REPO_ROOT}"
 
-  ## Build Hugo site
-  if [[ "${BUILD_HUGO_SITE}" == "true" ]]; then
-    build_site
-  fi
-
   ## Run offline check
   if [[ "${OFFLINE}" == "true" ]]; then
+    ## Build Hugo site
+    build_site
+
     lychee_check_offline "${LYCHEE_ROOT_DIR}"
 
   ## Run online check
