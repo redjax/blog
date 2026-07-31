@@ -105,3 +105,47 @@ I have a "whole" clone of this repository on a few of my machines, just a regula
 I commit the files as the initial starting point for that repository and push the branch up to git. Then I do a sparse clone and checkout the new service's branch, and I get to work building the `compose.yml` and `.env.example`. I usually create host volume mounts in the git path, although a better practice would be storing Docker files in another path, like `/opt/docker_data` or something. The things we wished we learned sooner...
 
 Eventually, when the template is in working condition, I merge the branch into `main`. As I make changes to the template, I create `feat/` and `fix/` branches, which also get merged into main. The idea/goal is to be running my services off the stable `main` branch as often as possible.
+
+### Favorite containers
+
+With some containers, I get them into working order, then bring the stack down and forget about it. I still like having the reference file in my repository, but I might not actively run the container. If it's in the `main` branch, it means I got it running at one point and it's ready to run again.
+
+But there are some templates I am constantly running, or re-using on different machines.
+
+- [`docker_pangolin`](https://github.com/redjax/docker_templates/tree/main/templates/networking/docker_pangolin): One of the most important services in my stack! [Pangolin](https://github.com/fosrl/pangolin) is my reverse HTTP proxy.
+  - I have Pangolin running on a VPS I rent.
+  - I route my domain name through Cloudflare, and have Cloudflare pointed at the VPS.
+  - In Pangolin, I create subdomain routes to services I want to expose to the Internet, and route the traffic over a private tunnel.
+- [`docker_adguard`](https://github.com/redjax/docker_templates/tree/main/templates/networking/docker_adguard): I run an [AdGuard Home container](https://github.com/redjax/docker_templates/tree/main/templates/networking/docker_adguard) for ad blocking on my entire LAN.
+  - My router uses the AdGuard container as its DNS server.
+  - I create records for my important machines, so I can resolve `machine-name.home` anywhere on my network instead of remembering IP addresses.
+- [`docker_netbird`](https://github.com/redjax/docker_templates/tree/main/templates/networking/docker_netbird): I use [Netbird](https://netbird.io/) to run a private network, similar to how many people use [Tailscale](https://tailscale.com/).
+  - I use access policies to allow or restrict traffic between devices, and to give my friends limited access to things like my media and game servers.
+- [`docker_paperless-ngx`](https://github.com/redjax/docker_templates/tree/main/templates/documents/docker_paperless-ngx): [Paperless-ngx](https://docs.paperless-ngx.com/) is an incredibly useful document management system.
+  - I upload my receipts, work documents for things like benefits packages and employee handbooks, PDFs, and airline tickets.
+  - Daily backups to local and offsite storage prevent data loss (and I've had to recover a few times, don't neglect your backups!).
+  - Full-text search lets me find things quickly, and the tagging system lets me sort documents, with tags like `receipt`, `pets`, `house`, `vehicle`, etc.
+- [`docker_concourse_ci`](https://github.com/redjax/docker_templates/tree/main/templates/automation/docker_concourse_ci): I use [Concourse CI](https://concourse-ci.org/) for some of my homelab automation pipelines.
+- [`docker_semaphore`](https://github.com/redjax/docker_templates/tree/main/templates/automation/docker_semaphore): [Semaphore](https://semaphoreui.com/) lets me run my [Ansible roles](https://gitlab.com/redjax/ansible-roles) and [playbooks](https://gitlab.com/redjax/ansible-playbooks), as well as scheduled Bash scripts and [Terraform](https://github.com/redjax/Terraform) from a convenient webUI.
+- [`docker_gickup`](https://github.com/redjax/docker_templates/tree/main/templates/backup/docker_gickup): [Gickup](https://github.com/cooperspencer/gickup) is a useful utility for backing up and mirroring git repositories.
+  - I keep a config file with all of my most important/valuable repositories, and Gickup runs on a raspberry pi, pulling my changes to a local drive and mirroring some to a self-hosted Git instance.
+- [`database`](https://github.com/redjax/docker_templates/tree/main/templates/database): A collection of database templates.
+  - I frequently use [Postgres](https://github.com/redjax/docker_templates/tree/main/templates/database/docker_postgresql) and [Redis](https://github.com/redjax/docker_templates/tree/main/templates/database/docker_redis) in my homelab, and I use [InfluxDB](https://github.com/redjax/docker_templates/tree/main/templates/database/docker_influxdb) for some of my time-series data like weather readings.
+- [`docker_linkwarden`](https://github.com/redjax/docker_templates/tree/main/templates/bookmarking/docker_linkwarden): [Linkwarden](https://linkwarden.app/) is a bookmarking/read-it-later app.
+  - I imported all of my browser bookmarks, and I frequently save new links I come across on the web.
+  - I can export Linkwarden's saved links as a `bookmarks.html` file to synchronize back to my browser.
+- [`docker_forgejo`](https://github.com/redjax/docker_templates/tree/main/templates/code_forges/docker_forgejo): [Forgejo](https://forgejo.org/) is a self-hosted Git forge, reminiscient of 2015-2018 Github.
+  - The Forgejo Actions platform is semi-compatible with Github actions, and Forgejo's pipelines are very similar in syntax.
+  - I host a private/local-only Git forge for some of my more sensitive repositories that I do not want to expose to the Internet.
+- [`docker_opengist`](https://github.com/redjax/docker_templates/tree/main/templates/code_forges/docker_opengist): I am a big fan of Github Gists, and discovered [OpenGist](https://opengist.io/), which is basically the self-hosted version.
+  - I put a lot of code snippets, scripts, and reference files here, and occasionally I will expand a gist into an Obsidian note or a post on this blog!
+- [`dav`](https://github.com/redjax/docker_templates/tree/main/templates/dav): I self-host my contacts and calendars, and synchronize them with my email client.
+  - I primarily use [Radicale](https://github.com/redjax/docker_templates/tree/main/templates/dav/docker_radicale), but have recently been test driving [Davis](https://github.com/redjax/docker_templates/tree/main/templates/dav/docker_davis) and liking it a lot.
+- [`games`](https://github.com/redjax/docker_templates/tree/main/templates/games): I host a bunch of game servers for my friends and I. We connect over a private network I host to play.
+- [`monitoring_alerting`](https://github.com/redjax/docker_templates/tree/main/templates/monitoring_alerting): I have tried many different monitoring/alerting solutions, and have kept a template for each one in this path.
+  - I used [Zabbix](https://github.com/redjax/docker_templates/tree/main/templates/monitoring_alerting/docker_zabbix) for a while, but more recently I have used [Beszel](https://github.com/redjax/docker_templates/tree/main/templates/monitoring_alerting/docker_beszel) for server metric monitoring, [Uptime Kuma](https://github.com/redjax/docker_templates/tree/main/templates/monitoring_alerting/docker_uptime-kuma) for uptime checks, [happyDomain](https://github.com/redjax/docker_templates/tree/main/templates/monitoring_alerting/docker_happydomain) to track and monitor my domains and DNS records, and [NtopNG](https://github.com/redjax/docker_templates/tree/main/templates/monitoring_alerting/docker_ntopng) for local network monitoring.
+  - I run Uptime Kuma from a VPS so it can watch my homelab for outages.
+- [`docker_ntfy`](https://github.com/redjax/docker_templates/tree/main/templates/notifications/docker_ntfy)/[`docker_gotify`](https://github.com/redjax/docker_templates/tree/main/templates/notifications/docker_gotify): My own self-hosted push notification servers.
+  - Ntfy and Gotify work very similarly, and I have been test driving both for a while.
+  - I can't decide which one I prefer and I don't see much harm in using both.
+  - I've recently added [Apprise](https://github.com/redjax/docker_templates/tree/main/templates/notifications/docker_apprise) into the mix, which lets me send notifications to both services.
