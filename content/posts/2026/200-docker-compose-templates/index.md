@@ -97,3 +97,11 @@ $> cd ../docker_zabbix
 ```
 
 I have continued to use sparse checkouts because I often checkout a service and just run it on the `main` branch until I have updates or fixes to apply, and this flow does not work with worktrees.
+
+## How I use it
+
+I have a "whole" clone of this repository on a few of my machines, just a regular clone of the repository that I don't touch after cloning, except to create new templates. When I want to try a new service, I `cd` into the local clone, create a branch for the new service, and run the `new_template.py` script, which prompts me for a template name, category, summary, and optional description. I usually add a link of some sort in the summary, i.e. a Github repository or documentation URL.
+
+I commit the files as the initial starting point for that repository and push the branch up to git. Then I do a sparse clone and checkout the new service's branch, and I get to work building the `compose.yml` and `.env.example`. I usually create host volume mounts in the git path, although a better practice would be storing Docker files in another path, like `/opt/docker_data` or something. The things we wished we learned sooner...
+
+Eventually, when the template is in working condition, I merge the branch into `main`. As I make changes to the template, I create `feat/` and `fix/` branches, which also get merged into main. The idea/goal is to be running my services off the stable `main` branch as often as possible.
