@@ -61,3 +61,39 @@ I also created a [repository "map"](https://github.com/redjax/docker_templates/t
 The scripts that update my README files also write data to the [`metadata/` directory](https://github.com/redjax/docker_templates/tree/main/metadata). This can act as a sort of read-only API using cURL requests. For example, the repository map uses the [`categories.json` file](https://github.com/redjax/docker_templates/blob/main/metadata/categories.json) to populate the tree, and all `.category` and `.docker-compose.template` markers are in [`beacons.json`](https://github.com/redjax/docker_templates/blob/main/metadata/beacons.json). I started calling the marker files "beacons" at one point, and it just kind of stuck.
 
 The metadata files are only really used for rendering README templates, but I have plans for things like a frontend webUI to explore the repository's templates, and a Go CLI or downloading and using individual templates.
+
+## Git Sparse Checkouts
+
+I mentioned earlier that I was cloning the whole repository each time I wanted to run a template I had in `docker_templates`. This quickly became a problem as the size of the repository grew. The repository is currently 10MB in size (mostly due to image files and some larger files in history I'll clean up at some point), so each time I cloned the repository, I added 10MB of disk usage.
+
+I discovered [git sparse checkouts](https://git-scm.com/docs/git-sparse-checkout) when I searched for a solution to this problem. A sparse checkout is a git operation that allows you to checkout only a subset of the files in a repository. When I'm running a Docker Compose template, I don't need to pull the `src/img` directory, with the `.png` I render on the main README.md, and I can pull just the files in the Compose template I wish to run.
+
+In practice, most of my sparse checkouts are ~5% of the total size of the repository, which is about the same amount of size they would take as separate git repositories. It adds a few steps to the initial checkout process, but it makes the clone a focused copy with only as much as I need to run.
+
+As an example, if I want to run a [Zabbix server container](https://github.com/redjax/docker_templates/tree/main/templates/monitoring_alerting/docker_zabbix), I would run the following commands:
+
+```shell
+$> git clone --no-checkout https://github.com/redjax/docker_templates docker_zabbix
+$> cd docker_zabbix
+## Initialize sparse checkout
+$> git sparse-checkout init --cone
+## Tell git which paths to checkout
+$> git sparse-checkout set templates/monitoring_alerting/docker_zabbix
+## Checkout the main branch, or a working branch for the zabbix server
+$> git checkout feat/some-zabbix-feature
+```
+
+This would create a directory named `docker_zabbix/`, which would have all of the files in the root path, and a single directory named `templates/`, with `monitoring_alerting/docker_zabbix`. All of the other containers still exist in the remote, but sparse checkouts let me focus on a single template.
+
+[git worktrees](https://git-scm.com/docs/git-worktree) were not a thing when I started using sparse checkouts. An alternative to the sparse checkout method described above is cloning the whole `docker_templates` repository once, then creating worktrees for all of the services you want to run. A worktree exists in a separate path on the machine like a sparse clone would. Worktrees share the same git object database, meaning paths and objects are deduplicated, saving space on the disk.
+
+To create a Zabbix server container using a worktree, you would clone the whole repository once, `cd` into it, then create worktrees for each service you want to run. The limitation here is that each worktree checks out a branch, and only that worktree can use that branch. So, the original repository clone stays on the `main` branch, and each worktree must have its own branch, even if I'm not making any changes on that service.
+
+```shell
+$> git clone https://github.com/redjax/docker_templates
+$> cd docker_templates
+$> git worktree add -b feat/zabbix-server ../docker_zabbix
+$> cd ../docker_zabbix
+```
+
+I have continued to use sparse checkouts because I often checkout a service and just run it on the `main` branch until I have updates or fixes to apply, and this flow does not work with worktrees.
