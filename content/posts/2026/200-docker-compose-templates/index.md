@@ -45,3 +45,9 @@ Each new repository created from the Cookiecutter template starts with the same 
 - `.gitignore`: Template-local ignore pattern overrides.
 - `README.md`: The `new_template.py` script prompts the user for a title, summary, and optional description, and populates the README file with the user's inputs.
 - `compose.yml`: A Docker Compose template file with the basic shape defined, so I can just start writing service definitions.
+
+### Path markers
+
+Once the template business was all sorted out, I decided to create [subdirectories under the `templates/` path](https://github.com/redjax/docker_templates/tree/main/templates) that would serve as "categories." I put my Postgres, Mariadb, Redis, and InnoDB containers under the `database/` path, my Plex and Jellyfin servers under `media/`, Ntfy and Gotify containers under `notifications/`, and so on. Splitting things up this way made it easier to browse through the containers on the web, and helped to keep the stacks logically sorted by archetype.
+
+In each "category" directory, I created an empty `.category` file marker. I used the `.category` and `.docker-compose.template` files to write scripts that manage some of the complexity in the repository. For example, the [`count_templates.py` script](https://github.com/redjax/docker_templates/blob/main/scripts/count_templates.py) finds all of the `.docker-compose.template` files in the repository and returns a count, which I use to update the templates count in the [repository's README.md](https://github.com/redjax/docker_templates/blob/main/README.md). I wrote a [Github workflow](https://github.com/redjax/docker_templates/blob/main/.github/workflows/update-templates-count.yml) to run the script on a schedule, and if the count is different from what's in the README.md, it updates the `Templates:\s*\d+` pattern with the new count.
