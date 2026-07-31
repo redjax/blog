@@ -146,7 +146,7 @@ params:
 
   socialIcons:
     - name: github
-      url: https://github.com/TechobyteDigital
+      url: https://github.com/redjax/blog
 
   cover:
     hidden: true
