@@ -11,7 +11,7 @@ tags:
 author: "me"
 description: ""
 showToc: true
-TocOpen: false
+TocOpen: true
 hidemeta: false
 comments: false
 searchHidden: false
