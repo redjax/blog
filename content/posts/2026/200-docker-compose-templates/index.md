@@ -10,7 +10,7 @@ tags:
   - git
 author: "me"
 description: ""
-showToc: false
+showToc: true
 TocOpen: false
 hidemeta: false
 comments: false
@@ -32,3 +32,16 @@ For years, whenever I wanted to try a new service, I would create a directory fo
 At some point in 2023, I decided to start a new git monorepo where I would store all of the services I ran in Docker Compose. I created my [`docker_templates` repository](https://github.com/redjax/docker_templates), and one-by-one started copying Compose files I had written into the repository. Pulling everything into 1 place allowed me to do some cleanup, and made it much easier to start new templates. Whenever I wanted to run a new service, I would clone the repository into a path in my `~/git/` directory, name it after the service, and create the `docker-compose.yml` file alongside all my other templates in a branch named after the service. Each service existed in an immediate child of the `templates/` directory, and over time that path became difficult to sort through.
 
 This worked great for a while, but as I added more and more containers, and thought about all of the templates I planned to add in the future, I realized the structure of the `templates/` directory would need to change, and the multiplicative git cloning would end up being a storage problem in the long term. I decided to overhaul the organization of templates in the repository, and write scripts to help me manage the complexity and initialize new templates in a standardized way.
+
+### Cookiecutter Templates
+
+When I would start new service templates, I would usually go to a previous template and copy the `docker-compose.yml` and `README.md` files into the new path and rewrite them for the new service. I realized I wanted to standardize the way I initialized new template directories. I was familiar with Jinja2 templating from writing Python programs, and had used [Cookiecutter](https://github.com/cookiecutter/cookiecutter) in the past to create templated Python project repositories. So I created a [standardized Docker Compose service template directory](https://github.com/redjax/docker_templates/tree/main/templates/_cookiecutter/docker-template), with a common starting point for all future templates, and a [Python script](https://github.com/redjax/docker_templates/blob/main/scripts/new_template.py) to guide the user through initializing a new template. I am definitely yada-yada-ing a lot of steps I took to get to this point, but after a few iterations, I settled on the template I have been using for the majority of the time this repository has existed.
+
+Each new repository created from the Cookiecutter template starts with the same files:
+
+- `.docker-compose.template`: An empty marker file for some of the maintenance scripts...I'll explain more later.
+- `.env.example`: I parameterize my `compose.yml` files, and provide an example `.env` file with the defaults for each service.
+  - The user is instructed to copy `.env.example` to `.env` (which is ignored in the `.gitignore` for the whole repository) to configure the running stack.
+- `.gitignore`: Template-local ignore pattern overrides.
+- `README.md`: The `new_template.py` script prompts the user for a title, summary, and optional description, and populates the README file with the user's inputs.
+- `compose.yml`: A Docker Compose template file with the basic shape defined, so I can just start writing service definitions.
