@@ -16,7 +16,7 @@ searchHidden: false
 
 Having a good backup strategy is essential, especially when you host your own data. If you have not experienced the dread of realizing you've lost an important file, consider yourself lucky and keep reading to learn why you should have a backup strategy for your data. I have lost important data due to lack of sufficient backups a number of times in my life. It never gets any less devastating, but each time it's happened I have inched closer to a sufficient backup strategy.
 
-There are a number of great solutions out there, from [Kopia](kopia.io), [Duplicati](https://duplicati.com) and [Borg](https://www.borgbackup.org), to good ol' [rsync](https://rsync.net) and a remote share, and I have tried most of them. Let's talk about them, and why I ended up using Restic for all of my backups.
+There are a number of great solutions out there, from [Kopia](https://kopia.io), [Duplicati](https://duplicati.com) and [Borg](https://www.borgbackup.org), to good ol' [rsync](https://rsync.net) and a remote share, and I have tried most of them. Let's talk about them, and why I ended up using Restic for all of my backups.
 
 ## The Problem
 
