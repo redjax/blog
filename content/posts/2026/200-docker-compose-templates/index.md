@@ -1,6 +1,6 @@
 ---
 title: "200 Docker Compose Templates"
-date: 2026-07-26T21:18:37-04:00
+date: 2026-08-02T00:00:00-04:00
 draft: true
 slug: "/200-docker-compose-templates/"
 # url: "/posts/200-docker-compose-templates/"
