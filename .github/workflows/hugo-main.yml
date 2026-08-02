@@ -22,7 +22,7 @@ on:
       - "hugo.yml"
       - "go.mod"
       - "go.sum"
-      - "*.css"
+      - "**/*.css"
 
   workflow_dispatch:
     inputs:
