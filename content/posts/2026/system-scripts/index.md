@@ -20,4 +20,18 @@ comments: false
 searchHidden: false
 ---
 
+OUTLINE:
+
+- Exposition
+  - Manage many computers
+  - Hop between Windows and different Linux distros
+  - Pull all scripts into single repository
+- Usage
+  - Cloning to new machines
+  - Adding new scripts
+  - Scheduling/calling scripts from the hosts
+- Highlights
+  - Best/proudest scripts
+  - Ways I use the repository
+
 [`system_scripts`](https://github.com/redjax/system_scripts)
