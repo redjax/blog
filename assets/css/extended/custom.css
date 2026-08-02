@@ -1,7 +1,28 @@
-/*
-    PaperMod - override hugo's syntax highlighter
-        https: //github.com/adityatelange/hugo-PaperMod/wiki/FAQs#using-hugos-syntax-highlighter-chroma
+/* PaperModX Overrides */
+
+/* Override hugo's syntax highlighter
+   https://github.com/adityatelange/hugo-PaperMod/wiki/FAQs#using-hugos-syntax-highlighter-chroma
 */
 .chroma {
     background-color: unset;
+}
+
+/* Desktop: 60% of viewport width */
+:root {
+    --post-width: 60vw;
+    --main-width: 60vw;
+}
+
+/* Mobile: let it fill the viewport (theme already limits by padding) */
+@media screen and (max-width: 768px) {
+    :root {
+        --post-width: 100vw;
+        --main-width: 100vw;
+    }
+
+    /* Optional: remove any extra side margins on very small screens */
+    .main {
+        padding-left: var(--gap);
+        padding-right: var(--gap);
+    }
 }
