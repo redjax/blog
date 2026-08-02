@@ -42,6 +42,12 @@ I also considered [Woodpecker CI](https://woodpecker-ci.org), which is a fork of
 
 ## Hosting
 
+{{< notice note >}}
+I moved this blog from Netlify to [Cloudflare Pages](https://pages.cloudflare.com/) on 2026-08-02. For a simple static site like this, a Netlify deployment ended up being overkill, and had the potential to run up billing, limiting my ability to publish the site and [taking it offline completely](https://answers.netlify.com/t/free-plan-usage-limit-website-suspension/145978/4) until the next billing cycle.
+
+Netlify's service was very easy to get started with, and I like the service. It offers a lot more than Cloudflare Pages, and this blog simply doesn't need those "extras." It made sense to switch to Cloudflare Pages, where I get unlimited deployments and free, simple hosting.
+{{< /notice >}}
+
 As of 01/24/2026, this blog is hosted on [Netlify](https://netlify.com), a platform I have been looking for a reason to try. I disabled Netlify's automated rebuilds on merges to main so I could [write a deployment pipeline of my own](https://github.com/redjax/blog/blob/main/.github/workflows/hugo-deploy.yml), mainly for the experience, but also to ensure I don't break the site when I'm trying new things. I hit Netlify's free tier limit in 2 days because of all the pipeline failures...I mean "tests" that I ran...but the team was generous enough to refresh my credits when I reached out for support. +1 to Netlify!
 
 Because the site is just static HTML/JS/CSS, I leave the option open to move the site's hosting to basically anywhere. I build a [production Docker image](https://github.com/redjax/blog/tree/main/.containers/prod), so I could deploy a container somewhere and route the `techobyte.cc` domain to it, or simply copy the static files to any host that can serve files via a web server. This ensures I won't get "stuck" with a specific host, or with a specific deployment method. I have heard of many bloggers who run their blogs off a Raspberry Pi they have in their house, and there's really nothing stopping me from doing the same!
