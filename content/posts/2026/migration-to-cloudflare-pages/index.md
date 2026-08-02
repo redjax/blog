@@ -1,7 +1,7 @@
 ---
 title: "Migration to Cloudflare Pages"
 date: 2026-08-02T01:53:55-04:00
-draft: true
+draft: false
 slug: "/migration-to-cloudflare-pages/"
 # url: "/posts/migration-to-cloudflare-pages/"
 categories: []
