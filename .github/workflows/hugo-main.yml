@@ -30,7 +30,7 @@ on:
         description: 'JSON array of publish targets, e.g. ["netlify","cloudflare-pages"]'
         required: false
         type: string
-        default: '["netlify","cloudflare-pages"]'
+        default: '["cloudflare-pages"]'
       runner-img-or-label:
         type: string
         default: ubuntu-latest
@@ -73,7 +73,7 @@ jobs:
       versioned: false
       artifact-name: "hugo-site"
       release-prefix: "site"
-      publish-targets: ${{ inputs.publish-targets || '["netlify","cloudflare-pages"]' }}
+      publish-targets: ${{ inputs.publish-targets || '["cloudflare-pages"]' }}
       # branch-name: "gh-pages"
       # cloudflare-pages-project: ""
       # cloudflare-pages-branch: "main"
