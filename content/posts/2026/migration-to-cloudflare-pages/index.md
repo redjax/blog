@@ -19,6 +19,8 @@ I migrated my blog to [Cloudflare Pages](https://pages.dev) on August 2nd, 2026.
 
 I have used Github Pages for static site hosting in the past (i.e. my [RedKB personal knowledgebase site](https://redkb.fyi)), but I wanted to give Cloudflare Pages a try. They offer unlimited deployments, and setup was very simple. The [Hugo deployment pipeline I built](https://github.com/redjax/PipelineTemplates/blob/main/.github/workflows/hugo-site-main.yml) already supports [publishing to Cloudflare Pages](https://github.com/redjax/PipelineTemplates/blob/main/.github/workflows/hugo-publish-gh-pages.yml), I just had to give it some new values and set secret values in the repository.
 
+As I discuss in my [blog setup series](/posts/blog-setup/), I built my repository around the concept of portability. I wanted to be able to move around Git forges and hosting providers, and support a variety of deployment/publishing destinations. I have read posts from other bloggers I follow who have moved platforms (i.e. Wordpress to Hugo) and hosting providers/deployment methods, and I hope writing about my experience migrating from Netlify to Cloudflare Pages can save someone some time in the future.
+
 ## Migration
 
 ### Github Preparation
