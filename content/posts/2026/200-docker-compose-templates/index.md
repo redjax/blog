@@ -62,7 +62,7 @@ I also created a [repository "map"](https://github.com/redjax/docker_templates/t
 
 The scripts that update my README files also write data to the [`metadata/` directory](https://github.com/redjax/docker_templates/tree/main/metadata). This can act as a sort of read-only API using cURL requests. For example, the repository map uses the [`categories.json` file](https://github.com/redjax/docker_templates/blob/main/metadata/categories.json) to populate the tree, and all `.category` and `.docker-compose.template` markers are in [`beacons.json`](https://github.com/redjax/docker_templates/blob/main/metadata/beacons.json). I started calling the marker files "beacons" at one point, and it just kind of stuck.
 
-The metadata files are only really used for rendering README templates, but I have plans for things like a frontend webUI to explore the repository's templates, and a Go CLI or downloading and using individual templates.
+The metadata files are only really used for rendering README templates, but I have plans for things like a frontend webUI to explore the repository's templates, and a Go CLI for downloading and using individual templates.
 
 ## Git Sparse Checkouts
 
