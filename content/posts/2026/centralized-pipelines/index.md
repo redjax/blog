@@ -5,11 +5,13 @@ draft: true
 slug: "/centralized-pipelines/"
 # url: "/posts/centralized-pipelines/"
 categories: []
-tags: []
+tags:
+  - git
+  - ci-cd
 author: "me"
 description: ""
 showToc: true
-TocOpen: false
+TocOpen: true
 hidemeta: false
 comments: false
 searchHidden: false
