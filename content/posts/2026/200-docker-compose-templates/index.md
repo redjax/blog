@@ -46,7 +46,7 @@ Each new repository created from the Cookiecutter template starts with the same 
   - The user is instructed to copy `.env.example` to `.env` (which is ignored in the `.gitignore` for the whole repository) to configure the running stack.
 - `.gitignore`: Template-local ignore pattern overrides.
 - `README.md`: The `new_template.py` script prompts the user for a title, summary, and optional description, and populates the README file with the user's inputs.
-- `compose.yml`: A Docker Compose template file with the basic shape defined, so I can just start writing service definitions.
+- `compose.yml`: The Python script generates a Docker Compose template file with the basic shape defined, so I can just start writing service definitions.
 
 ### Path markers
 
