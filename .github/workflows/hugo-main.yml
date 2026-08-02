@@ -73,7 +73,7 @@ jobs:
       versioned: false
       artifact-name: "hugo-site"
       release-prefix: "site"
-      publish-targets: ${{ inputs.publish-targets || '["netlify"]' }}
+      publish-targets: ${{ inputs.publish-targets || '["netlify","cloudflare-pages"]' }}
       # branch-name: "gh-pages"
       # cloudflare-pages-project: ""
       # cloudflare-pages-branch: "main"
