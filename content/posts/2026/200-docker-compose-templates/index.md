@@ -21,7 +21,7 @@ searchHidden: false
 
 I have been maintaining a git monorepo named [`docker_templates`](https://github.com/redjax/docker_templates) since sometime in 2023, and I recently added my 200th template [(commit `7c112b7`)](https://github.com/redjax/docker_templates/tree/7c112b7222d81330c0310ec851c7b512f48347e6)! I thought back to 2015, when I started learning Docker and Docker Compose, and how transformative containers have been in the way I use my machines. There is something very satisfying about describing a runtime you want to work with and encapsulating everything you need to run an app or service the same way each time you run it, on any machine. In reality, there are some edge cases, but it's a beautiful dream.
 
-The structure of the `docker_templates` repository continues to evolve, but it's also come a long way from how it started out. I use this repository in some way nearly every day. It is the heart of my homelab, where I keep references for pretty much every service I've stood up on one of my machines. I will now indulge my nostalgia by showing you how the repository has grown over time, and how I use it, and I'll share a few of my most useful/favorite containers I use.
+The structure of the `docker_templates` repository continues to evolve, but it's also come a long way from where it started. I use this repository in some way almost every day. It is the heart of my homelab, and is where I keep references for pretty much every service I've stood up on one of my machines. I will now indulge my nostalgia by showing you how the repository has grown over time, how I use it, and share a few of my most useful/favorite containers.
 
 ## The Beginning: Disparate Directories with Docker Compose files
 
