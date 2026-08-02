@@ -37,7 +37,7 @@ on:
       cloudflare-pages-project:
         type: string
         required: false
-        default: "pipelinetemplates-test"
+        default: "techobyte-blog"
       cloudflare-pages-branch:
         type: string
         required: false
@@ -73,14 +73,14 @@ jobs:
       versioned: false
       artifact-name: "hugo-site"
       release-prefix: "site"
-      publish-targets: ${{ inputs.publish-targets || '["netlify"]' }}
+      publish-targets: ${{ inputs.publish-targets || '["netlify","cloudflare-pages"]' }}
       # branch-name: "gh-pages"
       # cloudflare-pages-project: ""
       # cloudflare-pages-branch: "main"
       netlify-site-id: ${{ vars.NETLIFY_SITE_ID }}
       netlify-branch: main
       netlify-dir: public
-      cloudflare-pages-project: ${{ inputs.cloudflare-pages-project || 'blog' }}
+      cloudflare-pages-project: ${{ inputs.cloudflare-pages-project || 'techobyte-blog' }}
       cloudflare-pages-branch: ${{ inputs.cloudflare-pages-branch || 'main' }}
       runner-image: ${{ inputs.runner-img-or-label || 'ubuntu-latest' }}
       templates-ref: ${{ inputs.pipelinetemplates-ref || 'main' }}
