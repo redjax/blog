@@ -22,17 +22,26 @@ on:
       - "hugo.yml"
       - "go.mod"
       - "go.sum"
+      - "**/*.css"
 
   workflow_dispatch:
     inputs:
       publish-targets:
-        description: 'JSON array of publish targets, e.g. ["netlify"]'
+        description: 'JSON array of publish targets, e.g. ["netlify","cloudflare-pages"]'
         required: false
         type: string
-        default: '["netlify"]'
+        default: '["netlify","cloudflare-pages"]'
       runner-img-or-label:
         type: string
         default: ubuntu-latest
+      cloudflare-pages-project:
+        type: string
+        required: false
+        default: "pipelinetemplates-test"
+      cloudflare-pages-branch:
+        type: string
+        required: false
+        default: "main"
       pipelinetemplates-ref:
         description: "Branch, tag, or commit SHA to use when checking out PipelineTemplates repository."
         type: string
@@ -71,6 +80,8 @@ jobs:
       netlify-site-id: ${{ vars.NETLIFY_SITE_ID }}
       netlify-branch: main
       netlify-dir: public
+      cloudflare-pages-project: ${{ inputs.cloudflare-pages-project || 'blog' }}
+      cloudflare-pages-branch: ${{ inputs.cloudflare-pages-branch || 'main' }}
       runner-image: ${{ inputs.runner-img-or-label || 'ubuntu-latest' }}
       templates-ref: ${{ inputs.pipelinetemplates-ref || 'main' }}
       hugo-build-flags: "--gc --minify"
@@ -82,3 +93,5 @@ jobs:
     secrets:
       release-bot-pat: ${{ secrets.RELEASE_BOT_PAT }}
       netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+      cloudflare-api-token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      cloudflare-account-id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
