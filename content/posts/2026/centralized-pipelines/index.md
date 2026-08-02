@@ -1,7 +1,7 @@
 ---
 title: "Centralized CI/CD Pipelines"
-date: 2026-07-15T01:07:19-04:00
-draft: true
+date: 2026-08-03T00:00:00-04:00
+draft: false
 slug: "/centralized-pipelines/"
 # url: "/posts/centralized-pipelines/"
 categories: []
