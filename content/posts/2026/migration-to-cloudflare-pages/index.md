@@ -64,3 +64,7 @@ cloudflare-pages-branch:
 ```
 
 After making these changes, I ran the pipeline manually and my site published to Cloudflare Pages successfully! Any time I make changes to the site's files (i.e. adding or updating a page, deleting a page, updating custom CSS or Hugo config, etc) and merge them into the `main` branch successfully, the pipeline triggers and rebuilds the site, then publishes it to Cloudflare.
+
+## Outcome
+
+A reader of my blog shouldn't notice any difference now that I've switched hosts. If you were to do an `nslookup` or ping `techobyte.cc`, the response already had a Cloudflare IP and routed through Cloudflare's networks. For maintenance and ongoing development, I can freely merge changes into `main` without worrying about exceeding a quota, or test changes to a pipeline repeatedly without hitting a CPU cycle/build minutes limit, and I am no longer concerned with my site going offline in the middle of a billing cycle because I went over the limits of a free plan. Who knows if Cloudflare Pages will keep its free offering so generous forever, but for now I am happy with the switch.
