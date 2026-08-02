@@ -66,9 +66,9 @@ The metadata files are only really used for rendering README templates, but I ha
 
 ## Git Sparse Checkouts
 
-I mentioned earlier that I was cloning the whole repository each time I wanted to run a template I had in `docker_templates`. This quickly became a problem as the size of the repository grew. The repository is currently 10MB in size (mostly due to image files and some larger files in history I'll clean up at some point), so each time I cloned the repository, I added 10MB of disk usage.
+I mentioned earlier that I was cloning the whole repository each time I wanted to run a template I had in `docker_templates`. This quickly became a problem as the size of the repository grew. The repository is currently 10MB in size (mostly due to image files and some larger files in history that I'll clean up at some point), so each time I cloned the repository, I added 10MB of disk usage.
 
-I discovered [git sparse checkouts](https://git-scm.com/docs/git-sparse-checkout) when I searched for a solution to this problem. A sparse checkout is a git operation that allows you to checkout only a subset of the files in a repository. When I'm running a Docker Compose template, I don't need to pull the `src/img` directory, with the `.png` I render on the main README.md, and I can pull just the files in the Compose template I wish to run.
+I discovered [git sparse checkouts](https://git-scm.com/docs/git-sparse-checkout) when I searched for a solution to this problem. A sparse checkout is a git operation that allows you to checkout only a subset of the files in a repository. When I'm running a Docker Compose template, I don't need to pull the `src/img` directory, with the `.png` I render in the main README.md; I can pull just the files in the Compose template I wish to run.
 
 In practice, most of my sparse checkouts are ~5% of the total size of the repository, which is about the same amount of size they would take as separate git repositories. It adds a few steps to the initial checkout process, but it makes the clone a focused copy with only as much as I need to run.
 
@@ -87,7 +87,7 @@ $> git checkout feat/some-zabbix-feature
 
 This would create a directory named `docker_zabbix/`, which would have all of the files in the root path, and a single directory named `templates/`, with `monitoring_alerting/docker_zabbix`. All of the other containers still exist in the remote, but sparse checkouts let me focus on a single template.
 
-[git worktrees](https://git-scm.com/docs/git-worktree) were not a thing when I started using sparse checkouts. An alternative to the sparse checkout method described above is cloning the whole `docker_templates` repository once, then creating worktrees for all of the services you want to run. A worktree exists in a separate path on the machine like a sparse clone would. Worktrees share the same git object database, meaning paths and objects are deduplicated, saving space on the disk.
+[Git Worktrees](https://git-scm.com/docs/git-worktree) were not a thing when I started using sparse checkouts. An alternative to the sparse checkout method described above is cloning the whole `docker_templates` repository once, then creating worktrees for all of the services you want to run. A worktree exists in a separate path on the machine like a sparse clone would. They share the same git object database, meaning paths and objects are deduplicated, which saves space on the disk.
 
 To create a Zabbix server container using a worktree, you would clone the whole repository once, `cd` into it, then create worktrees for each service you want to run. The limitation here is that each worktree checks out a branch, and only that worktree can use that branch. So, the original repository clone stays on the `main` branch, and each worktree must have its own branch, even if I'm not making any changes on that service.
 
