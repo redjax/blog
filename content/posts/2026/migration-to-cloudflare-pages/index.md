@@ -63,4 +63,4 @@ cloudflare-pages-branch:
   default: "main"
 ```
 
-After making these changes, I ran the pipeline manually and my site published to Cloudflare Pages successfully!
+After making these changes, I ran the pipeline manually and my site published to Cloudflare Pages successfully! Any time I make changes to the site's files (i.e. adding or updating a page, deleting a page, updating custom CSS or Hugo config, etc) and merge them into the `main` branch successfully, the pipeline triggers and rebuilds the site, then publishes it to Cloudflare.
