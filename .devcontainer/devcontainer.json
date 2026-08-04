@@ -1,16 +1,20 @@
 {
-    "name": "Hugo Blog Dev",
+    "name": "Techobyte Blog Dev",
     "build": {
         "dockerfile": "Dockerfile",
         "context": ".."
     },
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
     "workspaceFolder": "/workspace",
     "remoteUser": "vscode",
     "updateRemoteUserUID": true,
+    "mounts": [
+        "type=volume,source=mise-cache,target=/home/vscode/.local/share/mise"
+    ],
     "remoteEnv": {
         "PATH": "/home/vscode/.local/bin:/home/vscode/.local/share/mise/shims:${containerEnv:PATH}"
     },
-    "postCreateCommand": "bash -lc 'cd /workspace && if [ -f .mise.toml ] || [ -f mise.toml ]; then command -v mise >/dev/null && mise trust && mise install || echo \"mise not on PATH\"; else echo \"No mise config found in /workspace\"; fi'",
+    "postCreateCommand": "bash -lc 'sudo chown -R vscode:vscode /home/vscode/.local/share/mise && cd /workspace && if [ -f .mise.toml ] || [ -f mise.toml ]; then mise trust --yes && mise install; else echo \"No mise config found in /workspace\"; fi'",
     "customizations": {
         "vscode": {
             "settings": {
@@ -19,7 +23,8 @@
             "extensions": [
                 "ms-vscode.go",
                 "ms-azuretools.vscode-docker",
-                "bierner.markdown-mermaid"
+                "bierner.markdown-mermaid",
+                "budparr.language-hugo-vscode"
             ]
         }
     },
