@@ -23,7 +23,28 @@
             "extensions": [
                 "ms-vscode.go",
                 "ms-azuretools.vscode-docker",
+                "yzhang.markdown-all-in-one",
+                "kofuk.hugo-utils",
+                "rusnasonov.vscode-hugo",
                 "bierner.markdown-mermaid",
+                "lamartire.git-indicators",
+                "donjayamanne.githistory",
+                "mhutchie.git-graph",
+                "budparr.language-hugo-vscode",
+                "waderyan.gitblame",
+                "Wattenberger.footsteps",
+                "redhat.vscode-yaml",
+                "foxundermoon.shell-format",
+                "ms-python.python",
+                "fabiospampinato.vscode-diff",
+                "ms-azuretools.vscode-docker",
+                "jomeinaster.bracket-peek",
+                "rogalmic.bash-debug",
+                "mads-hartmann.bash-ide-vscode",
+                "formulahendry.auto-complete-tag",
+                "formulahendry.auto-close-tag",
+                "formulahendry.auto-rename-tag",
+                "vincaslt.highlight-matching-tag",
                 "budparr.language-hugo-vscode"
             ]
         }
