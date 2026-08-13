@@ -54,3 +54,108 @@ My default configuration enables the [dashboard issue](https://docs.renovatebot.
 The centralized pipeline also allows repositories to provide their own `renovate.json` configuration. This feature gives me greater control over Renovate's behavior; for most repositories, the defaults are perfectly fine and "set it and forget it." Some of my repositories have package manager files in subdirectories, or use the `customManagers` config block to provide Renovate with regular expressions of files to monitor. For example, [my Dockerfile repository's `renovate.json`](https://github.com/redjax/Dockerfiles/blob/main/renovate.json) is much different from most of my other repositories. The Dockerfiles repo consolidates my Docker images into subdirectories in the `dockerfiles/` directory, and uses a [Github action to rebuild the container nightly and whenever an image has changed (i.e. a version bumps)](https://github.com/redjax/Dockerfiles/blob/main/.github/workflows/build-publish.yml). Each template also has an `image.yml` "manifest" file that tracks versions for the build script to inject.
 
 I had to provide instructions to Renovate for how to handle this repository, but the centralized pipeline automatically uses whatever Renovate config file I pass from a consuming repository in `config-file:`.
+
+### The Calling Pipeline
+
+In each repository where I want to use my central Renovate pipeline, all I need to do is create a pipeline "stub" that calls the centralized template. I use the pipeline's `inputs` to change configurations between repositories. The pipeline stub can be very simple; if the repository doesn't provide a `renovate.json` configuration, all it really needs is triggers, a couple of repository-specific inputs, and access tokens added to the repository.
+
+A simple pipeline that runs once nightly at midnight could be:
+
+```yaml
+---
+name: Run Renovate
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  actions: write
+
+jobs:
+  renovate:
+    uses: redjax/pipelinetemplates/.github/workflows/renovate.yml@main
+    with:
+      mode: run
+      log-level: info
+      repository: ${{ github.repository }}
+      autodiscover: true
+      renovate-author-email: "0000000+gitusername@users.noreply.github.com"
+    secrets:
+      renovate-token: ${{ secrets.RENOVATE_TOKEN }}
+      gh-api-token: ${{ secrets.GH_API_TOKEN }}
+```
+
+Renovate will automatically detect languages and package managers it supports, create a dashboard issue, and start opening PRs to bump dependencies.
+
+For an example of a more complex pipeline, the Dockerfiles repository is configured to run the pipeline every 4 times daily (every 6 hours). It will also trigger again after merging a `renovate/*` branch into the `main` branch. This extra trigger handles closing other PRs if they depended on another auto or manually merged PR, updating the Dashboard, and re-scanning the repository after version bumps. It also has a manual trigger if I ever want to run it, maybe while testing changes on another branch, or to do a "dry run" to see what will happen the next time the pipeline runs. The Dockerfiles repository provides its own `renovate.json`, and disabled "autodiscover" to force Renovate to use it.
+
+This version uses `if` conditionals to change the way the pipeline runs depending on the trigger, and the PR events work to trigger the pipeline that rebuilds and publishes updated Dockerfiles.
+
+```yaml
+---
+name: Run Renovate
+
+on:
+  schedule:
+    - cron: "0 3 * * *"
+    - cron: "0 9 * * *"
+    - cron: "0 15 * * *"
+    - cron: "0 21 * * *"
+  push:
+    branches:
+      - "renovate/*"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Renovate mode"
+        required: false
+        default: "lookup"
+        type: choice
+        options:
+          - extract
+          - lookup
+          - run
+      log-level:
+        description: "Renovate log level"
+        required: false
+        default: "info"
+        type: choice
+        options:
+          - info
+          - debug
+          - trace
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  actions: write
+
+jobs:
+  renovate:
+    uses: redjax/pipelinetemplates/.github/workflows/renovate.yml@main
+    with:
+      mode: >-
+        ${{ github.event_name == 'schedule'
+            && 'run'
+            || inputs.mode || 'run' }}
+      # mode: run
+      log-level: ${{ inputs.log-level || 'info' }}
+      repository: ${{ github.repository }}
+      config-file: renovate.json
+      ## Set to 'ignored' while testing renovate.json changes on a different base branch,
+      #  otherwise use 'optional'
+      require-config: optional
+      autodiscover: false
+      runner-image: ubuntu-latest
+      renovate-author-email: "0000000+gitusername@users.noreply.github.com"
+      base-branches: "main"
+      use-base-branch-config: true
+    secrets:
+      renovate-token: ${{ secrets.RENOVATE_TOKEN }}
+      gh-api-token: ${{ secrets.GH_API_TOKEN }}
+```
