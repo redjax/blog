@@ -1,0 +1,56 @@
+{
+    "name": "Techobyte Blog Dev",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".."
+    },
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+    "workspaceFolder": "/workspace",
+    "remoteUser": "vscode",
+    "updateRemoteUserUID": true,
+    "mounts": [
+        "type=volume,source=mise-cache,target=/home/vscode/.local/share/mise"
+    ],
+    "remoteEnv": {
+        "SSH_AUTH_SOCK": "/ssh-agent",
+        "PATH": "/home/vscode/.local/bin:/home/vscode/.local/share/mise/shims:${containerEnv:PATH}"
+    },
+    "postCreateCommand": "bash -lc 'sudo chown -R vscode:vscode /home/vscode/.local/share/mise && cd /workspace && if [ -f .mise.toml ] || [ -f mise.toml ]; then mise trust --yes && mise install; else echo \"No mise config found in /workspace\"; fi'",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "terminal.integrated.defaultProfile.linux": "bash"
+            },
+            "extensions": [
+                "ms-vscode.go",
+                "ms-azuretools.vscode-docker",
+                "yzhang.markdown-all-in-one",
+                "kofuk.hugo-utils",
+                "rusnasonov.vscode-hugo",
+                "bierner.markdown-mermaid",
+                "lamartire.git-indicators",
+                "donjayamanne.githistory",
+                "mhutchie.git-graph",
+                "budparr.language-hugo-vscode",
+                "waderyan.gitblame",
+                "Wattenberger.footsteps",
+                "redhat.vscode-yaml",
+                "foxundermoon.shell-format",
+                "ms-python.python",
+                "fabiospampinato.vscode-diff",
+                "ms-azuretools.vscode-docker",
+                "jomeinaster.bracket-peek",
+                "rogalmic.bash-debug",
+                "mads-hartmann.bash-ide-vscode",
+                "formulahendry.auto-complete-tag",
+                "formulahendry.auto-close-tag",
+                "formulahendry.auto-rename-tag",
+                "vincaslt.highlight-matching-tag",
+                "budparr.language-hugo-vscode"
+            ]
+        }
+    },
+    "forwardPorts": [
+        1313
+    ]
+}
