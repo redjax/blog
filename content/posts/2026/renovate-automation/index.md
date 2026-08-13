@@ -159,3 +159,31 @@ jobs:
       renovate-token: ${{ secrets.RENOVATE_TOKEN }}
       gh-api-token: ${{ secrets.GH_API_TOKEN }}
 ```
+
+### Repository Secrets
+
+My Renovate pipeline requires consuming repositories to have 2 secrets set in their environment. On Github, you can use [repository Action secrets](https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets). On Gitlab you can use masked & hidden [CI/CD variables](https://docs.gitlab.com/ci/variables/#define-a-cicd-variable-in-the-ui). On Forgejo/Codeberg, use [repository secrets](https://forgejo.org/docs/next/user/actions/basic-concepts/#secrets).
+
+- `RENOVATE_TOKEN`: A token (i.e. a Github PAT or Gitlab PAT) with read/write access to the repository's contents, issues, and the ability to open and close pull requests.
+  - On Github, the required token permissions are:
+    - Code quality: `Read-only`
+    - Code scanning alerts: `Read-only`
+    - Commit statuses: `Read and write`
+    - Contents: `Read and write`
+    - Dependabot alerts: `Read-only` (I'm not sure why enabling this helps, but the tools were fighting each other until I added this)
+    - Issues: `Read and write`
+    - Pull requests: `Read and write`
+      - You also need to enable "Allow pull requests" in the repository's "General" settings
+    - Repository security advisories: `Read and write`
+    - Secret scanning alerts: `Read-only`
+    - Workflows: `Read and write` (to allow Renovate workflow runs to make changes)
+  - On Gitlab, use a "legacy" token and give it `api` access
+  - On Forgejo, the token needs:
+    - `read:organization`
+    - `write:issue`
+    - `write:repository`
+    - `read:user`
+- `GH_API_TOKEN`: An optional Github PAT (classic) with `public_repo` scope.
+  - While the token is option, you should provide it regardless of the Git platform to allow pipelines to read the Github API for versions, tags, and releases, without getting rate-limited.
+  - Most pipelines interact with Github in some way, i.e. to download a tool release asset.
+  - Even if the repository is on Gitlab or Forgejo/Codeberg, it can and will use this token when making requests to Github's API, and authenticated requests to Github have a much higher threshold for rate limiting.
