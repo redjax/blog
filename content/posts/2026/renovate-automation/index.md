@@ -162,7 +162,7 @@ jobs:
 
 ### Repository Secrets
 
-My Renovate pipeline requires consuming repositories to have 2 secrets set in their environment. On Github, you can use [repository Action secrets](https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets). On Gitlab you can use masked & hidden [CI/CD variables](https://docs.gitlab.com/ci/variables/#define-a-cicd-variable-in-the-ui). On Forgejo/Codeberg, use [repository secrets](https://forgejo.org/docs/next/user/actions/basic-concepts/#secrets).
+My Renovate pipeline requires consuming repositories to have 2 secrets set in their environment, `RENOVATE_TOKEN` and `GH_API_TOKEN`. On Github, you can use [repository Action secrets](https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets). On Gitlab you can use masked & hidden [CI/CD variables](https://docs.gitlab.com/ci/variables/#define-a-cicd-variable-in-the-ui). On Forgejo/Codeberg, use [repository secrets](https://forgejo.org/docs/next/user/actions/basic-concepts/#secrets).
 
 - `RENOVATE_TOKEN`: A token (i.e. a Github PAT or Gitlab PAT) with read/write access to the repository's contents, issues, and the ability to open and close pull requests.
   - On Github, the required token permissions are:
