@@ -13,7 +13,7 @@ tags:
   - forgejo
 author: "me"
 description: ""
-showToc: false
+showToc: true
 TocOpen: false
 hidemeta: false
 comments: false
@@ -55,7 +55,7 @@ The centralized pipeline also allows repositories to provide their own `renovate
 
 I had to provide instructions to Renovate for how to handle this repository, but the centralized pipeline automatically uses whatever Renovate config file I pass from a consuming repository in `config-file:`.
 
-### The Calling Pipeline
+## The Calling Pipeline
 
 In each repository where I want to use my central Renovate pipeline, all I need to do is create a pipeline "stub" that calls the centralized template. I use the pipeline's `inputs` to change configurations between repositories. The pipeline stub can be very simple; if the repository doesn't provide a `renovate.json` configuration, all it really needs is triggers, a couple of repository-specific inputs, and access tokens added to the repository.
 
@@ -160,7 +160,7 @@ jobs:
       gh-api-token: ${{ secrets.GH_API_TOKEN }}
 ```
 
-### Repository Secrets
+## Repository Secrets
 
 My Renovate pipeline requires consuming repositories to have 2 secrets set in their environment, `RENOVATE_TOKEN` and `GH_API_TOKEN`. On Github, you can use [repository Action secrets](https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets). On Gitlab you can use masked & hidden [CI/CD variables](https://docs.gitlab.com/ci/variables/#define-a-cicd-variable-in-the-ui). On Forgejo/Codeberg, use [repository secrets](https://forgejo.org/docs/next/user/actions/basic-concepts/#secrets).
 
