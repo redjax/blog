@@ -1,0 +1,22 @@
+---
+name: jot
+
+volumes:
+  data: {}
+
+services:
+  jot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NODE_IMG_TAG: ${NODE_IMG_TAG:-trixie-slim}
+    restart: unless-stopped
+    ports:
+      - "${JOT_PORT:-3210}:3210"
+    environment:
+      JOT_BIND: "${JOT_BIND:-0.0.0.0}"
+      JOT_PORT: "${JOT_PORT:-3210}"
+      JOT_DATA_DIR: /var/jot
+    volumes:
+      - "${JOT_DATA_DIR:-data}:/var/jot"
