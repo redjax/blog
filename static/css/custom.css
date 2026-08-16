@@ -37,3 +37,76 @@ img[src$='#floatright'] {
     max-width: 600px;
     height: auto;
 }
+
+/*
+    Code blocks
+*/
+
+.highlight .lntable {
+    width: 100%;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+.highlight .lntd {
+    padding: 0;
+    vertical-align: top;
+}
+
+/* Line numbers */
+.highlight .lnt {
+    margin-right: 0;
+    padding: 0;
+    white-space: pre;
+}
+
+/* Line-number column */
+.highlight .lntd:first-child {
+    width: 1%;
+    white-space: nowrap;
+}
+
+.highlight .lntd:first-child pre {
+    margin: 0;
+    padding: 0.5rem 0.8rem 0.5rem 0;
+}
+
+/* Code column */
+.highlight .lntd:last-child {
+    width: auto;
+}
+
+.highlight .lntd:last-child pre {
+    margin: 0;
+    padding: 0.5rem 1rem 0.5rem 0;
+}
+
+/* Override Blog Awesome's centered/max-width code */
+.highlight .lntd:last-child pre>code {
+    display: block;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Code highlighting - light mode */
+.chroma {
+    background: #f5f5f5;
+    color: #24292f;
+}
+
+.chroma .lnt,
+.chroma .ln {
+    color: #8c959f;
+}
+
+/* Code highlighting - dark mode */
+.dark .chroma {
+    background: #161b22;
+    color: #e6edf3;
+}
+
+.dark .chroma .lnt,
+.dark .chroma .ln {
+    color: #6e7681;
+}
