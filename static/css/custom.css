@@ -1,3 +1,7 @@
+/*-------------- 
+  PaperModX CSS 
+  --------------*/
+
 img[src$='#center'] {
     display: block;
     margin: 0.7rem auto;
@@ -19,4 +23,17 @@ img[src$='#floatright'] {
     margin: 0.7rem;
     /* this margin is totally up to you */
     /* whatever else styles you fancy here */
+}
+
+/*---------------------
+  Hugo-Blog-Awesome CSS
+  ---------------------*/
+
+.wrapper.post {
+    max-width: 1000px;
+}
+
+.wrapper.post img {
+    max-width: 600px;
+    height: auto;
 }
