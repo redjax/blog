@@ -20,7 +20,7 @@ comments: false
 searchHidden: false
 ---
 
-![Mend Renovate logo](/mend-renovate-logo.png#center)
+![Mend Renovate logo](mend-renovate-logo.png#center)
 
 Every now and then, I test drive a new tool and find it so immediately useful, it becomes a core part of my toolkit practically overnight. I have experienced this with [Astral's `uv` for manging Python projects](https://docs.astral.sh/uv), [Atuin for shell history](https://atuin.sh/), [`chezmoi` for dotfiles management](https://www.chezmoi.io/), and so on. When I set out a few weeks ago to test drive [Renovate](https://github.com/renovatebot/renovate), I only intended to dip my toes in a repository or two to see if I found it useful enough to add it to the repositories I spend the most time maintaining.
 

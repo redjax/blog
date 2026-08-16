@@ -46,7 +46,7 @@ Immich can perform many of the same functions as PhotoPrism, automatically recog
 
 ## The winner: Immich
 
-![Immich logo](/immich-logo-stacked-light.svg#center)
+![Immich logo](immich-logo-stacked-light.svg#center)
 
 Immich is backed by [Futo](https://futo.tech), a company that makes local, privacy-respecting AI tools. They have a [host of features I care about](https://github.com/immich-app/immich#features), and their [Android app](https://play.google.com/store/apps/details?id=app.alextran.immich) works great.
 
@@ -78,11 +78,11 @@ The `-f overlays/service-name.yml` syntax is for [merging Docker Compose files](
 
 ### Export Google Photos
 
-![Google Takeout logo](/google-takeout-img.png#center)
+![Google Takeout logo](google-takeout-img.png#center)
 
 Google offers a feature for exporting your Google Photos (and more account/app data) with [Google Takeout](https://takeout.google.com). Using this feature, I exported ~200GB of photos and videos I've taken over the years into a .zip archive.
 
-![Google Takeout photos](/google-takeout-selected.png#center)
+![Google Takeout photos](google-takeout-selected.png#center)
 
 ### Networking
 
@@ -90,11 +90,11 @@ I use [Pangolin](https://github.com/fosrl/pangolin) as a reverse proxy for my se
 
 After setting up Immich as an HTTPS resource in Pangolin, create a shareable link and set the new Immich service as the resource. Set this link to "never expire" for convenience; if you set an expiration date, you will need to update the app with a new link each time it expires.
 
-![Immich create shareable link](/immich-create-shareable-link.png#center)
+![Immich create shareable link](immich-create-shareable-link.png#center)
 
 On the next screen, scroll past the QR code and copy the link below it. This is the link you will provide to the Android app. Click the `Usage Examples` button and note the `P-Access-Token-Id` and `P-Access-Token` values.
 
-![Immich shareable link access token](/immich-shareable-link-access-token.png#center)
+![Immich shareable link access token](immich-shareable-link-access-token.png#center)
 
 You will use this link and the access token to allow the Immich app to communicate with the server behind the Pangolin proxy.
 
@@ -102,7 +102,7 @@ You will use this link and the access token to allow the Immich app to communica
 
 In the Immich Android app, navigate to Settings > Advanced > Custom proxy headers, and click "Add new header." Name the header `P-Access-Token-Id` and paste the value from when you created the token. Create another header named `P-Access-Token`.
 
-![Immich proxy headers](/immich-android-proxy-headers.png#center)
+![Immich proxy headers](immich-android-proxy-headers.png#center)
 
 This setup authenticates requests from the Android app to the Pangolin proxy, then passes the traffic to the Immich server.
 
@@ -266,7 +266,7 @@ The next important factor to consider is backups. When you host your own media c
 
 This strategy can be intense for a homelab, and it increases the size your collection uses on-disk. I generally keep 1 copy somewhere local (an external drive or my NAS), and upload an encrypted copy to [Wasabi cloud storage](https://wasabi.com/). If you want to avoid cloud hosting, you could also do a "buddy backup," which is where you keep a storage device at a "buddy's" location (a relative or friend's house, or rented networked storage at a local datacenter, etc).
 
-[I use Restic for backups](/posts/comparing-backup-solutions), and which makes it simple to keep a local backup, a backup on another machine on my LAN via [Rclone SFTP copy](https://rclone.org/sftp/), and a remote copy in [pCloud](https://pcloud.com) or Wasabi S3.
+[I use Restic for backups](posts/comparing-backup-solutions), and which makes it simple to keep a local backup, a backup on another machine on my LAN via [Rclone SFTP copy](https://rclone.org/sftp/), and a remote copy in [pCloud](https://pcloud.com) or Wasabi S3.
 
 ### Maintenance
 
