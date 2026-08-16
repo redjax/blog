@@ -59,7 +59,7 @@ outputs:
 
 module:
   imports:
-    - path: github.com/adityatelange/hugo-PaperMod
+    - path: github.com/hugo-sid/hugo-blog-awesome/v2
     - path: github.com/martignoni/hugo-notice
 
 pagination:
@@ -86,79 +86,111 @@ markup:
 #########################
 # PaperMod Theme Config #
 #########################
+# params:
+#   ## Disable schema.org JSON-LD, fixes page bundle navigation
+#   # disableSchema: true
+#   schema:
+#     disable: true
+#   ## Prevent PaperMod from dynamically injecting section menus
+#   disableSectionMenus: true
+#   mainSections:
+#     - posts
+#     - notes
+
+#   ShowReadingTime: true
+#   ShowShareButtons: false
+#   ShowPostNavLinks: true
+#   ShowBreadCrumbs: true
+#   ShowCodeCopyButtons: true
+#   ShowWordCount: true
+#   ShowRssButtonInSectionTermList: true
+#   ShowFullTextinRSS: true
+#   UseHugoToc: true
+#   disableSpecial1stPost: false
+#   disableScrollToTop: false
+#   comments: false
+#   hidemeta: false
+#   hideSummary: false
+#   showtoc: true
+#   tocopen: false
+#   showTaxonomies: true
+
+#   assets:
+#     disableFingerprinting: true
+#     disableHLJS: true
+#     manifest: "/site.webmanifest"
+#     favicon: "/favicon.ico"
+#     favicon16x16: "/favicon-16x16.png"
+#     favicon32x32: "/favicon-32x32.png"
+#     apple_touch_icon: "/apple-touch-icon.png"
+
+#   label:
+#     text: "Techobyte"
+#     iconHeight: 35
+
+#   profileMode:
+#     enabled: false
+#     title: Techobyte
+#     subtitle: "Personal blog about technology & computing"
+#     imageWidth: 120
+#     imageHeight: 120
+#     buttons:
+#       - name: Posts
+#         url: posts
+#       - name: Tags
+#         url: tags
+
+#   homeInfoParams:
+#     Title: "Welcome to Techobyte"
+#     Content: A text-heavy personal blog about technology & computing, covering topics like Linux, scripting/programming (Python, Bash, Powershell, Go), DevOps, automation, and more.
+
+#   socialIcons:
+#     - name: github
+#       url: https://github.com/redjax/blog
+
+#   cover:
+#     hidden: true
+#     hiddenInList: true
+#     hiddenInSingle: true
+
+#   fuseOpts:
+#     isCaseSensitive: false
+#     shouldSort: true
+#     location: 0
+#     distance: 1000
+#     threshold: 0.4
+#     minMatchCharLength: 0
+#     limit: 10
+#     keys: ["title", "permalink", "summary", "content"]
+
+##################################
+# Hugo Blog Awesome Theme Config #
+##################################
+
 params:
-  ## Disable schema.org JSON-LD, fixes page bundle navigation
-  # disableSchema: true
-  schema:
-    disable: true
-  ## Prevent PaperMod from dynamically injecting section menus
-  disableSectionMenus: true
+  sitename: "Techobyte"
+  description: "A personal blog about technology & computing"
+
+  defaultColor: "auto"
+
   mainSections:
     - posts
     - notes
 
-  ShowReadingTime: true
-  ShowShareButtons: false
-  ShowPostNavLinks: true
-  ShowBreadCrumbs: true
-  ShowCodeCopyButtons: true
-  ShowWordCount: true
-  ShowRssButtonInSectionTermList: true
-  ShowFullTextinRSS: true
-  UseHugoToc: true
-  disableSpecial1stPost: false
-  disableScrollToTop: false
-  comments: false
-  hidemeta: false
-  hideSummary: false
-  showtoc: true
-  tocopen: false
-  showTaxonomies: true
+  toc: true
+  tocOpen: false
 
-  assets:
-    disableFingerprinting: true
-    disableHLJS: true
-    manifest: "/site.webmanifest"
-    favicon: "/favicon.ico"
-    favicon16x16: "/favicon-16x16.png"
-    favicon32x32: "/favicon-32x32.png"
-    apple_touch_icon: "/apple-touch-icon.png"
+  goToTop: true
 
-  label:
-    text: "Techobyte"
-    iconHeight: 35
+  dateFormat: "2 Jan 2006"
 
-  profileMode:
-    enabled: false
-    title: Techobyte
-    subtitle: "Personal blog about technology & computing"
-    imageWidth: 120
-    imageHeight: 120
-    buttons:
-      - name: Posts
-        url: posts
-      - name: Tags
-        url: tags
-
-  homeInfoParams:
-    Title: "Welcome to Techobyte"
-    Content: A text-heavy personal blog about technology & computing, covering topics like Linux, scripting/programming (Python, Bash, Powershell, Go), DevOps, automation, and more.
+  rssFeedDescription: "full"
 
   socialIcons:
     - name: github
-      url: https://github.com/redjax/blog
+      url: "https://github.com/redjax/blog"
 
-  cover:
-    hidden: true
-    hiddenInList: true
-    hiddenInSingle: true
-
-  fuseOpts:
-    isCaseSensitive: false
-    shouldSort: true
-    location: 0
-    distance: 1000
-    threshold: 0.4
-    minMatchCharLength: 0
-    limit: 10
-    keys: ["title", "permalink", "summary", "content"]
+  author:
+    name: "Techobyte"
+    intro: "Techobyte"
+    description: "Personal blog about technology & computing"
