@@ -1,7 +1,7 @@
 ---
 title: "Renovate Automation"
-date: 2026-08-13T11:57:46-04:00
-draft: true
+date: 2026-08-16T00:00:00-04:00
+draft: false
 slug: "/renovate-automation/"
 # url: "/posts/renovate-automation/"
 categories: []
