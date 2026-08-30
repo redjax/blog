@@ -1,0 +1,27 @@
+resources:
+  - name: repo
+    type: git
+    source:
+      uri: https://github.com/redjax/blog.git
+      branch: feat/concourse-ci
+
+jobs:
+  - name: build-and-test
+    plan:
+      - get: repo
+
+      # - try:
+      #     task: vale-lint
+      #     file: repo/.ci/concourse/tasks/vale-lint.yml
+      ## Params to pass into task file. This is commented with the default values
+      #  in the task file, just to show where they go.
+      # params:
+      #   VALE_CONFIG: .vale.ini
+      #   VALE_PATH: content
+      #   VALE_GLOB: "**/*.md"
+
+      - task: build-hugo-site
+        file: repo/.ci/concourse/tasks/build-hugo-site.yml
+
+      # - task: lychee-check-links
+      #   file: repo/.ci/concourse/tasks/lychee-check-links.yml
