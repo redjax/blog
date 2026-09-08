@@ -14,6 +14,7 @@
         "mise"
     ],
     "prConcurrentLimit": 5,
+    "platformAutomerge": true,
     "packageRules": [
         {
             "matchUpdateTypes": [
