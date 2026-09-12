@@ -1,2 +1,3 @@
 <!-- Custom head tag element for hugo-blog-awesome theme -->
-<link rel="stylesheet" href="/css/custom.css">
+{{- $css := resources.Get "css/custom.css" | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
