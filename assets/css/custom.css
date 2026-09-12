@@ -35,8 +35,10 @@ img[src$="#floatright"] {
 }
 
 .wrapper.post img {
-    max-width: 600px;
+    display: block;
+    max-width: 100%;
     height: auto;
+    margin: 1rem auto;
 }
 
 /*
