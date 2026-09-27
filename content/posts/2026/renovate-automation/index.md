@@ -22,6 +22,18 @@ searchHidden: false
 
 ![Mend Renovate logo](/mend-renovate-logo.png#center)
 
+{{< notice tip "Renovate Cloud" >}}
+Since writing this article, I have moved to using Renovate's cloud version, which has a [generous free tier](https://docs.mend.io/renovate/latest/mend-renovate-cloud-resource-tiers#Renovate-Cloud---Community-vs-Enterprise). I am still using the same `renovate.json` for each repository, but I let the Renovate platform take over scheduling runs and opening pull requests.
+
+The Renovate community cloud runs the bot when it needs to run, instead of waiting for the next pipeline execution. When a change is merged into the main branch, Renovate will automatically re-run to update the dashboard issue, keeping things more up to date than the pipeline version.
+
+When the free tier inevitably changes for the worse, whether due to Mend deciding it's time to squeeze, or selling to Private Equity and enshittifying itself, I will look into [self-hosting my own Renovate server](https://docs.mend.io/renovate/latest/mend-renovate-enterprise-self-hosted) (or more realistically, will find a different tool).
+
+Most of the content in this article is still relevant, besides the Github workflow; when using Renovate cloud, this should be disabled so the two don't interfere with each other.
+{{< /notice >}}
+
+---
+
 Every now and then, I test drive a new tool and find it so immediately useful, it becomes a core part of my toolkit practically overnight. I have experienced this with [Astral's `uv` for manging Python projects](https://docs.astral.sh/uv), [Atuin for shell history](https://atuin.sh/), [`chezmoi` for dotfiles management](https://www.chezmoi.io/), and so on. When I set out a few weeks ago to test drive [Renovate](https://github.com/renovatebot/renovate), I only intended to dip my toes in a repository or two to see if I found it useful enough to add it to the repositories I spend the most time maintaining.
 
 Instead, I found the tool immediately useful, simple to configure, and easy to bend to my needs. Overnight, I found myself creating a centralized, reusable version of the pipeline that easily adds Renovate support to new and existing repositories. I even rewrote the bespoke Bash scripting I was using to automate bumping and rebuilding Docker images in [my Dockerfiles repository](https://github.com/redjax/Dockerfiles) because Renovate made managing all of the different versions much simpler.
