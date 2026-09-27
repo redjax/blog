@@ -214,6 +214,9 @@ jobs:
     runs-on: ${{ needs.validate-inputs.outputs.runner-image }}
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Download Hugo site artifact
         uses: actions/download-artifact@v7
         with:
@@ -224,6 +227,7 @@ jobs:
         uses: lycheeverse/lychee-action@v2.9.0
         with:
           args: >-
+            --config "${{ github.workspace }}/.lychee/offline.toml"
             --offline
             --root-dir "${{ github.workspace }}/public"
             --index-files index.html
@@ -273,16 +277,18 @@ jobs:
       cancel-in-progress: false
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Test live site links
         uses: lycheeverse/lychee-action@v2.9.0
         with:
           args: >-
+            --config "${{ github.workspace }}/.lychee/online.toml"
             --verbose
             --no-progress
             --exclude-all-private
             --max-concurrency 5
-            --max-retries 2
-            --timeout 30
             --user-agent "TechobyteLinkChecker/1.0 (+${{ needs.validate-inputs.outputs.site-url }}/)"
             "${{ needs.validate-inputs.outputs.site-url }}"
             "${{ needs.validate-inputs.outputs.site-url }}/posts/"
