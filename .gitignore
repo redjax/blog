@@ -1,7 +1,10 @@
 /public/
 /resources/
+_vendor/
 
 .env
+**/.env
+**/*.env
 
 !*.example*
 !*example*.*
