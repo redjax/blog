@@ -3,17 +3,13 @@ max_retries = 3
 retry_wait_time = 2
 no_progress = true
 
-## Handle URL fragments and file extensions correctly
-include_fragments = false
+accept = ["200..=299", "403", "429"]
 
-## Accept 429 (rate limit) as valid
-accept = ["200..=299", "429"]
-
-## Exclude schemes and domains that block CI
 exclude = [
     "^mailto:",
     "^tel:",
     "^javascript:",
+    "^data:",
     "linkedin\\.com",
     "twitter\\.com",
     "x\\.com",
@@ -21,4 +17,5 @@ exclude = [
     "forgejo\\.org",
 ]
 
+include_fragments = false
 extensions = ["html", "htm", "md", "markdown"]
