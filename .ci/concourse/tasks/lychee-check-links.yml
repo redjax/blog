@@ -1,0 +1,20 @@
+platform: linux
+
+image_resource:
+  type: registry-image
+  source:
+    repository: lycheeverse/lychee
+    tag: latest
+
+inputs:
+  - name: public
+
+run:
+  path: sh
+  args:
+    - -c
+    - |
+      lychee public/ \
+        --root-dir public/ \
+        --remap "^https://example.org file://$(pwd)/public" \
+        --offline

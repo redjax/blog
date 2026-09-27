@@ -1,0 +1,27 @@
+platform: linux
+
+image_resource:
+  type: registry-image
+  source:
+    repository: hugomods/hugo
+    tag: debian-exts
+
+inputs:
+  - name: repo
+
+outputs:
+  - name: public
+
+caches:
+  - path: /tmp/hugo_cache
+
+params:
+  HUGO_CACHEDIR: /tmp/hugo_cache
+
+run:
+  path: sh
+  args:
+    - -c
+    - |
+      cd repo
+      hugo --gc --minify --destination ../public
