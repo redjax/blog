@@ -11,10 +11,10 @@
         "github-actions",
         "gomod",
         "dockerfile",
-        "mise"
+        "mise",
+        "custom.regex"
     ],
     "prConcurrentLimit": 5,
-    "platformAutomerge": true,
     "packageRules": [
         {
             "matchUpdateTypes": [
@@ -45,6 +45,18 @@
                 "indirect"
             ],
             "enabled": true
+        }
+    ],
+    "customManagers": [
+        {
+            "customType": "regex",
+            "description": "Update versions declared beneath Renovate annotations",
+            "managerFilePatterns": [
+                "/^\\.github\\/workflows\\/.*\\.ya?ml$/"
+            ],
+            "matchStrings": [
+                "# renovate: datasource=(?<datasource>[a-z-]+) depName=(?<depName>[^\\s]+)(?: versioning=(?<versioning>[^\\s]+))?\\s+[^\\n]*\\n\\s*[^:#\\n]+:\\s*[\"']?(?<currentValue>v?[0-9][0-9A-Za-z.+_-]*)[\"']?"
+            ]
         }
     ]
 }
