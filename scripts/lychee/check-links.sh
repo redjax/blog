@@ -9,6 +9,8 @@ REPO_ROOT="$(realpath -m "${THIS_DIR}/../..")"
 PUBLIC_DIR="${REPO_ROOT}/public"
 SITE_URL=""
 CHECK_MODE="live"
+OFFLINE_CONFIG="${REPO_ROOT}/.lychee/offline.toml"
+ONLINE_CONFIG="${REPO_ROOT}/.lychee/online.toml"
 LYCHEE_CONFIG_FILE=""
 
 CWD="$(pwd)"
@@ -128,11 +130,21 @@ if [[ -z "${LYCHEE_CONFIG_FILE}" && -n "${LYCHEE_CONFIG:-}" ]]; then
   LYCHEE_CONFIG_FILE="$(realpath -m "${LYCHEE_CONFIG}")"
 fi
 
-if [[ -z "${LYCHEE_CONFIG_FILE}" && -f "${REPO_ROOT}/.lychee.toml" ]]; then
-  LYCHEE_CONFIG_FILE="${REPO_ROOT}/.lychee.toml"
+if [[ -z "${LYCHEE_CONFIG_FILE}" ]]; then
+  case "${CHECK_MODE}" in
+  offline)
+    LYCHEE_CONFIG_FILE="${OFFLINE_CONFIG}"
+    ;;
+  live)
+    LYCHEE_CONFIG_FILE="${ONLINE_CONFIG}"
+    ;;
+  *)
+    error "Unsupported check mode: ${CHECK_MODE}"
+    ;;
+  esac
 fi
 
-if [[ -n "${LYCHEE_CONFIG_FILE}" && ! -f "${LYCHEE_CONFIG_FILE}" ]]; then
+if [[ ! -f "${LYCHEE_CONFIG_FILE}" ]]; then
   error "Lychee configuration file does not exist: ${LYCHEE_CONFIG_FILE}"
 fi
 
