@@ -1,36 +1,51 @@
 ---
+###############################################
+# Local Task wrappers for Lychee link checking #
+###############################################
+
 version: "3"
 
 vars:
-  HUGO_BASEURL: '{{default "http://localhost:1313/" .HUGO_BASEURL}}'
+  HUGO_BASEURL: '{{default "https://techobyte.cc/" .HUGO_BASEURL}}'
+  LYCHEE_OFFLINE_CONFIG: ".lychee/offline.toml"
+  LYCHEE_ONLINE_CONFIG: ".lychee/online.toml"
+  PUBLIC_DIR: "public"
 
 tasks:
-  check-public:
-    desc: "Run lychee on rendered files in public/ directory"
+  check-offline:
+    desc: Check locally rendered Hugo HTML under public/
+    preconditions:
+      - sh: test -f "{{.ROOT_DIR}}/{{.LYCHEE_OFFLINE_CONFIG}}"
+        msg: "Missing Lychee offline config: {{.ROOT_DIR}}/{{.LYCHEE_OFFLINE_CONFIG}}"
+      - sh: test -d "{{.ROOT_DIR}}/{{.PUBLIC_DIR}}"
+        msg: "Missing Hugo output directory: {{.ROOT_DIR}}/{{.PUBLIC_DIR}}. Run task hugo:build first."
     cmds:
-      - >
+      - >-
         lychee
-        public/**/*.html
-        --base-url {{.HUGO_BASEURL}}
-        --exclude-all-private
-
-  check-live:
-    desc: "Run lychee on the live site"
-    cmds:
-      - >
-        lychee public/
-        --root-dir public/
-        --remap "^https://example.org file://$(pwd)/public"
+        --config "{{.ROOT_DIR}}/{{.LYCHEE_OFFLINE_CONFIG}}"
         --offline
-    # cmds:
-    #   - >
-    #     lychee
-    #     "{{.HUGO_BASEURL}}"
-    #     --exclude-all-private
-    #     --max-concurrency 5
-    #     --user-agent "TechobyteLinkChecker/1.0 (+{{.HUGO_BASEURL}})"
-    #     "{{.HUGO_BASEURL}}"
-    #     "{{.HUGO_BASEURL}}/posts/"
-    #     "{{.HUGO_BASEURL}}/notes/"
-    #     "{{.HUGO_BASEURL}}/tags/"
-    #     "{{.HUGO_BASEURL}}/categories/"
+        --root-dir "{{.ROOT_DIR}}/{{.PUBLIC_DIR}}"
+        --index-files index.html
+        --fallback-extensions html
+        --no-progress
+        "{{.ROOT_DIR}}/{{.PUBLIC_DIR}}/**/*.html"
+
+  check-online:
+    desc: Check links on the deployed live site
+    preconditions:
+      - sh: test -f "{{.LYCHEE_ONLINE_CONFIG}}"
+        msg: "Missing Lychee online config: {{.LYCHEE_ONLINE_CONFIG}}"
+      - sh: 'case "{{.HUGO_BASEURL}}" in http://*|https://*) exit 0 ;; *) exit 1 ;; esac'
+        msg: "HUGO_BASEURL must include http:// or https://"
+    cmds:
+      - >-
+        lychee
+        --config "{{.LYCHEE_ONLINE_CONFIG}}"
+        --exclude-all-private
+        --max-concurrency 5
+        --user-agent "TechobyteLinkChecker/1.0 (+{{trimSuffix "/" .HUGO_BASEURL}}/)"
+        "{{trimSuffix "/" .HUGO_BASEURL}}"
+        "{{trimSuffix "/" .HUGO_BASEURL}}/posts/"
+        "{{trimSuffix "/" .HUGO_BASEURL}}/notes/"
+        "{{trimSuffix "/" .HUGO_BASEURL}}/tags/"
+        "{{trimSuffix "/" .HUGO_BASEURL}}/categories/"

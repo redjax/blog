@@ -64,21 +64,17 @@ tasks:
     cmds:
       - task: _vale:vale-lint-content
 
-  lychee:check-public:
-    desc: Run lychee on local public/ directory.
-    vars:
-      HUGO_BASEURL: "http://localhost:1313/"
+  lychee:offline:
+    desc: Build Hugo, then check links in generated public/ HTML
     cmds:
       - task: _hugo:build
-      - task: _lychee:check-public
-        vars:
-          HUGO_BASEURL: "{{.HUGO_BASEURL}}"
+      - task: _lychee:check-offline
 
-  lychee:check:
-    desc: Run lychee on the live site
+  lychee:online:
+    desc: Check links on the deployed live site
     vars:
       HUGO_BASEURL: "https://techobyte.cc/"
     cmds:
-      - task: _lychee:check-live
+      - task: _lychee:check-online
         vars:
           HUGO_BASEURL: "{{.HUGO_BASEURL}}"
