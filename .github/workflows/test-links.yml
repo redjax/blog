@@ -1,21 +1,170 @@
 ---
-name: "Test Blog Links"
+#############################################################
+# Build and check local Hugo output, or crawl the live site. #
+#############################################################
+
+name: Test blog links
 
 on:
   workflow_dispatch:
+    inputs:
+      run-offline:
+        description: Build Hugo and check generated local routes, assets, and links
+        required: true
+        type: boolean
+        default: false
+
+      run-online:
+        description: Crawl and check links on the deployed public site
+        required: true
+        type: boolean
+        default: true
+
+      site-url:
+        description: Optional live site URL; defaults to the HUGO_BASEURL Actions variable
+        required: false
+        type: string
+        default: ""
+
   schedule:
-    ## Every 6 hours
+    ## Every 6 hours, at minute 0, in UTC.
     - cron: "0 */6 * * *"
 
 permissions:
   contents: read
-  issues: write
 
 jobs:
-  test:
+  validate-inputs:
+    name: Validate selected checks
     runs-on: ubuntu-latest
+
+    outputs:
+      site-url: ${{ steps.site.outputs.url }}
+      site-host: ${{ steps.site.outputs.host }}
+
+    steps:
+      - name: Validate selected checks
+        shell: bash
+        env:
+          RUN_OFFLINE: ${{ inputs.run-offline || 'false' }}
+          RUN_ONLINE: ${{ inputs.run-online || 'true' }}
+        run: |
+          set -euo pipefail
+
+          if [[ \
+            "${RUN_OFFLINE}" != "true" &&
+            "${RUN_ONLINE}" != "true"
+          ]]; then
+            echo "::error::Select at least one link-check mode."
+            exit 1
+          fi
+
+      - name: Resolve live site URL
+        id: site
+        shell: bash
+        env:
+          INPUT_SITE_URL: ${{ inputs.site-url || '' }}
+          HUGO_BASEURL: ${{ vars.HUGO_BASEURL }}
+        run: |
+          set -euo pipefail
+
+          if [[ -n "${INPUT_SITE_URL}" ]]; then
+            site_url="${INPUT_SITE_URL%/}"
+          else
+            site_url="${HUGO_BASEURL%/}"
+          fi
+
+          if [[ -z "${site_url}" ]]; then
+            echo "::error::site-url was not supplied and Actions variable HUGO_BASEURL is not set."
+            exit 1
+          fi
+
+          if [[ ! "${site_url}" =~ ^https?:// ]]; then
+            echo "::error::Live site URL must begin with http:// or https://"
+            exit 1
+          fi
+
+          site_host="$(
+            printf '%s\n' "${site_url}" |
+              sed -E 's#^https?://([^/:?#]+).*#\1#'
+          )"
+
+          if [[ -z "${site_host}" ]]; then
+            echo "::error::Unable to derive a hostname from: ${site_url}"
+            exit 1
+          fi
+
+          echo "url=${site_url}" >> "${GITHUB_OUTPUT}"
+          echo "host=${site_host}" >> "${GITHUB_OUTPUT}"
+
+          {
+            echo "### Link-check configuration"
+            echo
+            echo "| Setting | Value |"
+            echo "|---|---|"
+            echo "| Offline | \`${RUN_OFFLINE}\` |"
+            echo "| Online | \`${RUN_ONLINE}\` |"
+            echo "| Live URL | \`${site_url}\` |"
+            echo "| Live host | \`${site_host}\` |"
+          } >> "${GITHUB_STEP_SUMMARY}"
+
+  offline:
+    name: Check local Hugo build
+    if: ${{ inputs.run-offline || false }}
+    needs: validate-inputs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          # renovate: datasource=github-releases depName=gohugoio/hugo versioning=semver-coerced
+          hugo-version: 0.166.0
+          extended: true
+
+      - name: Build Hugo site
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./scripts/hugo/build.sh
+
+      - name: Check locally rendered links
+        uses: lycheeverse/lychee-action@v2.9.0
+        with:
+          args: >-
+            --offline
+            --root-dir "${{ github.workspace }}/public"
+            --index-files index.html
+            --fallback-extensions html
+            --no-progress
+            "${{ github.workspace }}/public/**/*.html"
+          format: markdown
+          output: lychee-offline-report.md
+          jobSummary: true
+          fail: true
+
+      - name: Upload offline Lychee report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: lychee-offline-report
+          path: lychee-offline-report.md
+          if-no-files-found: warn
+          retention-days: 30
+
+  online:
+    name: Check live site links
+    if: ${{ inputs.run-online || github.event_name == 'schedule' }}
+    needs: validate-inputs
+    runs-on: ubuntu-latest
+
     concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
+      group: ${{ github.workflow }}-online-${{ github.ref }}
+      cancel-in-progress: false
+
     steps:
       - name: Test live site links
         id: lychee
@@ -26,28 +175,42 @@ jobs:
             --no-progress
             --exclude-all-private
             --max-concurrency 5
-            --user-agent "TechobyteLinkChecker/1.0 (+https://techobyte.cc/)"
-            "${{ vars.HUGO_BASEURL }}"
-            "${{ vars.HUGO_BASEURL }}/posts/"
-            "${{ vars.HUGO_BASEURL }}/notes/"
-            "${{ vars.HUGO_BASEURL }}/tags/"
-            "${{ vars.HUGO_BASEURL }}/categories/"
+            --max-retries 2
+            --timeout 30
+            --user-agent "TechobyteLinkChecker/1.0 (+${{ needs.validate-inputs.outputs.site-url }}/)"
+            "${{ needs.validate-inputs.outputs.site-url }}"
+            "${{ needs.validate-inputs.outputs.site-url }}/posts/"
+            "${{ needs.validate-inputs.outputs.site-url }}/notes/"
+            "${{ needs.validate-inputs.outputs.site-url }}/tags/"
+            "${{ needs.validate-inputs.outputs.site-url }}/categories/"
           format: markdown
-          output: lychee-report.md
+          output: lychee-online-report.md
           jobSummary: true
           fail: true
 
-      - name: Show lychee report
+      - name: Show online Lychee report
         if: always()
+        shell: bash
         run: |
-          echo "## Lychee Results" >> $GITHUB_STEP_SUMMARY
-          echo '```markdown' >> $GITHUB_STEP_SUMMARY
-          cat lychee-report.md >> $GITHUB_STEP_SUMMARY || true
-          echo '```' >> $GITHUB_STEP_SUMMARY
+          {
+            echo "## Online Lychee results"
+            echo
+            echo '```markdown'
 
-      - name: Upload lychee report as artifact
+            if [[ -f lychee-online-report.md ]]; then
+              cat lychee-online-report.md
+            else
+              echo "Lychee did not produce a report file."
+            fi
+
+            echo '```'
+          } >> "${GITHUB_STEP_SUMMARY}"
+
+      - name: Upload online Lychee report
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: lychee-report
-          path: lychee-report.md
+          name: lychee-online-report
+          path: lychee-online-report.md
+          if-no-files-found: warn
+          retention-days: 30
