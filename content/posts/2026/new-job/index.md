@@ -1,7 +1,7 @@
 ---
 title: "New Job"
 date: 2026-09-11T00:56:49-04:00
-draft: true
+draft: false
 slug: "/new-job/"
 # url: "/posts/new-job/"
 categories: []
