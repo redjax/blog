@@ -17,5 +17,4 @@ exclude = [
     "forgejo\\.org",
 ]
 
-include_fragments = false
 extensions = ["html", "htm", "md", "markdown"]
