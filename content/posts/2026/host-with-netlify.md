@@ -2,6 +2,7 @@
 title: "Host Hugo with Netlify"
 date: 2026-01-09T01:56:08-05:00
 draft: false
+url: /posts/host-with-netlify
 categories: ["DevOps", "CI/CD"]
 tags: ["git", "netlify", "devops", "ci-cd", "hosting", "cloudflare", "static-site"]
 author: "me"

@@ -1,7 +1,13 @@
 /public/
 /resources/
+_vendor/
 
 .env
+**/.env
+**/*.env
 
 !*.example*
 !*example*.*
+
+hugo-trace.txt
+trace.txt

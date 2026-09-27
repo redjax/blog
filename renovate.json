@@ -1,0 +1,62 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+        "config:recommended"
+    ],
+    "labels": [
+        "dependencies",
+        "renovate"
+    ],
+    "enabledManagers": [
+        "github-actions",
+        "gomod",
+        "dockerfile",
+        "mise",
+        "custom.regex"
+    ],
+    "prConcurrentLimit": 5,
+    "packageRules": [
+        {
+            "matchUpdateTypes": [
+                "minor",
+                "patch",
+                "digest"
+            ],
+            "groupName": "non-major dependencies",
+            "automerge": true
+        },
+        {
+            "matchManagers": [
+                "github-actions"
+            ],
+            "groupName": "GitHub Actions"
+        },
+        {
+            "matchManagers": [
+                "dockerfile"
+            ],
+            "groupName": "Docker base images"
+        },
+        {
+            "matchManagers": [
+                "gomod"
+            ],
+            "matchDepTypes": [
+                "indirect"
+            ],
+            "enabled": true
+        }
+    ],
+    "customManagers": [
+        {
+            "customType": "regex",
+            "description": "Update versions declared beneath Renovate annotations",
+            "managerFilePatterns": [
+                "/^\\.github\\/workflows\\/.*\\.ya?ml$/"
+            ],
+            "matchStrings": [
+                "# renovate: datasource=(?<datasource>[a-z-]+) depName=(?<depName>[^\\s]+)(?: versioning=(?<versioning>[^\\s]+))?\\s+[^\\n]*\\n\\s*[^:#\\n]+:\\s*[\"']?(?<currentValue>v?[0-9][0-9A-Za-z.+_-]*)[\"']?"
+            ]
+        }
+    ]
+}
