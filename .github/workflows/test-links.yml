@@ -26,9 +26,9 @@ on:
         type: string
         default: ""
 
-  schedule:
-    ## Every 6 hours, at minute 0, in UTC.
-    - cron: "0 */6 * * *"
+  # schedule:
+  ## Every 6 hours, at minute 0, in UTC.
+  # - cron: "0 */6 * * *"
 
 permissions:
   contents: read
