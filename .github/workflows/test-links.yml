@@ -49,7 +49,7 @@ on:
     - cron: "0 */6 * * *"
 
 permissions:
-  actions: read
+  actions: write
   contents: read
 
 jobs:
