@@ -9,13 +9,13 @@ on:
   workflow_dispatch:
     inputs:
       run-offline:
-        description: Build Hugo and check generated local routes, assets, and links
+        description: "[offline] Build Hugo and check generated local routes, assets, and links"
         required: true
         type: boolean
         default: false
 
       run-online:
-        description: Crawl and check links on the deployed public site
+        description: "[online] Crawl and check links on the deployed public site"
         required: true
         type: boolean
         default: true
