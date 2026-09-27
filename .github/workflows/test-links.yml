@@ -39,39 +39,54 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
+      run-offline: ${{ steps.selection.outputs.run-offline }}
+      run-online: ${{ steps.selection.outputs.run-online }}
       site-url: ${{ steps.site.outputs.url }}
       site-host: ${{ steps.site.outputs.host }}
 
     steps:
       - name: Validate selected checks
+        id: selection
         shell: bash
         env:
-          RUN_OFFLINE: ${{ inputs.run-offline || 'false' }}
-          RUN_ONLINE: ${{ inputs.run-online || 'true' }}
+          EVENT_NAME: ${{ github.event_name }}
+          RUN_OFFLINE: ${{ github.event_name == 'workflow_dispatch' && inputs.run-offline || 'false' }}
+          RUN_ONLINE: ${{ github.event_name == 'workflow_dispatch' && inputs.run-online || 'true' }}
         run: |
           set -euo pipefail
 
+          run_offline="${RUN_OFFLINE:-false}"
+          run_online="${RUN_ONLINE:-true}"
+
           if [[ \
-            "${RUN_OFFLINE}" != "true" &&
-            "${RUN_ONLINE}" != "true"
+            "${run_offline}" != "true" &&
+            "${run_online}" != "true"
           ]]; then
             echo "::error::Select at least one link-check mode."
             exit 1
           fi
 
+          {
+            echo "run-offline=${run_offline}"
+            echo "run-online=${run_online}"
+          } >> "${GITHUB_OUTPUT}"
+
       - name: Resolve live site URL
         id: site
         shell: bash
         env:
-          INPUT_SITE_URL: ${{ inputs.site-url || '' }}
+          INPUT_SITE_URL: ${{ github.event_name == 'workflow_dispatch' && inputs.site-url || '' }}
           HUGO_BASEURL: ${{ vars.HUGO_BASEURL }}
         run: |
           set -euo pipefail
 
-          if [[ -n "${INPUT_SITE_URL}" ]]; then
-            site_url="${INPUT_SITE_URL%/}"
+          input_site_url="${INPUT_SITE_URL:-}"
+          hugo_baseurl="${HUGO_BASEURL:-}"
+
+          if [[ -n "${input_site_url}" ]]; then
+            site_url="${input_site_url%/}"
           else
-            site_url="${HUGO_BASEURL%/}"
+            site_url="${hugo_baseurl%/}"
           fi
 
           if [[ -z "${site_url}" ]]; then
@@ -94,16 +109,19 @@ jobs:
             exit 1
           fi
 
-          echo "url=${site_url}" >> "${GITHUB_OUTPUT}"
-          echo "host=${site_host}" >> "${GITHUB_OUTPUT}"
+          {
+            echo "url=${site_url}"
+            echo "host=${site_host}"
+          } >> "${GITHUB_OUTPUT}"
 
           {
             echo "### Link-check configuration"
             echo
             echo "| Setting | Value |"
             echo "|---|---|"
-            echo "| Offline | \`${RUN_OFFLINE}\` |"
-            echo "| Online | \`${RUN_ONLINE}\` |"
+            echo "| Trigger | \`${{ github.event_name }}\` |"
+            echo "| Offline | \`${{ steps.selection.outputs.run-offline }}\` |"
+            echo "| Online | \`${{ steps.selection.outputs.run-online }}\` |"
             echo "| Live URL | \`${site_url}\` |"
             echo "| Live host | \`${site_host}\` |"
           } >> "${GITHUB_STEP_SUMMARY}"
