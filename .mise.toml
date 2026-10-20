@@ -1,6 +1,6 @@
 [tools]
 hugo-extended = "0.168.0"
-go = "1.27.2"
+go = "1.27.3"
 direnv = "latest"
 "aqua:go-task/task" = "latest"
 "aqua:errata-ai/vale" = "latest"
