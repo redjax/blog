@@ -1,0 +1,57 @@
+platform: linux
+
+image_resource:
+  type: registry-image
+  source:
+    # repository: jdkato/vale
+    # tag: latest
+    repository: jdkato/vale
+    tag: latest
+
+inputs:
+  - name: repo
+
+params:
+  VALE_CONFIG: .vale.ini
+  VALE_PATH: content
+  VALE_GLOB: "**/*.md"
+
+run:
+  path: sh
+  args:
+    - -c
+    - |
+      cd repo
+
+      # echo "[DEBUG] CWD: $(pwd)"
+      # echo "[DEBUG] Files:"
+      # ls -la
+
+      # echo "[DEBUG] Styles dir contents:"
+      # ls -la .styles
+
+      vale sync
+      vale content/
+
+    # - |
+    #   set -e
+    #   cd repo
+
+    #   ## Debug Vale config in pipeline
+    #   # vale ls-config --config "${VALE_CONFIG}"
+    #   # vale ls-vars --config "${VALE_CONFIG}"
+
+    #   ## Sync Vale styles
+    #   # vale sync --config "${VALE_CONFIG}"
+
+    #   ## Find Markdown files
+    #   files=$(find "${VALE_PATH}" -type f -name '*.md')
+
+    #   if [ -z "$files" ]; then
+    #     echo "No Markdown files found under ${VALE_PATH}/"
+    #     exit 0
+    #   fi
+
+    #   ## Pass discovered files to Vale
+    #   echo "Linting $(echo "$files" | wc -l) file(s)"
+    #   echo "$files" | xargs vale --config "${VALE_CONFIG}"
