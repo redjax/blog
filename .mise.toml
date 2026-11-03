@@ -1,7 +1,7 @@
 [tools]
 hugo-extended = "0.169.0"
 go = "1.27.3"
-direnv = "latest"
-"aqua:go-task/task" = "latest"
-"aqua:errata-ai/vale" = "latest"
-"aqua:lycheeverse/lychee" = "latest"
+direnv = "2.38.2"
+"aqua:go-task/task" = "3.54.0"
+"aqua:errata-ai/vale" = "3.26.0"
+"aqua:lycheeverse/lychee" = "0.24.2"
