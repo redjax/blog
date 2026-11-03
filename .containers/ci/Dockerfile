@@ -37,7 +37,7 @@ RUN --mount=type=cache,target=/tmp/hugo_cache \
     hugo --minify --gc --cleanDestinationDir \
     --environment production
 
-## Lychee links check  
+## Lychee links check
 FROM lycheeverse/lychee:latest AS lychee
 WORKDIR /work
 

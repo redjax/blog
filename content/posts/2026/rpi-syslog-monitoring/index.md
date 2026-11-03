@@ -5,7 +5,7 @@ draft: false
 slug: "/rpi-syslog-monitoring/"
 # url: "/posts/rpi-syslog-monitoring/"
 categories: []
-tags: 
+tags:
   - homelab
   - selfhosting
   - raspberrypi
