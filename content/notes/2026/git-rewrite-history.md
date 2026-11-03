@@ -8,7 +8,7 @@ showToc: true
 categories: []
 description: "Code snippet or command reference"
 summary: "Code snippet or command reference"
-tags: 
+tags:
   - "note"
   - "git"
 ---

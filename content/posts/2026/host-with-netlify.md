@@ -283,7 +283,7 @@ name: "Test Blog Links"
 on:
   ## Allow manual runs
   workflow_dispatch:
-  
+
   ## Every 6 hours
   schedule:
     - cron: "0 */6 * * *"
@@ -301,8 +301,8 @@ jobs:
         uses: lycheeverse/lychee-action@v1
         with:
           args: >-
-            --base-verification false 
-            --no-progress 
+            --base-verification false
+            --no-progress
             "${{ vars.HUGO_BASEURL }}"/*
 
 ```
