@@ -19,9 +19,9 @@ jobs:
     name: "Build & test Hugo site"
     runs-on: ubuntu-latest
     if: |
-      github.event.action != 'closed' || 
-      (github.event.action == 'closed' && 
-       github.event.pull_request.merged == true && 
+      github.event.action != 'closed' ||
+      (github.event.action == 'closed' &&
+       github.event.pull_request.merged == true &&
        contains(github.event.pull_request.labels.*.name, 'netlify-release'))
 
     steps:

@@ -12,7 +12,8 @@
         "gomod",
         "dockerfile",
         "mise",
-        "custom.regex"
+        "custom.regex",
+        "pre-commit"
     ],
     "prConcurrentLimit": 5,
     "packageRules": [
